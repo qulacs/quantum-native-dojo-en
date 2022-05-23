@@ -1,35 +1,37 @@
 Welcome to Quantum Native Dojo!
 ===============================
 
-Quantum Native Dojoは量子コンピュータについて勉強したいと思っている方のために作られた自習教材です。
+Quantum Native Dojo is a self-study material designed for those who want to learn about quantum computers.
 
-量子コンピュータの基本的な動作原理から、基礎アルゴリズム、それらを応用してどのように化学計算や金融計算などに役立てるかを学ぶことができます。本教材は誤り訂正の有る量子コンピュータのアルゴリズムの他、数年以内に実用されるであろうNISQ (Noisy Intermidiate-Scale Quantum) デバイスのアルゴリズムもカバーしています。
+You can learn the basic principles of quantum computers, basic algorithms, and how to apply them to chemical and financial calculations. The material covers algorithms for quantum computers with error correction, as well as algorithms for NISQ (Noisy Intermidiate-Scale Quantum) devices, which will be in practical use within a few years.
 
-全ての教材が Jupyter notebook で製作され、そのまま Google Colaboratory 上で実行可能になっているので、面倒な環境設定をすることなく学習を始めることが可能です。
+All the materials are built on Jupyter notebooks and can be run directly on Google Colaboratory, so you can start learning without any complicated setup.
 
-この教材の意義：Becoming Quantum Native
----------------------------------------
 
-量子コンピュータは、量子力学の原理に基づいて計算を行います。一方、私達がふだん目にする物理現象は主に古典力学に支配されています。ここに「量子コンピュータは難しい」と思われる原因の一端があります。
+Significance of this material：Becoming Quantum Native
+------------------------------------------------------
 
-Quantum Native Dojoでは、みなさまに量子コンピュータの動作を感覚的に理解して使いこなせる **Quantum Native** になっていただくことを目標としています。Quantum Nativeへの道のりは簡単ではありませんが、このDojoを通して基礎からじっくりと量子力学と量子コンピュータの原理・応用を学ぶことが着実な一歩となるでしょう。
+Quantum computers perform calculations based on the principles of quantum mechanics. On the other hand, the physical phenomena we see in everyday life are mainly governed by classical mechanics. This is one of the reasons why people think that quantum computers are difficult.
 
-このDojoを巣立ち、Quantum Nativeとなったみなさまが様々な量子アルゴリズム/アプリケーションを作るエンジニアとして活躍されることを期待しています！
+The goal of Quantum Native Dojo is to help you become a **Quantum Native** who understands the operation of quantum computer and can use it sensitively. The road to becoming a Quantum Native is not an easy one, but learning the principles and applications of quantum mechanics and quantum computing from the basics through this Dojo will be a steady step forward.
 
-前提となる知識
---------------
+We hope that you will leave this Dojo and become Quantum Natives and become engineers who create various quantum algorithms/applications!
 
-Quantum Native Dojoの内容を理解するには、以下のような知識が必要です。
+Prerequisite Knowledge
+-----------------------
 
-* 複素数とは何か
-* 簡単な関数(sin, cos, exp, ...)の微積分
-* 行列とベクトルの掛け算、対角化とは何か
+To understand the content of Quantum Native Dojo, you need to know the following
 
-こちらの前提知識及びPython・NumPyの使用に不安がある方は、 `Chainer Tutorial <https://tutorials.chainer.org/ja/tutorial.html>`_ の1.〜12.を先に学習することをオススメします。
+* What is a complex number?
+* Differential and integral calculus of Simple functions (sin, cos, exp, ...) 
+* What is matrix and vector multiplication and diagonalization
+
+If you are not comfortable with this prerequisite knowledge and with Python and NumPy, we recommend that you first study 1. through 12. of the `Chainer Tutorial <https://tutorials.chainer.org/ja/tutorial.html>`_.
+
 
 .. toctree::
    :maxdepth: 2
-   :caption: 目次
+   :caption: Contents
 
    notebooks/0_prologue
    notebooks/1_quantum_information_foundation
@@ -43,9 +45,9 @@ Quantum Native Dojoの内容を理解するには、以下のような知識が�
    notebooks/9_quantum_error_correction
 
 
-運営・サポート
+Operation・Support
 --------------
 
-運営： `株式会社QunaSys <https://qunasys.com>`_ 
+Operation： `QunaSys Inc. <https://qunasys.com>`_ 
 
-ご意見・ご要望・質問： `Qulacs Slack Community <https://join.slack.com/t/qulacs/shared_invite/enQtNzY1OTM5MDYxMjAxLWM1ZDc3MzdiNjZhZjdmYTQ5MTJiOTEzZjI3ZjAwZTg0OGFiNjcxY2VjZWRjMWY0YjE5ZTViOWQzZTliYzdmYzY>`_ にお寄せ下さい。
+Comments・Questions： `Qulacs Slack Community <https://join.slack.com/t/qulacs/shared_invite/enQtNzY1OTM5MDYxMjAxLWM1ZDc3MzdiNjZhZjdmYTQ5MTJiOTEzZjI3ZjAwZTg0OGFiNjcxY2VjZWRjMWY0YjE5ZTViOWQzZTliYzdmYzY>`_ 
