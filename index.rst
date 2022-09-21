@@ -8,23 +8,23 @@ You can learn the basic principles of quantum computers, basic algorithms, and h
 All the materials are built on Jupyter notebooks and can be run directly on Google Colaboratory, so you can start learning without any complicated setup.
 
 
-Significance of this material：Becoming Quantum Native
+Objective of this material：Becoming Quantum Native
 ------------------------------------------------------
 
 Quantum computers perform calculations based on the principles of quantum mechanics. On the other hand, the physical phenomena we see in everyday life are mainly governed by classical mechanics. This is one of the reasons why people think that quantum computers are difficult.
 
-The goal of Quantum Native Dojo is to help you become a **Quantum Native** who understands the operation of quantum computer and can use it sensitively. The road to becoming a Quantum Native is not an easy one, but learning the principles and applications of quantum mechanics and quantum computing from the basics through this Dojo will be a steady step forward.
+The goal of Quantum Native Dojo is to help you become a **Quantum Native** who understands the operation of quantum computer and can use it sensibly. The road to becoming a Quantum Native is not an easy one, but learning the principles and applications of quantum mechanics and quantum computing from the basics through this Dojo will be a steady step forward.
 
 We hope that you will leave this Dojo and become Quantum Natives and become engineers who create various quantum algorithms/applications!
 
 Prerequisite Knowledge
 -----------------------
 
-To understand the content of Quantum Native Dojo, you need to know the following
+To understand the content of Quantum Native Dojo, you need to know the following:
 
-* What is a complex number?
-* Differential and integral calculus of Simple functions (sin, cos, exp, ...) 
-* What is matrix and vector multiplication and diagonalization
+* What is a complex number?:
+* Differential and integral calculus of Simple functions (sin, cos, exp, ...) :
+* What is matrix and vector multiplication and diagonalization:
 
 If you are not comfortable with this prerequisite knowledge and with Python and NumPy, we recommend that you first study 1. through 12. of the `Chainer Tutorial <https://tutorials.chainer.org/ja/tutorial.html>`_.
 
