@@ -126,8 +126,8 @@ This material is created and updated by  [QunaSys](https://qunasys.com) and the 
 [yoooopeeee](https://github.com/yoooopeeee),
 [Kosuke Mitarai](https://scholar.google.com/citations?user=TfsGcnMAAAAJ),
 [Yuya-O-Nakagawa](https://scholar.google.co.jp/citations?user=LyU8LXsAAAAJ),
-[yamamoto-takahiro](https://github.com/yamamoto-takahiro)
-[Akira Yamazaki](https://github.com/ayamazaki)
+[yamamoto-takahiro](https://github.com/yamamoto-takahiro),
+[Akira Yamazaki](https://github.com/ayamazaki),
 [Karim Essafi](https://github.com/essafik)
 
 ## release history
