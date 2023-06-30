@@ -58,8 +58,8 @@ The `anaconda3` installation is a convenient way to install all of the above pac
 
 ## index
 ===== Part1：Basic =====
-- Chapter0 What is quantum computer？
-- chapter1 Quantum information foundation
+- Chapter 0: What is quantum computer？
+- Chapter 1: Quantum information foundation
   - 1-1. Quantum bit
   - 1-2. Basic operations on qubits
   - 1-3. Multiqubit representation
@@ -67,42 +67,42 @@ The `anaconda3` installation is a convenient way to install all of the above pac
   - 1-4. Quantum circuit diagram
   - Column1：The No-Cloning theorem
   - Column2：Bell (CHSH) inequality
-- Chapter2 Introduction to Quantum Algorithms
+- Chapter 2: Introduction to Quantum Algorithms
   - 2-1. NISQ algorithms and long-term algorithms
   - 2-2. Hadamard test
   - Column：Quantum Random Number Generator
   - 2-3. Quantum Fourier transform
   - 2-4. Phase Estimation Algorithm（Introductory）
-- Chapter3 Execution environment of algorithm
+- Chapter 3: Execution environment of algorithm
   - 3-1. How to use Qulacs the fastest simulator
   - 3-2. How to use Qiskit and IBM Q Experience
 
 ===== Part2：NISQ =====
-- Chapter4 Quantum dynamics simulation
+- Chapter 4: Quantum dynamics simulation
   - 4-1. Quantum dynamics simulation
   - 4-2. Quantum dynamics simulation using Trotter decomposition
-- Chapter5 Variational Quantum Circuit based algorithm
+- Chapter 5: Variational Quantum Circuit based algorithm
   - 5-1. Variational Quantum Eigensolver（VQE) algorithm
   - 5-2. Quantum Circuit Learning (QCL)
   - Column：application of QCL to classification 
   - Column：Quantum reservoir computing
   - 5-3. Quantum Approximate Optimization Algorithm (QAOA)
-- Chapter6 Quantum Chemistry Calculation
+- Chapter 6: Quantum Chemistry Calculation
   - 6-1. OpenFermion basics
   - 6-2. Qulacs implementation of variational quantum eigensolver (VQE)
   - 6-3. Excited state search method (subspace-search VQE)
 
 ===== Part3：Long-term =====
-- Chapter7 Quantum phase estimation algorithm
+- Chapter 7: Quantum phase estimation algorithm
   - 7-1. Detailed explanation of Quantum phase estimation algorithm：Hydrogen molecule as an example
   - 7-2. Harrow-Hassidim-Lloyd (HHL) algorithm
   - Column：Quantum Random Access Memory(qRAM)
   - 7-3. Portfolio optimization using HHL algorithm
   - Column：Fast singular values decomposition for low rank matrix and sampling（Quantum-inspired algorithm)
-- Chapter8 Quantum search algorithm
+- Chapter 8: Quantum search algorithm
   - 8-1. Oracle
   - 8-2. Grovers algorithm
-- Chapter9 Quantum error correction
+- Chapter 9: Quantum error correction
   - 9-1. Classic error correction
   - 9-2. Quantum error correction
  
@@ -128,7 +128,8 @@ This material is created and updated by  [QunaSys](https://qunasys.com) and the 
 [Yuya-O-Nakagawa](https://scholar.google.co.jp/citations?user=LyU8LXsAAAAJ),
 [yamamoto-takahiro](https://github.com/yamamoto-takahiro),
 [Akira Yamazaki](https://github.com/ayamazaki),
-[Karim Essafi](https://github.com/essafik)
+[Karim Essafi](https://github.com/essafik),
+[Adam Wesolowski](https://github.com/notalp1)
 
 ## release history
 - 2023/6/30: v2.0.0
