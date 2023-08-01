@@ -7,7 +7,7 @@ You can learn the basic principles of quantum computers, basic algorithms, and h
 All the materials are built on Jupyter notebooks and can be run directly on Google Colaboratory, so you can start learning without any complicated setup.
 
 There is also a website version, so please use it as well.
-https://dojo.qulacs.org
+[https://dojo.qulacs.org/en/](https://dojo.qulacs.org/en/latest/)
 
 ## Objective of this material：Becoming Quantum Native
 
