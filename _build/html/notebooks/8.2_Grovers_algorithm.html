@@ -17,10 +17,10 @@
     <link rel="stylesheet" href="../_static/bootstrap-icons.css" type="text/css" />
           <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
           <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
-          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
           <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
-          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
-          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css" />
           <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
         <link rel="index" title="Index" href="../genindex.html" />
         <link rel="search" title="Search" href="../search.html" />
@@ -201,7 +201,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="6_quantum_chemistry_calculation.html">Chapter 6 Quantum chemistry calculation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="6.1_openfermion_basics.html">6-1. OpenFermion Basics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qp_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using QURI Parts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
 </ul>
 </li>
@@ -244,7 +244,7 @@
 <li><p>The problem of finding the original value from a particular hash value</p></li>
 </ul>
 <p>and the latter has actually been proposed in a paper as a Bitcoin mining acceleration [2].</p>
-<p>In this section, we first provide a theoretical explanation of Glover’s algorithm and then present an example implementation using Qulacs.</p>
+<p>In this section, we first provide a theoretical explanation of Grover’s algorithm and then present an example implementation using Qulacs.</p>
 <section id="Algorithm-Flow">
 <h2>Algorithm Flow<a class="headerlink" href="#Algorithm-Flow" title="Link to this heading">¶</a></h2>
 <p>The flow of Grover’s algorithm is simple and is as follows. As in the previous section, consider the problem of searching for <span class="math notranslate nohighlight">\(M\)</span> solutions from a database of <span class="math notranslate nohighlight">\(N\)</span> elements, where the element labels are <span class="math notranslate nohighlight">\(N\)</span> digit bit sequences <span class="math notranslate nohighlight">\(x = x_1 \ldots x_n\)</span>.</p>
@@ -288,7 +288,7 @@
 </section>
 <section id="4.-Repeat-steps-2-and-3-k-times">
 <h3>4. Repeat steps 2 and 3 <span class="math notranslate nohighlight">\(k\)</span> times<a class="headerlink" href="#4.-Repeat-steps-2-and-3-k-times" title="Link to this heading">¶</a></h3>
-<p>Repeat the above two inversion operations <span class="math notranslate nohighlight">\(U_w\)</span> and <span class="math notranslate nohighlight">\(U_s\)</span>. As we will see later, approximately <span class="math notranslate nohighlight">\(O(\sqrt{N/M})\)</span> iterations are sufficient to obtain a solution with high enough probability for the next step 5 measurement. In other words, the number of times to call the oracle is <span class="math notranslate nohighlight">\(O(\sqrt{N})\)</span>.</p>
+<p>Repeat the above two inversion operations <span class="math notranslate nohighlight">\(U_w\)</span> and <span class="math notranslate nohighlight">\(U_s\)</span>. As we will see later, approximately <span class="math notranslate nohighlight">\(O(\sqrt{N/M})\)</span> iterations are sufficient to obtain a solution with high enough probability in the next step: measurement. In other words, the number of times to call the oracle is <span class="math notranslate nohighlight">\(O(\sqrt{N})\)</span>.</p>
 </section>
 <section id="5.-Take-a-measurement">
 <h3>5. Take a measurement<a class="headerlink" href="#5.-Take-a-measurement" title="Link to this heading">¶</a></h3>
@@ -322,7 +322,7 @@
 <div class="math notranslate nohighlight">
 \[(U_s U_w)^k |s\rangle = \cos{\frac{(2k+1)\theta}{2}} |\alpha\rangle + \sin{\frac{(2k+1)\theta}{2}} |\beta\rangle\]</div>
 <p>When <span class="math notranslate nohighlight">\(N \gg M\)</span> , <span class="math notranslate nohighlight">\(\theta\)</span> was a positive number close to zero, so each time <span class="math notranslate nohighlight">\(|s\rangle\)</span> was acted on by <span class="math notranslate nohighlight">\(U_s U_w\)</span>, the coefficient of <span class="math notranslate nohighlight">\(|\alpha\rangle\)</span> would decrease and that of <span class="math notranslate nohighlight">\(|\beta\rangle\)</span> would increase. Since <span class="math notranslate nohighlight">\(|\beta\rangle\)</span> was made up of a superposition of all solution states, this means that the probability of obtaining a solution increases when <span class="math notranslate nohighlight">\((U_s U_w)^k |s\rangle\)</span> is measured.</p>
-<p>This is the reasons why Glover’s algorithm can successfully search for solutions.</p>
+<p>This is the reasons why Grover’s algorithm can successfully search for solutions.</p>
 </section>
 <section id="Estimating-the-optimal-k.">
 <h3>Estimating the optimal <span class="math notranslate nohighlight">\(k\)</span>.<a class="headerlink" href="#Estimating-the-optimal-k." title="Link to this heading">¶</a></h3>
@@ -330,7 +330,6 @@
 <p>The closest <span class="math notranslate nohighlight">\((U_s U_w)^k |s\rangle\)</span> comes to <span class="math notranslate nohighlight">\(|\beta\rangle\)</span> is when <span class="math notranslate nohighlight">\(\frac{(2k+1)\theta}{2}\)</span> is close to <span class="math notranslate nohighlight">\(\frac{\pi}{2}\)</span>, that is when <span class="math notranslate nohighlight">\(k\)</span> is</p>
 <div class="math notranslate nohighlight">
 \[R = \text{ClosestInteger}\left( \frac{\pi}{2\theta} -\frac{1}{2} \right)\]</div>
-<p>ここで <span class="math notranslate nohighlight">\(\text{ClosestInteger}(\ldots)\)</span> は <span class="math notranslate nohighlight">\(\ldots\)</span> に最も近い整数を表す。 <span class="math notranslate nohighlight">\(R\)</span>の上限を評価しよう。 <span class="math notranslate nohighlight">\(\theta &gt; 0\)</span> について成り立つ式</p>
 <p>where <span class="math notranslate nohighlight">\(\text{ClosestInteger}(\ldots)\)</span> denotes the integer closest to <span class="math notranslate nohighlight">\(\ldots\)</span>. Let us evaluate the upper bound of <span class="math notranslate nohighlight">\(R\)</span>.</p>
 <div class="math notranslate nohighlight">
 \[\frac{\theta}{2} \geq  \sin \frac{\theta}{2} = \sqrt{\frac{M}{N}}\]</div>
@@ -342,39 +341,23 @@
 </section>
 <section id="Example-Implementation">
 <h2>Example Implementation<a class="headerlink" href="#Example-Implementation" title="Link to this heading">¶</a></h2>
-<p>Let us try to implement Grover’s algorithm using Qulacs. (The implementation code is almost the same as in [4].</p>
+<p>Let us try to implement Grover’s algorithm using QURI Parts. (The implementation code is almost the same as in [4].)</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Importing libraries</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.core.state</span> <span class="kn">import</span> <span class="n">GeneralCircuitQuantumState</span>
+<span class="kn">from</span> <span class="nn">quri_parts.qulacs.simulator</span> <span class="kn">import</span> <span class="n">evaluate_state_to_vector</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">random</span>
-<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
-<span class="kn">from</span> <span class="nn">qulacs.state</span> <span class="kn">import</span> <span class="n">inner_product</span>
-<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
-<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">to_matrix_gate</span>
-<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
-<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">Identity</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span> <span class="c1">#Pauli operator</span>
-<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">H</span>
-<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">RX</span><span class="p">,</span><span class="n">RY</span><span class="p">,</span><span class="n">RZ</span> <span class="c1">#Rotation operations on Pauli operators</span>
-
-<span class="c1">## Run only if you are in a Google Colaboratory / (Linux or Mac) jupyter notebook environment.</span>
-<span class="c1">## Qulacs errors will be output normally.</span>
-<span class="o">!</span>pip3<span class="w"> </span>install<span class="w"> </span>wurlitzer
-<span class="o">%</span><span class="k">load_ext</span> wurlitzer
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Function to plot the distribution of absolute values of coefficients</span>
-<span class="k">def</span> <span class="nf">show_distribution</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="n">nqubits</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">nqubits</span><span class="p">))],</span> <span class="nb">abs</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">()))</span>
+<span class="c1">## Function to plot the distribution of absolute values of coefficients</span>
+<span class="k">def</span> <span class="nf">show_distribution</span><span class="p">(</span>
+    <span class="n">state</span><span class="p">:</span> <span class="n">GeneralCircuitQuantumState</span><span class="p">,</span>
+    <span class="n">n_qubits</span><span class="p">:</span> <span class="nb">int</span>
+<span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">))],</span>
+        <span class="nb">abs</span><span class="p">(</span><span class="n">evaluate_state_to_vector</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">vector</span><span class="p">)</span>
+    <span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -383,23 +366,25 @@
 <h3>Checking the operation<a class="headerlink" href="#Checking-the-operation" title="Link to this heading">¶</a></h3>
 <p>First, let’s implement Grover’s algorithm with 5 qubits and check its operation. The superposition state of all states <span class="math notranslate nohighlight">\(|s\rangle\)</span> can be created by acting on all bits of the state <span class="math notranslate nohighlight">\(|0\cdots0\rangle\)</span> with Hadamard gate.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nqubits</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
-<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.circuit</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.state</span> <span class="kn">import</span> <span class="n">quantum_state</span>
 
-<span class="k">def</span> <span class="nf">make_Hadamard</span><span class="p">(</span><span class="n">nqubits</span><span class="p">):</span>
+<span class="n">n_qubits</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="k">def</span> <span class="nf">make_Hadamard</span><span class="p">(</span><span class="n">nqubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QuantumCircuit</span><span class="p">:</span>
     <span class="n">Hadamard</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubits</span><span class="p">):</span>
-        <span class="n">Hadamard</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">H</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="n">Hadamard</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">Hadamard</span>
 
-<span class="n">Hadamard</span> <span class="o">=</span> <span class="n">make_Hadamard</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
-<span class="n">Hadamard</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
 
-<span class="n">show_distribution</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">Hadamard</span> <span class="o">=</span> <span class="n">make_Hadamard</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">quantum_state</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">,</span> <span class="n">circuit</span><span class="o">=</span><span class="n">Hadamard</span><span class="p">)</span>
+
+<span class="n">show_distribution</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -407,36 +392,33 @@
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_8.2_Grovers_algorithm_13_0.png" src="../_images/notebooks_8.2_Grovers_algorithm_13_0.png" />
+<img alt="../_images/notebooks_8.2_Grovers_algorithm_12_0.png" src="../_images/notebooks_8.2_Grovers_algorithm_12_0.png" />
 </div>
 </div>
-<p>Next, we create the oracle <span class="math notranslate nohighlight">\(U_w\)</span>. Here we set <span class="math notranslate nohighlight">\(|1\ldots1\rangle\)</span> as the solution, and create an operator that adds a phase (-1) to only <span class="math notranslate nohighlight">\(|1\ldots1\rangle\)</span>. Such an operator can be implemented as “an operator that apply the <span class="math notranslate nohighlight">\(Z\)</span> gate on the <code class="docutils literal notranslate"><span class="pre">nqubits</span></code>th qubit when all qubits from the <code class="docutils literal notranslate"><span class="pre">0</span></code>th to the <code class="docutils literal notranslate"><span class="pre">nqubits-1</span></code>th are <code class="docutils literal notranslate"><span class="pre">1</span></code>. The implementation uses Qulacs special gate <code class="docutils literal notranslate"><span class="pre">to_matrix_gate</span></code>. Also, we use <code class="docutils literal notranslate"><span class="pre">control_index</span></code> and <code class="docutils literal notranslate"><span class="pre">control_with_value</span></code>.</p>
+<p>Next, we create the oracle <span class="math notranslate nohighlight">\(U_w\)</span>. Here we set <span class="math notranslate nohighlight">\(|1\ldots1\rangle\)</span> as the solution, and create an operator that adds a phase (-1) to only <span class="math notranslate nohighlight">\(|1\ldots1\rangle\)</span>. Such an operator can be implemented as “an operator that apply the <span class="math notranslate nohighlight">\(Z\)</span> gate on the <code class="docutils literal notranslate"><span class="pre">nqubits</span></code>th qubit when all qubits from the <code class="docutils literal notranslate"><span class="pre">0</span></code>th to the <code class="docutils literal notranslate"><span class="pre">nqubits-1</span></code>th are <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_U_w</span><span class="p">(</span><span class="n">nqubits</span><span class="p">):</span>
-    <span class="n">U_w</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
-    <span class="n">CnZ</span> <span class="o">=</span> <span class="n">to_matrix_gate</span><span class="p">(</span><span class="n">Z</span><span class="p">(</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-    <span class="c1"># apply gate only if i-th qubits are all 1&#39;s</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">control_index</span> <span class="o">=</span> <span class="n">i</span>
-        <span class="n">control_with_value</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">CnZ</span><span class="o">.</span><span class="n">add_control_qubit</span><span class="p">(</span><span class="n">control_index</span><span class="p">,</span> <span class="n">control_with_value</span><span class="p">)</span>
-    <span class="n">U_w</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">CnZ</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">def</span> <span class="nf">make_U_w</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="n">U_w</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
+    <span class="n">U_w</span><span class="o">.</span><span class="n">add_Z_gate</span><span class="p">(</span><span class="n">n_qubits</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">controlled_on</span><span class="o">=</span><span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_qubits</span><span class="o">-</span><span class="mi">1</span><span class="p">)})</span>
     <span class="k">return</span> <span class="n">U_w</span>
+
+<span class="n">Uw</span> <span class="o">=</span> <span class="n">make_U_w</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <p>Checking the action of the oracle, we can see that indeed only the last component (<span class="math notranslate nohighlight">\(|1\cdots1\rangle\)</span>) is inverted in phase.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hoge</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="n">U_w</span> <span class="o">=</span> <span class="n">make_U_w</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
-<span class="n">U_w</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">hoge</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">hoge</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.qulacs.simulator</span> <span class="kn">import</span> <span class="n">evaluate_state_to_vector</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">quantum_state</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">,</span> <span class="n">circuit</span> <span class="o">=</span> <span class="n">make_Hadamard</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span> <span class="o">+</span> <span class="n">Uw</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">evaluate_state_to_vector</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">vector</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -459,49 +441,40 @@
 <div class="math notranslate nohighlight">
 \[U_s = 2 |s\rangle \langle s| - I = H^{\otimes n} (2 |0\cdots0\rangle \langle0\cdots0| - I) H^{\otimes n}\]</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_U_s</span><span class="p">(</span><span class="n">nqubits</span><span class="p">):</span>
-    <span class="n">U_s</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubits</span><span class="p">):</span>
-        <span class="n">U_s</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">H</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_U_s</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="n">Us</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">):</span>
+        <span class="n">Us</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
-    <span class="c1">## 2|0&gt;&lt;0| - I implementation</span>
-    <span class="c1">## First, phase (-1) is given to all states. The gate matrix is arrary([[-1,0],[0,-1]])</span>
-    <span class="n">U_s</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">to_matrix_gate</span><span class="p">(</span><span class="n">RZ</span><span class="p">(</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)))</span>
-    <span class="n">U_s</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span> <span class="n">X</span><span class="p">(</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
-    <span class="c1">## apply the Z-gate only if all i-th qubits are 0</span>
-    <span class="n">CnZ</span> <span class="o">=</span> <span class="n">to_matrix_gate</span><span class="p">(</span><span class="n">Z</span><span class="p">(</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">control_index</span> <span class="o">=</span> <span class="n">i</span>
-        <span class="n">control_with_value</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">CnZ</span><span class="o">.</span><span class="n">add_control_qubit</span><span class="p">(</span><span class="n">control_index</span><span class="p">,</span> <span class="n">control_with_value</span><span class="p">)</span>
-    <span class="n">U_s</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span> <span class="n">CnZ</span> <span class="p">)</span>
-    <span class="n">U_s</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span> <span class="n">X</span><span class="p">(</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">Us</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="n">n_qubits</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    <span class="n">Us</span><span class="o">.</span><span class="n">add_X_gate</span><span class="p">(</span><span class="n">n_qubits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">Us</span><span class="o">.</span><span class="n">add_Z_gate</span><span class="p">(</span><span class="n">n_qubits</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">controlled_on</span><span class="o">=</span><span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_qubits</span><span class="o">-</span><span class="mi">1</span><span class="p">)})</span>
+    <span class="n">Us</span><span class="o">.</span><span class="n">add_X_gate</span><span class="p">(</span><span class="n">n_qubits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubits</span><span class="p">):</span>
-        <span class="n">U_s</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">H</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">):</span>
+        <span class="n">Us</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">U_s</span>
+    <span class="k">return</span> <span class="n">Us</span>
+
+<span class="n">Us</span> <span class="o">=</span> <span class="n">make_U_s</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <p>Now let’s apply <span class="math notranslate nohighlight">\(U_s U_w\)</span> just once and see how the probability distribution changes. The probability of all 1 states (the rightmost one) gets slightly larger.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Prepare initial state</span>
-<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
-<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
-<span class="n">Hadamard</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.core.state</span> <span class="kn">import</span> <span class="n">apply_circuit</span>
+<span class="c1">## Prepare initial state</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">quantum_state</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">,</span> <span class="n">circuit</span><span class="o">=</span><span class="n">Hadamard</span><span class="p">)</span>
 
 <span class="c1">## apply U_s U_w</span>
-<span class="n">U_s</span> <span class="o">=</span> <span class="n">make_U_s</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
-<span class="n">U_w</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-<span class="n">U_s</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-<span class="n">show_distribution</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">apply_circuit</span><span class="p">(</span><span class="n">Uw</span> <span class="o">+</span> <span class="n">Us</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+<span class="n">show_distribution</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -509,37 +482,38 @@
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_8.2_Grovers_algorithm_21_0.png" src="../_images/notebooks_8.2_Grovers_algorithm_21_0.png" />
+<img alt="../_images/notebooks_8.2_Grovers_algorithm_20_0.png" src="../_images/notebooks_8.2_Grovers_algorithm_20_0.png" />
 </div>
 </div>
 <p>Repeat this a few times and you’ll see.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Create a solution state |1....1&gt; to evaluate the inner product.</span>
-<span class="n">target_state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
-<span class="n">target_state</span><span class="o">.</span><span class="n">set_computational_basis</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1">## 2**n_qubits-1 is a binary number 1.... .1</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.state</span> <span class="kn">import</span> <span class="n">ComputationalBasisState</span>
+<span class="n">target_state</span> <span class="o">=</span> <span class="n">quantum_state</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">,</span> <span class="n">bits</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="n">n_qubits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1">## Run Grover&#39;s algorithm</span>
-<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
-<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
-
-<span class="n">Hadamard</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">quantum_state</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">,</span> <span class="n">circuit</span><span class="o">=</span><span class="n">Hadamard</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
-    <span class="n">U_w</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-    <span class="n">U_s</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-    <span class="n">show_distribution</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="n">nqubits</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">inner_product</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">target_state</span><span class="p">)))</span>
-</pre></div>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">apply_circuit</span><span class="p">(</span><span class="n">Uw</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">apply_circuit</span><span class="p">(</span><span class="n">Us</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+    <span class="n">show_distribution</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span>
+            <span class="n">evaluate_state_to_vector</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span> <span class="o">@</span> <span class="n">evaluate_state_to_vector</span><span class="p">(</span><span class="n">target_state</span><span class="p">)</span><span class="o">.</span><span class="n">vector</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<br/></pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_8.2_Grovers_algorithm_23_0.png" src="../_images/notebooks_8.2_Grovers_algorithm_23_0.png" />
+<img alt="../_images/notebooks_8.2_Grovers_algorithm_22_0.png" src="../_images/notebooks_8.2_Grovers_algorithm_22_0.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
@@ -554,7 +528,7 @@
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_8.2_Grovers_algorithm_23_2.png" src="../_images/notebooks_8.2_Grovers_algorithm_23_2.png" />
+<img alt="../_images/notebooks_8.2_Grovers_algorithm_22_2.png" src="../_images/notebooks_8.2_Grovers_algorithm_22_2.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
@@ -569,7 +543,7 @@
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_8.2_Grovers_algorithm_23_4.png" src="../_images/notebooks_8.2_Grovers_algorithm_23_4.png" />
+<img alt="../_images/notebooks_8.2_Grovers_algorithm_22_4.png" src="../_images/notebooks_8.2_Grovers_algorithm_22_4.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
@@ -584,7 +558,7 @@
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_8.2_Grovers_algorithm_23_6.png" src="../_images/notebooks_8.2_Grovers_algorithm_23_6.png" />
+<img alt="../_images/notebooks_8.2_Grovers_algorithm_22_6.png" src="../_images/notebooks_8.2_Grovers_algorithm_22_6.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -597,37 +571,39 @@
 </div>
 <p>After about <span class="math notranslate nohighlight">\(k=4\)</span> iterations, we got a solution state with probability almost 1. Let <code class="docutils literal notranslate"><span class="pre">nqubits</span></code> be a bit larger and check the behavior of the solution output probability for <span class="math notranslate nohighlight">\(k\)</span>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nqubits</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
-<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.core.state</span> <span class="kn">import</span> <span class="n">ComputationalBasisState</span>
+<span class="n">n_qubits</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">quantum_state</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
 
 <span class="c1">## Create a solution state |1....1&gt; to evaluate the inner product.</span>
-<span class="n">target_state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
-<span class="n">target_state</span><span class="o">.</span><span class="n">set_computational_basis</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1">## 2**n_qubits-1 is binary number 1...1</span>
+<span class="n">target_state</span> <span class="o">=</span> <span class="n">quantum_state</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">,</span> <span class="n">bits</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="n">n_qubits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1">## 2**n_qubits-1 is binary number 1...1</span>
+<span class="n">target_state_vector</span> <span class="o">=</span> <span class="n">evaluate_state_to_vector</span><span class="p">(</span><span class="n">target_state</span><span class="p">)</span><span class="o">.</span><span class="n">vector</span>
 
 <span class="c1">## Run Grover&#39;s algorithm</span>
-<span class="n">Hadamard</span> <span class="o">=</span> <span class="n">make_Hadamard</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
-<span class="n">U_w</span><span class="o">=</span> <span class="n">make_U_w</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
-<span class="n">U_s</span> <span class="o">=</span> <span class="n">make_U_s</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">Hadamard</span> <span class="o">=</span> <span class="n">make_Hadamard</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
+<span class="n">Uw</span> <span class="o">=</span> <span class="n">make_U_w</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
+<span class="n">Us</span> <span class="o">=</span> <span class="n">make_U_s</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
 
 <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
 
-<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
-<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
-<span class="n">Hadamard</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">quantum_state</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">,</span> <span class="n">circuit</span><span class="o">=</span><span class="n">Hadamard</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">):</span>
-    <span class="n">U_w</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-    <span class="n">U_s</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">apply_circuit</span><span class="p">(</span><span class="n">Uw</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">apply_circuit</span><span class="p">(</span><span class="n">Us</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
     <span class="c1">#show_distribution(state,nqubits)</span>
-    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">inner_product</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">target_state</span><span class="p">)))</span>
+    <span class="n">state_vector</span> <span class="o">=</span> <span class="n">evaluate_state_to_vector</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">vector</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">state_vector</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span> <span class="o">@</span> <span class="n">target_state_vector</span><span class="p">)</span>
+    <span class="p">)</span>
 
 <span class="n">max_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span> <span class="sa">f</span><span class="s2">&quot;maximal probability </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="n">max_k</span><span class="p">]</span><span class="si">:</span><span class="s2">5e</span><span class="si">}</span><span class="s2"> is obtained at k = </span><span class="si">{</span><span class="n">max_k</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">30</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">result</span><span class="p">,</span> <span class="s2">&quot;o-&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -639,44 +615,33 @@
 maximal probability 9.997306e-01 is obtained at k = 25
 </pre></div></div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-[&lt;matplotlib.lines.Line2D at 0x11d3ee990&gt;]
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_8.2_Grovers_algorithm_25_2.png" src="../_images/notebooks_8.2_Grovers_algorithm_25_2.png" />
+<img alt="../_images/notebooks_8.2_Grovers_algorithm_24_1.png" src="../_images/notebooks_8.2_Grovers_algorithm_24_1.png" />
 </div>
 </div>
 <p>The target state is obtained with probability 1 almost <span class="math notranslate nohighlight">\(k=25\)</span> times. Also, the <span class="math notranslate nohighlight">\(k\)</span> dependence of the probability is a sine function, as we saw in the “Geometric Explanation” section.</p>
 <p>Finally, let’s see how the <span class="math notranslate nohighlight">\(k\)</span> needed to find the solution behaves with respect to the number of qubits.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">min_nqubits</span> <span class="o">=</span> <span class="mi">6</span>
 <span class="n">max_nqubits</span> <span class="o">=</span> <span class="mi">16</span>
-<span class="k">for</span> <span class="n">nqubits</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">min_nqubits</span><span class="p">,</span> <span class="n">max_nqubits</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+<span class="k">for</span> <span class="n">n_qubits</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">min_nqubits</span><span class="p">,</span> <span class="n">max_nqubits</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
     <span class="c1">## Prepare circuit</span>
-    <span class="n">Hadamard</span> <span class="o">=</span> <span class="n">make_Hadamard</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
-    <span class="n">U_w</span><span class="o">=</span> <span class="n">make_U_w</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
-    <span class="n">U_s</span> <span class="o">=</span> <span class="n">make_U_s</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+    <span class="n">Hadamard</span> <span class="o">=</span> <span class="n">make_Hadamard</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
+    <span class="n">Uw</span> <span class="o">=</span> <span class="n">make_U_w</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
+    <span class="n">Us</span> <span class="o">=</span> <span class="n">make_U_s</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
 
     <span class="c1">## Create a solution state |1....1&gt; to evaluate the inner product.</span>
-    <span class="n">target_state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
-    <span class="n">target_state</span><span class="o">.</span><span class="n">set_computational_basis</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1">## 2**n_qubits-1 is binary number 1...1</span>
+    <span class="n">target_state</span> <span class="o">=</span> <span class="n">quantum_state</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">,</span> <span class="n">bits</span><span class="o">=</span><span class="mi">2</span><span class="o">**</span><span class="n">n_qubits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1">## 2**n_qubits-1 is binary number 1...1</span>
+    <span class="n">target_state_vector</span> <span class="o">=</span> <span class="n">evaluate_state_to_vector</span><span class="p">(</span><span class="n">target_state</span><span class="p">)</span><span class="o">.</span><span class="n">vector</span>
 
-    <span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
-    <span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
-    <span class="n">Hadamard</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">quantum_state</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">,</span> <span class="n">circuit</span><span class="o">=</span><span class="n">Hadamard</span><span class="p">)</span>
 
     <span class="c1">## Multiply U_s U_w until the probability starts to decrease</span>
     <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span>
@@ -684,15 +649,18 @@ maximal probability 9.997306e-01 is obtained at k = 25
     <span class="n">num_iter</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">while</span> <span class="n">flag</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">num_iter</span> <span class="o">&lt;=</span> <span class="mi">1000</span><span class="p">:</span>
         <span class="n">num_iter</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">U_w</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="n">U_s</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="n">suc_prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">inner_product</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">target_state</span><span class="p">))</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">apply_circuit</span><span class="p">(</span><span class="n">Uw</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">apply_circuit</span><span class="p">(</span><span class="n">Us</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+        <span class="n">state_vector</span> <span class="o">=</span> <span class="n">evaluate_state_to_vector</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">vector</span>
+
+        <span class="n">suc_prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">state_vector</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span> <span class="o">@</span> <span class="n">target_state_vector</span><span class="p">)</span>
+
         <span class="k">if</span> <span class="n">tmp</span> <span class="o">&lt;</span> <span class="n">suc_prob</span><span class="p">:</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="n">suc_prob</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">[</span><span class="n">nqubits</span><span class="p">,</span> <span class="n">num_iter</span><span class="p">,</span> <span class="n">suc_prob</span><span class="p">]</span> <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;nqubits=</span><span class="si">{</span><span class="n">nqubits</span><span class="si">}</span><span class="s2">, num_iter=</span><span class="si">{</span><span class="n">num_iter</span><span class="si">}</span><span class="s2">, suc_prob=</span><span class="si">{</span><span class="n">suc_prob</span><span class="si">:</span><span class="s2">5e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">[</span><span class="n">n_qubits</span><span class="p">,</span> <span class="n">num_iter</span><span class="p">,</span> <span class="n">suc_prob</span><span class="p">]</span> <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;nqubits=</span><span class="si">{</span><span class="n">n_qubits</span><span class="si">}</span><span class="s2">, num_iter=</span><span class="si">{</span><span class="n">num_iter</span><span class="si">}</span><span class="s2">, suc_prob=</span><span class="si">{</span><span class="n">suc_prob</span><span class="si">:</span><span class="s2">5e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -710,7 +678,7 @@ nqubits=16, num_iter=202, suc_prob=9.999368e-01
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
@@ -726,36 +694,22 @@ nqubits=16, num_iter=202, suc_prob=9.999368e-01
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x11a5fd410&gt;
+&lt;matplotlib.legend.Legend at 0x124b6f880&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_8.2_Grovers_algorithm_28_1.png" src="../_images/notebooks_8.2_Grovers_algorithm_28_1.png" />
+<img alt="../_images/notebooks_8.2_Grovers_algorithm_27_1.png" src="../_images/notebooks_8.2_Grovers_algorithm_27_1.png" />
 </div>
 </div>
-<p>The number of iterations = the number of oracle calls <span class="math notranslate nohighlight">\(k\)</span> is proportional to <span class="math notranslate nohighlight">\(O(\sqrt{N})\)</span>, not <span class="math notranslate nohighlight">\(O(N)\)</span>.</p>
 </section>
-</section>
-<section id="Appendix">
-<h2>Appendix<a class="headerlink" href="#Appendix" title="Link to this heading">¶</a></h2>
-<p>Interested readers are encouraged to use Grover’s algorithm to solve the convenience store placement problem <a class="reference external" href="https://github.com/quantum-challenge/2019/blob/master/problems/final/Final.ipynb">IBM Quantum Challenge 2019 contest problem</a>. An <a class="reference external" href="https://github.com/quantum-challenge/2019/blob/master/problems/final/answer_and_comment_by_judges.ipynb">example solution</a> has also been uploaded.</p>
-</section>
-<section id="Reference">
-<h2>Reference<a class="headerlink" href="#Reference" title="Link to this heading">¶</a></h2>
-<div class="line-block">
-<div class="line">[1] M. A. Nielsen and I. L. Chuang, <code class="docutils literal notranslate"><span class="pre">6.1</span> <span class="pre">The</span> <span class="pre">quantum</span> <span class="pre">search</span> <span class="pre">algorithm</span></code> of “Quantum Computation and Quantum Information 10th Anniversary Edition“, University Printing House</div>
-<div class="line">[2] D. Aggarwal, G. Brennen, T. Lee, M. Santha, and M. Tomamichel, “Quantum Attacks on Bitcoin, and How to Protect Against Them“, Ledger, [S.l.], v. 3, oct. 2018, <a class="reference external" href="https://ledgerjournal.org/ojs/index.php/ledger/article/view/127">https://ledgerjournal.org/ojs/index.php/ledger/article/view/127</a></div>
-<div class="line">[3] IBM Quantum Challenge 2019, Week 2 notebook <a class="reference external" href="https://github.com/quantum-challenge/2019/blob/master/problems/week2/week2.ipynb">https://github.com/quantum-challenge/2019/blob/master/problems/week2/week2.ipynb</a></div>
-<div class="line">[4] Keisuke Fujii, “Implement the Grover Search Quantum Algorithm in depth.“, <a class="reference external" href="https://github.com/keisukefujii/QulacsExamples/blob/master/GroverSearch.ipynb">https://github.com/keisukefujii/QulacsExamples/blob/master/GroverSearch.ipynb</a></div>
-</div>
 </section>
 </section>
 
@@ -790,8 +744,6 @@ nqubits=16, num_iter=202, suc_prob=9.999368e-01
 <li><a class="reference internal" href="#Checking-the-operation">Checking the operation</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#Appendix">Appendix</a></li>
-<li><a class="reference internal" href="#Reference">Reference</a></li>
 </ul>
 </li>
 </ul>

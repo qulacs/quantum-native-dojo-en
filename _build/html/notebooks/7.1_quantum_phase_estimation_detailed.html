@@ -12,15 +12,15 @@
     <meta name="docsearch:release" content="" />
     <meta name="docsearch:version" content="" />
     
-      <title>7-1. Quantum Phase Estimation Algorithm in Detail:Application to Hydrogen Molecule as an Example &mdash; Quantum Native Dojo  documentation</title>
+      <title>7-1. Quantum Phase Estimation Algorithm in Detail: Application to Hydrogen Molecule as an Example &mdash; Quantum Native Dojo  documentation</title>
     
     <link rel="stylesheet" href="../_static/bootstrap-icons.css" type="text/css" />
           <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
           <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
-          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
           <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
-          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
-          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css" />
           <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
         <link rel="index" title="Index" href="../genindex.html" />
         <link rel="search" title="Search" href="../search.html" />
@@ -201,7 +201,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="6_quantum_chemistry_calculation.html">Chapter 6 Quantum chemistry calculation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="6.1_openfermion_basics.html">6-1. OpenFermion Basics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qp_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using QURI Parts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
 </ul>
 </li>
@@ -235,13 +235,13 @@
           </div>
         </aside>
         <article id="content" class="nftt-content" role="main">
-    <section id="7-1.-Quantum-Phase-Estimation-Algorithm-in-Detail:Application-to-Hydrogen-Molecule-as-an-Example">
-<h1>7-1. Quantum Phase Estimation Algorithm in Detail:Application to Hydrogen Molecule as an Example<a class="headerlink" href="#7-1.-Quantum-Phase-Estimation-Algorithm-in-Detail:Application-to-Hydrogen-Molecule-as-an-Example" title="Link to this heading">¶</a></h1>
+    <section id="7-1.-Quantum-Phase-Estimation-Algorithm-in-Detail:-Application-to-Hydrogen-Molecule-as-an-Example">
+<h1>7-1. Quantum Phase Estimation Algorithm in Detail: Application to Hydrogen Molecule as an Example<a class="headerlink" href="#7-1.-Quantum-Phase-Estimation-Algorithm-in-Detail:-Application-to-Hydrogen-Molecule-as-an-Example" title="Link to this heading">¶</a></h1>
 <p>In this section, we review the Quantum Phase Estimation (QPE) algorithm and try to find the eigenvalues ​​of the Hamiltonian of a quantum many-body system (hydrogen molecule) using QPE. In the process, we will learn in detail the flow and techniques for applying QPE to real problems.</p>
 <section id="Review-of-Phase-Estimation">
 <h2>Review of Phase Estimation<a class="headerlink" href="#Review-of-Phase-Estimation" title="Link to this heading">¶</a></h2>
-<p>As we have already learned in <a class="reference internal" href="2.4_phase_estimation_beginner.html"><span class="doc">2-4. Phase estimation algorithm (introductory)</span></a>, given a unitary matrix <span class="math notranslate nohighlight">\(U\)</span>, QPE extracts its eigenvalues ​​<span class="math notranslate nohighlight">\(e^{i \lambda}\)</span> as bit strings. By using QPE as a subroutine, it is expected that many problems such as prime factorization and quantum many-body energy calculation (which can be reduced to the eigenvalue problem of unitary matrices) can be solved much faster than classical computers.</p>
-<p>Let us recall the transformation of QPE specifically. Let <span class="math notranslate nohighlight">\(| u_i \rangle\)</span> be the eigenvector corresponding to the <span class="math notranslate nohighlight">\(i\)</span>-th eigenvalue <span class="math notranslate nohighlight">\(e^{i \lambda_i}\)</span> of <span class="math notranslate nohighlight">\(U\)</span> (<span class="math notranslate nohighlight">\(U | u_i \rangle = e^{i \lambda_i} | u_i \ rangle\)</span>). At this time, using the control unitary operation <span class="math notranslate nohighlight">\(\Lambda (U)\)</span> and the quantum Fourier transform, the QPE realizes the following transform.</p>
+<p>As we have already learned in <a class="reference internal" href="2.4_phase_estimation_beginner.html"><span class="doc">2-4. Phase estimation algorithm (introductory)</span></a>, given a unitary matrix <span class="math notranslate nohighlight">\(U\)</span>, QPE extracts its eigenvalues ​​<span class="math notranslate nohighlight">\(e^{i \lambda}\)</span> as bit strings. By using QPE as a subroutine, it is expected that many problems such as prime factorization and quantum many-body energy calculation (which can be reduced to the eigenvalue problem of unitary matrices) can be solved much faster than on classical computers.</p>
+<p>Let us recall the transformation of QPE specifically. Let <span class="math notranslate nohighlight">\(| u_i \rangle\)</span> be the eigenvector corresponding to the <span class="math notranslate nohighlight">\(i\)</span>-th eigenvalue <span class="math notranslate nohighlight">\(e^{i \lambda_i}\)</span> of <span class="math notranslate nohighlight">\(U\)</span> (<span class="math notranslate nohighlight">\(U | u_i \rangle = e^{i \lambda_i} | u_i \rangle\)</span>). At this time, using the control unitary operation <span class="math notranslate nohighlight">\(\Lambda (U)\)</span> and the quantum Fourier transform, the QPE realizes the following transform.</p>
 <div class="math notranslate nohighlight">
 \[| u_i \rangle | 0 \rangle{}^{\otimes{t}} \xrightarrow{\text{QPE}} | u_i \rangle | \tilde{\lambda_i} \rangle.\]</div>
 <p>where <span class="math notranslate nohighlight">\(| 0 \rangle{}^{\otimes{t}}\)</span> are <span class="math notranslate nohighlight">\(t\)</span> auxiliary qubits and <span class="math notranslate nohighlight">\(\tilde{\lambda_i}=j_1j_2 \ldots j_t\)</span> is a bit string that is binary expression of <span class="math notranslate nohighlight">\(\lambda_i\)</span> up to the <span class="math notranslate nohighlight">\(t\)</span>th digit</p>
@@ -254,12 +254,12 @@
 <li><p>complexity of control unitary gate <span class="math notranslate nohighlight">\(\Lambda (U^{2^{k-1}})\)</span> (<span class="math notranslate nohighlight">\(k =1, ..., t\)</span>)</p></li>
 </ul>
 <p>First, regarding the number of ancillary bits, for example, 50 or more ancillary bits are required to obtain <span class="math notranslate nohighlight">\(\lambda_i\)</span> with the precision of double-precision real numbers used in modern classical computers. And with such a large number of ancillary bits (i.e. large <span class="math notranslate nohighlight">\(t\)</span> ), the control unitary gate <span class="math notranslate nohighlight">\(\Lambda (U^{2^{k-1}})\)</span> (<span class="math notranslate nohighlight">\(k =1, ..., t\)</span>) for very large powers of <span class="math notranslate nohighlight">\(U\)</span>. The difficulty of preparing such a control gate depends on what kind of matrix you consider for
-<span class="math notranslate nohighlight">\(U\)</span> , but in general it is not easy:</p>
-<p>As we will see later, in the case of the eigenvalue problem of the Hermitian matrix <span class="math notranslate nohighlight">\(H\)</span>, which is one of the most promising applications of QPE, <span class="math notranslate nohighlight">\(U\)</span> is the time evolution operator by <span class="math notranslate nohighlight">\(H\)</span>. That is, $ U = e^{-iH:nbsphinx-math:<cite>tau</cite>}$ (where <span class="math notranslate nohighlight">\(\tau\)</span> is a constant). Therefore, the large power of <span class="math notranslate nohighlight">\(U\)</span> means simulating development of <span class="math notranslate nohighlight">\(H\)</span> for a long time (exponential to the reciprocal of precision). This is very difficult.</p>
+<span class="math notranslate nohighlight">\(U\)</span> , but in general it is not easy.</p>
+<p>As we will see later, in the case of the eigenvalue problem of the Hermitian matrix <span class="math notranslate nohighlight">\(H\)</span>, which is one of the most promising applications of QPE, <span class="math notranslate nohighlight">\(U\)</span> is the time evolution operator by <span class="math notranslate nohighlight">\(H\)</span>. That is, $ U = e^{-iH:nbsphinx-math:<cite>tau</cite>}$ (where <span class="math notranslate nohighlight">\(\tau\)</span> is a constant). Therefore, the large power of <span class="math notranslate nohighlight">\(U\)</span> means simulating development of <span class="math notranslate nohighlight">\(H\)</span> for a long time (exponential to the reciprocal of precision) which is very difficult.</p>
 </section>
 <section id="Iterative-Quantum-Phase-Estimation">
 <h2>Iterative Quantum Phase Estimation<a class="headerlink" href="#Iterative-Quantum-Phase-Estimation" title="Link to this heading">¶</a></h2>
-<p>In fact, if we’re only interested in the eigenvalues ​​of <span class="math notranslate nohighlight">\(U\)</span> and don’t need the eigenstates, we can reduce the QPE ancillary bits. This is called Iterative Quantum Phase Estimation (IQPE),(<a class="reference external" href="https://journals.aps.org/pra/abstract/10.1103/PhysRevA.76.030306">https://journals.aps.org/pra/abstract/10.1103/PhysRevA.76.030306</a>) ,and is equivalent the method introduced in the section “Introduction: Improving the Hadamard test” of <a class="reference internal" href="2.4_phase_estimation_beginner.html"><span class="doc">chapter 2-4</span></a>, I will describe it here again.</p>
+<p>In fact, if we’re only interested in the eigenvalues ​​of <span class="math notranslate nohighlight">\(U\)</span> and don’t need the eigenstates, we can reduce the QPE ancillary bits. This is called Iterative Quantum Phase Estimation (IQPE), <a class="reference external" href="https://journals.aps.org/pra/abstract/10.1103/PhysRevA.76.030306">PhysRevA.76.030306</a>, and is equivalent to the method introduced in the section “Introduction: Improving the Hadamard test” of <a class="reference internal" href="2.4_phase_estimation_beginner.html"><span class="doc">chapter 2-4</span></a>, we will describe it here again.</p>
 <p>IQPE is a method of deterministically obtaining bit strings of binary expansion of eigenvalues ​​for each digit. Only one auxiliary bit is required, and one digit value (<span class="math notranslate nohighlight">\(j_k\)</span>) of the eigenvalue binary decimal representation <span class="math notranslate nohighlight">\(0.j_1...j_t\)</span> is obtained for each iteration. The steps are (<span class="math notranslate nohighlight">\(k = t, t-1, \ldots, 1\)</span>):</p>
 <section id="k-=-t">
 <h3><span class="math notranslate nohighlight">\(k = t\)</span><a class="headerlink" href="#k-=-t" title="Link to this heading">¶</a></h3>
@@ -321,7 +321,7 @@
 <h2>Example: Calculation of the ground state energy of the hydrogen molecular Hamiltonian using the quantum phase estimation algorithm<a class="headerlink" href="#Example:-Calculation-of-the-ground-state-energy-of-the-hydrogen-molecular-Hamiltonian-using-the-quantum-phase-estimation-algorithm" title="Link to this heading">¶</a></h2>
 <p>Let’s calculate the ground state energy of the hydrogen molecule using the above iterative phase estimation algorithm (the following content is based on the paper [1]).</p>
 <p>As we learned in <a class="reference internal" href="4.1_quantum_simulation.html"><span class="doc">Section 4-1</span></a> and <a class="reference internal" href="6.1_openfermion_basics.html"><span class="doc">Section 6-1</span></a>, the ground state energy of the hydrogen molecule is the smallest eigenvalue of Hamiltonian <span class="math notranslate nohighlight">\(H\)</span>. In QPE and IQPE, the eigenvalue problem of Hamiltonian <span class="math notranslate nohighlight">\(H\)</span> is solved by <strong>finding the eigenvalues ​​of its time evolution operator</strong> <span class="math notranslate nohighlight">\(U = e^{−iH \tau}\)</span>.</p>
-<p>Here, <span class="math notranslate nohighlight">\(E_{\text{min}} and E_{\text{max}}\)</span> are the smallest and largest eigenvalues. <span class="math notranslate nohighlight">\(\tau\)</span> is some constant and is set so that <span class="math notranslate nohighlight">\([ E_{\text{min}}, E_{\text{max}}]\)</span> fit in <span class="math notranslate nohighlight">\([0, 2\pi]\)</span>. (add a constant shift if necessary). Although in QPE and IQPE, the phase of the eigenvalue of <span class="math notranslate nohighlight">\(U\)</span> has <span class="math notranslate nohighlight">\(2\pi\)</span> ambiguity, the eigenvalues ​​of <span class="math notranslate nohighlight">\(H\)</span> can be uniquely restored from the eigenvalues ​​of <span class="math notranslate nohighlight">\(U\)</span> this way.</p>
+<p>Here, <span class="math notranslate nohighlight">\(E_{\text{min}}\)</span> and <span class="math notranslate nohighlight">\(E_{\text{max}}\)</span> are the smallest and largest eigenvalues. <span class="math notranslate nohighlight">\(\tau\)</span> is some constant and is set so that <span class="math notranslate nohighlight">\([ E_{\text{min}}, E_{\text{max}}]\)</span> fit in <span class="math notranslate nohighlight">\([0, 2\pi]\)</span>. (add a constant shift if necessary). Although in QPE and IQPE, the phase of the eigenvalue of <span class="math notranslate nohighlight">\(U\)</span> has <span class="math notranslate nohighlight">\(2\pi\)</span> ambiguity, the eigenvalues ​​of <span class="math notranslate nohighlight">\(H\)</span> can be uniquely restored from the eigenvalues ​​of <span class="math notranslate nohighlight">\(U\)</span> this way.</p>
 <p>The steps required to calculate the basis energy are:</p>
 <ol class="arabic simple" start="0">
 <li><p>(Reduce Hamiltonian size using symmetry etc.)</p></li>
@@ -333,11 +333,205 @@
 <p>A detailed explanation of the method and an implementation example are given below.</p>
 <section id="0.-(Reduce-Hamiltonian-size-using-symmetry-etc.)">
 <h3>0. (Reduce Hamiltonian size using symmetry etc.)<a class="headerlink" href="#0.-(Reduce-Hamiltonian-size-using-symmetry-etc.)" title="Link to this heading">¶</a></h3>
-<p>This step is necessary to reduce resources as much as possible when actually running IQPE on a simulator or on a real machine, and is not theoretically essential. For details, refer to reference [1], but if we map the second quantized Hamiltonian of the hydrogen molecule (STO-6G basis) to the qubit system by the Bravyi-Kitaev transformation, we get a 4qubit Hamiltonian = <span class="math notranslate nohighlight">\(16 \times 16\)</span> matrix. However, if we partially diagonalize the Hamiltonian using the <strong>symmetry of the Hamiltonian</strong>
+<p>This step is necessary to reduce resources as much as possible when actually running IQPE on a simulator or on a real machine, and is not theoretically essential. For details, refer to reference [1], but if we map the second quantized Hamiltonian of the hydrogen molecule (STO-6G basis) to the qubit system by the Bravyi-Kitaev transformation, we get a 4 qubit Hamiltonian = <span class="math notranslate nohighlight">\(16 \times 16\)</span> matrix. However, if we partially diagonalize the Hamiltonian using the <strong>symmetry of the Hamiltonian</strong>
 (such as the law of conservation of the number of electrons), we can get the ground state with 2 qubits, and the Hamiltonian has only 6 kinds of terms as follows.</p>
 <div class="math notranslate nohighlight">
 \[H = \sum_i g_i H_i = g_0 I + g_1 Z_0 + g_2 Z_1 + g_3 Z_0 Z_1 + g_4 Y_0 Y_1 + g_5 X_0 X_1\]</div>
 <p>where the coefficient <span class="math notranslate nohighlight">\(g_i\)</span> is a real number and its value depends on the interatomic distance (arrangement) of hydrogen molecules. Readers unfamiliar with chemistry should just understand that the above Hermitian matrix corresponding to the hydrogen molecule exists and that it is important to find the minimum eigenvalue of it.</p>
+<p>For the interested readers, we present how to construct the reduced Hamiltonian from scratch. First, let’s follow reference [1] and construct the full qubit Hamiltoinian with the Bravyi-Kitaev transformation. Please check out the QURI Parts tutorial page on <a class="reference external" href="https://quri-parts.qunasys.com/tutorials/quantum_chemistry/qubit_operator_mapping">Fermion-Qubit mapping</a> for more details.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">gto</span><span class="p">,</span> <span class="n">scf</span>
+<span class="kn">from</span> <span class="nn">quri_parts.pyscf.mol</span> <span class="kn">import</span> <span class="n">get_spin_mo_integrals_from_mole</span>
+<span class="kn">from</span> <span class="nn">quri_parts.openfermion.mol</span> <span class="kn">import</span> <span class="n">get_qubit_mapped_hamiltonian</span>
+<span class="kn">from</span> <span class="nn">quri_parts.openfermion.transforms</span> <span class="kn">import</span> <span class="n">bravyi_kitaev</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.operator</span> <span class="kn">import</span> <span class="n">commutator</span><span class="p">,</span> <span class="n">zero</span>
+
+<span class="n">mol</span> <span class="o">=</span> <span class="n">gto</span><span class="o">.</span><span class="n">M</span><span class="p">(</span><span class="n">atom</span><span class="o">=</span><span class="s2">&quot;H 0 0 0; H 0 0 0.7&quot;</span><span class="p">,</span> <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;sto-6g&quot;</span><span class="p">)</span>
+<span class="n">mf</span> <span class="o">=</span> <span class="n">scf</span><span class="o">.</span><span class="n">RHF</span><span class="p">(</span><span class="n">mol</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">full_space</span><span class="p">,</span> <span class="n">spin_mo_eint</span> <span class="o">=</span> <span class="n">get_spin_mo_integrals_from_mole</span><span class="p">(</span><span class="n">mol</span><span class="p">,</span> <span class="n">mf</span><span class="o">.</span><span class="n">mo_coeff</span><span class="p">)</span>
+<span class="n">qubit_hamiltonian</span><span class="p">,</span> <span class="n">bk_op_mapper</span><span class="p">,</span> <span class="n">bk_state_mapper</span> <span class="o">=</span> <span class="n">get_qubit_mapped_hamiltonian</span><span class="p">(</span><span class="n">full_space</span><span class="p">,</span> <span class="n">spin_mo_eint</span><span class="p">,</span> <span class="n">bravyi_kitaev</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">op</span><span class="p">,</span> <span class="n">coeff</span> <span class="ow">in</span> <span class="n">qubit_hamiltonian</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">coeff</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="si">}</span><span class="s2"> * </span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(0.17963+0j) * Z0
+(-0.04975+0j) * I
+(0.17963+0j) * Z0 Z1
+(-0.24131+0j) * Z2
+(-0.24131+0j) * Z1 Z2 Z3
+(0.04482+0j) * Y0 Z1 Y2
+(0.04482+0j) * X0 Z1 X2
+(0.04482+0j) * X0 Z1 X2 Z3
+(0.04482+0j) * Y0 Z1 Y2 Z3
+(0.17059+0j) * Z1
+(0.12303+0j) * Z0 Z2
+(0.16786+0j) * Z0 Z1 Z2
+(0.16786+0j) * Z0 Z1 Z2 Z3
+(0.12303+0j) * Z0 Z2 Z3
+(0.17671+0j) * Z1 Z3
+</pre></div></div>
+</div>
+<p>Then we exploit some symmetry properties and reduce the Hamiltonian above. Note that we will be acting on the Hartree Fock state:</p>
+<p><span class="math">\begin{equation}
+|\text{HF}\rangle = c_0^{\dagger}c_1^{\dagger}|0000\rangle,
+\end{equation}</span></p>
+<p>which takes the form</p>
+<p><span class="math">\begin{equation}
+|\text{HF}\rangle_{\text{BK}} = |0001\rangle
+\end{equation}</span></p>
+<p>under the Bravi-Kitaev transform. In QURI Parts, we can show this by:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bk_state_mapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ComputationalBasisState(qubit_count=4, bits=0b1, phase=0π/2)
+</pre></div></div>
+</div>
+<p>As the Hamiltonian contains only Pauli operators <span class="math notranslate nohighlight">\(I\)</span> and <span class="math notranslate nohighlight">\(Z\)</span> on qubit 1 and 3, they act as identity operator on <span class="math notranslate nohighlight">\(|\text{HF}\rangle_{\text{BK}}\)</span> on qubit 1 and 3. This means that we can remove these qubits from the Hamiltonian and relabel qubit 2 as qubit 1.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.core.operator</span> <span class="kn">import</span> <span class="n">Operator</span><span class="p">,</span> <span class="n">PAULI_IDENTITY</span><span class="p">,</span> <span class="n">pauli_label</span>
+
+<span class="k">def</span> <span class="nf">get_reduced_operator</span><span class="p">(</span><span class="n">operator</span><span class="p">:</span> <span class="n">Operator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Operator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute reduced hamiltonian</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">reduced_op</span> <span class="o">=</span> <span class="n">Operator</span><span class="p">()</span>
+    <span class="n">pauli_map</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;Y&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="s2">&quot;Z&quot;</span><span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">op</span><span class="p">,</span> <span class="n">coeff</span> <span class="ow">in</span> <span class="n">operator</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="n">PAULI_IDENTITY</span><span class="p">:</span>
+            <span class="n">reduced_op</span><span class="o">.</span><span class="n">add_term</span><span class="p">(</span><span class="n">PAULI_IDENTITY</span><span class="p">,</span> <span class="n">coeff</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">new_str</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">op</span><span class="o">.</span><span class="n">index_and_pauli_id_list</span><span class="p">):</span>
+            <span class="c1"># Remove Z1 and Z3 from the Hamiltonian as they both act as identity</span>
+            <span class="c1"># when acting on the Hartree-Fock state.</span>
+            <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">new_str</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pauli_map</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;0&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">new_str</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pauli_map</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;1&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">p</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Symmetry is not satisfied.&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_str</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">reduced_op</span><span class="o">.</span><span class="n">add_term</span><span class="p">(</span><span class="n">PAULI_IDENTITY</span><span class="p">,</span> <span class="n">coeff</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">reduced_op</span><span class="o">.</span><span class="n">add_term</span><span class="p">(</span><span class="n">pauli_label</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">new_str</span><span class="p">)),</span> <span class="n">coeff</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">reduced_op</span>
+
+<span class="n">reduced_hamiltonian</span> <span class="o">=</span> <span class="n">get_reduced_operator</span><span class="p">(</span><span class="n">qubit_hamiltonian</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">op</span><span class="p">,</span> <span class="n">coeff</span> <span class="ow">in</span> <span class="n">reduced_hamiltonian</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">coeff</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="si">}</span><span class="s2"> * </span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(0.35925+0j) * Z0
+(0.29755+0j) * I
+(-0.48262+0j) * Z1
+(0.08964+0j) * Y0 Y1
+(0.08964+0j) * X0 X1
+(0.58178+0j) * Z0 Z1
+</pre></div></div>
+</div>
+<p>As there could be terms in the Hamiltonian that commutes with all the Pauli strings in the Hamiltonian, in this case <span class="math notranslate nohighlight">\(Z_0 Z_1\)</span> and the identity operator, we can remove them from the Hamiltonian for further reducing the size of the Hamiltonian.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">matrix_power</span><span class="p">,</span> <span class="n">eig</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse.linalg</span> <span class="kn">import</span> <span class="n">eigsh</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.operator</span> <span class="kn">import</span> <span class="n">Operator</span><span class="p">,</span> <span class="n">pauli_label</span><span class="p">,</span> <span class="n">get_sparse_matrix</span>
+
+<span class="k">def</span> <span class="nf">remove_all_commuting_terms</span><span class="p">(</span><span class="n">reduced_op</span><span class="p">:</span> <span class="n">Operator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove terms that commute with rest of the Hamiltonian</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_commuting</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">op1</span> <span class="ow">in</span> <span class="n">reduced_op</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">op2</span> <span class="ow">in</span> <span class="n">reduced_op</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">op2</span> <span class="ow">in</span> <span class="n">all_commuting</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">commutator</span><span class="p">(</span><span class="n">Operator</span><span class="p">({</span><span class="n">op1</span><span class="p">:</span> <span class="mi">1</span><span class="p">}),</span> <span class="n">Operator</span><span class="p">({</span><span class="n">op2</span><span class="p">:</span> <span class="mi">1</span><span class="p">}))</span> <span class="o">!=</span> <span class="n">zero</span><span class="p">():</span>
+                <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">all_commuting</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">op1</span><span class="p">)</span>
+
+    <span class="p">[</span><span class="n">reduced_op</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">op</span><span class="p">)</span> <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">all_commuting</span><span class="p">]</span>
+    <span class="k">return</span>
+
+<span class="n">remove_all_commuting_terms</span><span class="p">(</span><span class="n">reduced_hamiltonian</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;reduced_hamiltonian:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">op</span><span class="p">,</span> <span class="n">coeff</span> <span class="ow">in</span> <span class="n">reduced_hamiltonian</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">coeff</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="si">}</span><span class="s2"> * </span><span class="si">{</span><span class="n">op</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+reduced_hamiltonian:
+
+(0.35925+0j) * Z0
+(-0.48262+0j) * Z1
+(0.08964+0j) * Y0 Y1
+(0.08964+0j) * X0 X1
+</pre></div></div>
+</div>
+<p>We have finally obtained <span class="math notranslate nohighlight">\(H_{\textrm{eff}}\)</span>. Now, let’s diagonalize it. The unit of energy used is <a class="reference external" href="https://en.wikipedia.org/wiki/Hartree">Hartree (Ha)</a>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sparse_matrix</span> <span class="o">=</span> <span class="n">get_sparse_matrix</span><span class="p">(</span><span class="n">reduced_hamiltonian</span><span class="p">)</span>
+<span class="n">exact_eigenvalue</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">eigsh</span><span class="p">(</span><span class="n">sparse_matrix</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;SA&#39;</span><span class="p">)</span> <span class="c1">## only smallest eigenvalue and eigenvector are calculated</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;exact_eigenvalue: </span><span class="si">{:.10f}</span><span class="s1"> Ha&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exact_eigenvalue</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="c1">## print eigenvalue up to 10 digits after decimal point</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+exact_eigenvalue: -0.8607485699 Ha
+</pre></div></div>
+</div>
 </section>
 <section id="1.-Accurate-approximation-of-Hamiltonian-time-evolution-operator-U=e^{-iH\tau}">
 <h3>1. Accurate approximation of Hamiltonian time evolution operator <span class="math notranslate nohighlight">\(U=e^{-iH\tau}\)</span><a class="headerlink" href="#1.-Accurate-approximation-of-Hamiltonian-time-evolution-operator-U=e^{-iH\tau}" title="Link to this heading">¶</a></h3>
@@ -355,111 +549,44 @@
 <p>Let’s examine the errors in this approximation. When we do a rough analytical evaluation, we have [2]</p>
 <div class="math notranslate nohighlight">
 \[\left| U_{\textrm{eff}} - U_{\textrm{Trot}}^{(N)} (\tau) \right| \sim \frac{\tau^2}{2N} \sum_{i &gt; j} | [H_i, H_j] |\]</div>
-<p>この表式によると、欲しい精度 <span class="math notranslate nohighlight">\(\epsilon\)</span> に対して <span class="math notranslate nohighlight">\(N \sim \tau^2/\epsilon\)</span> 程度の大きさの <span class="math notranslate nohighlight">\(N\)</span> をとれば良い事が分かる。</p>
 <p>According to this expression, it is possible to take <span class="math notranslate nohighlight">\(N\)</span> with a size of about <span class="math notranslate nohighlight">\(N \sim \tau^2/\epsilon\)</span> for the desired precision <span class="math notranslate nohighlight">\(\epsilon\)</span>.</p>
-<p>今回取り扱う系は <span class="math notranslate nohighlight">\(4 \times 4\)</span> という小さい行列で表されるので、<span class="math notranslate nohighlight">\(H_{\textrm{eff}}\)</span> を実際に厳密に対角化してみてその最小固有値 <span class="math notranslate nohighlight">\(E_{\textrm{min}}\)</span> を求め、<span class="math notranslate nohighlight">\(U_{\textrm{Trot}}^{(N)}\)</span> の固有値 <span class="math notranslate nohighlight">\(e^{i \lambda_{\textrm{Trot}}\tau}\)</span> の <span class="math notranslate nohighlight">\(\lambda_{\textrm{Trot}}\)</span> と比較してみよう。</p>
 <p>Since the system we are dealing with here is represented by a small matrix of <span class="math notranslate nohighlight">\(4 \times 4\)</span>, let’s diagonalize <span class="math notranslate nohighlight">\(H_{\textrm{eff}}\)</span> exactly and find its minimum eigenvalue <span class="math notranslate nohighlight">\(E_{\textrm{min}}\)</span>, and compare it with <span class="math notranslate nohighlight">\(\lambda_{\textrm{Trot}}\)</span> of <span class="math notranslate nohighlight">\(e^{i \lambda_{\textrm{Trot}}\tau}\)</span> which is the eigenvalue of <span class="math notranslate nohighlight">\(U_{\textrm{Trot}}^{(N)}\)</span>.</p>
-<p>First, we diagonize <span class="math notranslate nohighlight">\(H_{\textrm{eff}}\)</span>. The unit of energy used is <a class="reference external" href="https://en.wikipedia.org/wiki/Hartree">Hartree (Ha)</a>.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">matrix_power</span><span class="p">,</span> <span class="n">eig</span>
-<span class="kn">from</span> <span class="nn">scipy.sparse.linalg</span> <span class="kn">import</span> <span class="n">eigsh</span>
-<span class="kn">from</span> <span class="nn">openfermion.ops</span> <span class="kn">import</span> <span class="n">QubitOperator</span>
-<span class="kn">from</span> <span class="nn">openfermion.linalg</span> <span class="kn">import</span> <span class="n">get_sparse_operator</span> <span class="c1">#If you have an error, please update openfermion later than version 1.0.0</span>
-<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span><span class="p">,</span> <span class="n">Observable</span><span class="p">,</span> <span class="n">QuantumCircuit</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="c1">## Run only in Google Colaboratory or (Linux or Mac) jupyter notebook environment</span>
-<span class="c1">## Qulacs errors will be output normally.</span>
-<span class="o">!</span>pip3<span class="w"> </span>install<span class="w"> </span>wurlitzer
-<span class="o">%</span><span class="k">load_ext</span> wurlitzer
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">hamiltonian_eff</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    distance = 0.70 A</span>
-<span class="sd">    removed &#39;I&#39; and &#39;Z0 Z1&#39; terms, which add up to -1.31916027</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">n_qubits</span> <span class="o">=</span> <span class="mi">2</span>
-    <span class="n">g_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.3593</span><span class="p">,</span> <span class="mf">0.0896</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.4826</span><span class="p">,</span> <span class="mf">0.0896</span><span class="p">]</span> <span class="c1">## taken from table 1 of paper [1]</span>
-    <span class="n">pauli_strings</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Z0&#39;</span><span class="p">,</span> <span class="s1">&#39;Y0 Y1&#39;</span><span class="p">,</span> <span class="s1">&#39;Z1&#39;</span><span class="p">,</span> <span class="s1">&#39;X0 X1&#39;</span><span class="p">]</span>
-    <span class="n">hamiltonian</span> <span class="o">=</span> <span class="n">QubitOperator</span><span class="p">()</span>
-    <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">g_list</span><span class="p">,</span> <span class="n">pauli_strings</span><span class="p">):</span>
-        <span class="n">hamiltonian</span> <span class="o">+=</span> <span class="n">g</span> <span class="o">*</span> <span class="n">QubitOperator</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
-    <span class="n">sparse_matrix</span> <span class="o">=</span> <span class="n">get_sparse_operator</span><span class="p">(</span><span class="n">hamiltonian</span><span class="p">,</span> <span class="n">n_qubits</span><span class="o">=</span><span class="n">n_qubits</span><span class="p">)</span>
-    <span class="n">vals</span><span class="p">,</span> <span class="n">vecs</span> <span class="o">=</span> <span class="n">eigsh</span><span class="p">(</span><span class="n">sparse_matrix</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;SA&#39;</span><span class="p">)</span> <span class="c1">## only smallest eigenvalue and eigenvector are calculated</span>
-    <span class="k">return</span> <span class="n">sparse_matrix</span><span class="p">,</span> <span class="n">vals</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span><span class="p">,</span> <span class="n">eigs</span> <span class="o">=</span> <span class="n">hamiltonian_eff</span><span class="p">()</span>
-<span class="n">exact_eigenvalue</span> <span class="o">=</span> <span class="n">eigs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;exact_eigenvalue: </span><span class="si">{:.10f}</span><span class="s1"> Ha&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exact_eigenvalue</span><span class="p">))</span> <span class="c1">## print eigenvalue up to 10 digits after decimal point</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-exact_eigenvalue: -0.8607602744 Ha
-</pre></div></div>
-</div>
 <p>Next, we diagonize <span class="math notranslate nohighlight">\(U_{\textrm{Trot}}^{(N)}\)</span>. Later, we implement <span class="math notranslate nohighlight">\(U_{\textrm{Trot}}^{(N)}\)</span> as a quantum circuit. Here, we calculate it by using the following formula which holds true when <span class="math notranslate nohighlight">\(H_i^2 = I\)</span></p>
 <div class="math notranslate nohighlight">
 \[\left( \prod_{i=1,2,4,5} \exp[-i g_i H_i \tau/N] \right)^N = \left( \prod_{i=1,2,4,5} \left( \cos(g_i\tau/N) I -i \sin(g_i\tau/N) H_i \right) \right)^N\]</div>
 <p>Then, find the <span class="math notranslate nohighlight">\(\lambda_{\textrm{Trot}}\)</span> of the eigenvalue <span class="math notranslate nohighlight">\(e^{-i \lambda_{\textrm{Trot}}\tau}\)</span> of <span class="math notranslate nohighlight">\(U_{\textrm{Trot}}^{(N)}\)</span> at <span class="math notranslate nohighlight">\(N = 1, 3, \ldots, 9\)</span> and compare it with <span class="math notranslate nohighlight">\(E_{\textrm{min}}\)</span>.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">order_n_trotter_approx</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">n_trotter_steps</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">expm</span>
+<span class="k">def</span> <span class="nf">order_n_trotter_approx</span><span class="p">(</span><span class="n">t</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n_trotter_steps</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    ordering: &#39;Z0&#39;, &#39;Y0 Y1&#39;, &#39;Z1&#39;, &#39;X0 X1&#39;</span>
 <span class="sd">    Returns:</span>
-<span class="sd">        sparse_matrix: trotterized [exp(iHt/n)]^n</span>
 <span class="sd">        args: list of phases of each eigenvalue, exp(i*phase)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">n_qubits</span> <span class="o">=</span> <span class="mi">2</span>
-    <span class="n">g_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.3593</span><span class="p">,</span> <span class="mf">0.0896</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.4826</span><span class="p">,</span> <span class="mf">0.0896</span><span class="p">]</span>
-    <span class="n">pauli_strings</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Z0&#39;</span><span class="p">,</span> <span class="s1">&#39;Y0 Y1&#39;</span><span class="p">,</span> <span class="s1">&#39;Z1&#39;</span><span class="p">,</span> <span class="s1">&#39;X0 X1&#39;</span><span class="p">]</span>
-    <span class="n">terms</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">g</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">g_list</span><span class="p">,</span> <span class="n">pauli_strings</span><span class="p">):</span>
-        <span class="n">arg</span> <span class="o">=</span> <span class="n">g</span> <span class="o">*</span> <span class="n">t</span> <span class="o">/</span> <span class="n">n_trotter_steps</span>
-        <span class="n">qop</span> <span class="o">=</span> <span class="nb">complex</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">arg</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">QubitOperator</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="nb">complex</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">arg</span><span class="p">))</span> <span class="o">*</span> <span class="n">QubitOperator</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
-        <span class="n">terms</span> <span class="o">+=</span> <span class="p">[</span><span class="n">get_sparse_operator</span><span class="p">(</span><span class="n">qop</span><span class="p">,</span> <span class="n">n_qubits</span><span class="o">=</span><span class="n">n_qubits</span><span class="p">)]</span>
-    <span class="n">sparse_matrix</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">,</span> <span class="n">terms</span><span class="p">)</span>
-    <span class="n">matrix</span> <span class="o">=</span> <span class="n">matrix_power</span><span class="p">(</span><span class="n">sparse_matrix</span><span class="o">.</span><span class="n">toarray</span><span class="p">(),</span> <span class="n">n_trotter_steps</span><span class="p">)</span>  <span class="c1">## this is U_{trot}^{(N)}</span>
-    <span class="n">vals</span><span class="p">,</span> <span class="n">vecs</span> <span class="o">=</span> <span class="n">eig</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>  <span class="c1">## e^{i lambda_{trot} }</span>
+    <span class="n">pauli_strings</span> <span class="o">=</span> <span class="p">[</span><span class="n">pauli_label</span><span class="p">(</span><span class="s1">&#39;Z0&#39;</span><span class="p">),</span> <span class="n">pauli_label</span><span class="p">(</span><span class="s1">&#39;Y0 Y1&#39;</span><span class="p">),</span> <span class="n">pauli_label</span><span class="p">(</span><span class="s1">&#39;Z1&#39;</span><span class="p">),</span> <span class="n">pauli_label</span><span class="p">(</span><span class="s1">&#39;X0 X1&#39;</span><span class="p">)]</span>
+    <span class="n">time_evolution_exponent</span> <span class="o">=</span> <span class="n">reduced_hamiltonian</span> <span class="o">*</span> <span class="n">t</span> <span class="o">/</span> <span class="n">n_trotter_steps</span>
+
+    <span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">n_qubits</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">pauli_strings</span><span class="p">:</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">time_evolution_exponent</span><span class="p">[</span><span class="n">h</span><span class="p">]</span>
+        <span class="n">exponent</span> <span class="o">=</span> <span class="n">get_sparse_matrix</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">n_qubits</span><span class="p">)</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+        <span class="n">matrix</span> <span class="o">=</span> <span class="n">matrix</span> <span class="o">@</span> <span class="n">expm</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">g</span> <span class="o">*</span> <span class="n">exponent</span><span class="p">)</span>
+    <span class="n">matrix</span> <span class="o">=</span> <span class="n">matrix_power</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">n_trotter_steps</span><span class="p">)</span>  <span class="c1">## this is U_{trot}^{(N)}</span>
+
+    <span class="n">vals</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">eig</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span>  <span class="c1">## e^{i lambda_{trot} }</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span> <span class="c1">## returns value in [-pi, pi] -&gt; we don&#39;t modify output since we know exact value is around -0.86</span>
-    <span class="k">return</span> <span class="n">sparse_matrix</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="c1">## we return sorted values</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tau</span> <span class="o">=</span> <span class="mf">0.640</span> <span class="c1">## taken from table 1 of paper [1]</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="c1">## we return sorted values</span>
+
+<span class="n">tau</span> <span class="o">=</span> <span class="mf">0.640</span> <span class="c1">## taken from table 1 of paper [1]</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;N, E_trot, |exact_eig - E_trot|&#39;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">phases</span> <span class="o">=</span> <span class="n">order_n_trotter_approx</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">phases</span> <span class="o">=</span> <span class="n">order_n_trotter_approx</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
     <span class="n">e_trotter</span> <span class="o">=</span> <span class="n">phases</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">tau</span>
-    <span class="nb">print</span><span class="p">(</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">e_trotter</span><span class="si">:</span><span class="s2">.10f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">exact_eigenvalue</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">e_trotter</span><span class="p">)</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">e_trotter</span><span class="si">:</span><span class="s2">.10f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="nb">abs</span><span class="p">(</span><span class="n">exact_eigenvalue</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">e_trotter</span><span class="p">)</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -469,18 +596,17 @@ exact_eigenvalue: -0.8607602744 Ha
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 N, E_trot, |exact_eig - E_trot|
-1, -0.8602760326, 4.842e-04
-3, -0.8607068561, 5.342e-05
-5, -0.8607410548, 1.922e-05
-7, -0.8607504700, 9.804e-06
-9, -0.8607543437, 5.931e-06
+1, -0.8602638575, 4.847e-04
+3, -0.8606950998, 5.347e-05
+5, -0.8607293316, 1.924e-05
+7, -0.8607387560, 9.814e-06
+9, -0.8607426335, 5.936e-06
 </pre></div></div>
 </div>
-<p>As the order <span class="math notranslate nohighlight">\(N\)</span> increases, the accuracy of the approximation increases.To approximate the true energy eigenvalues ​​with the accuracy required by chemical calculation, called chemical accuracy ( <span class="math notranslate nohighlight">\(1.6 × 10^{−3}\)</span> Ha), <span class="math notranslate nohighlight">\(N = 1\)</span> turns out to be enough this time.</p>
 </section>
 <section id="2.-Decomposition-of-the-control-time-evolution-operator-into-a-set-of-gates-that-can-be-easily-executed-on-a-quantum-computer-and-implementation.">
 <h3>2. Decomposition of the control time evolution operator into a set of gates that can be easily executed on a quantum computer and implementation.<a class="headerlink" href="#2.-Decomposition-of-the-control-time-evolution-operator-into-a-set-of-gates-that-can-be-easily-executed-on-a-quantum-computer-and-implementation." title="Link to this heading">¶</a></h3>
-<p>To run the controlled time evolution operator <span class="math notranslate nohighlight">\(\Lambda \left( \left( U_{\textrm{Trot}}^{(N)} \right)^{2^k} \right)\)</span> on a quantum computer needs to decompose this into simple quantum gates. In this example, we need to decompose the following controlled rotation gate included in <span class="math notranslate nohighlight">\(U_{\textrm{Trot}}^{(N)}\)</span>.</p>
+<p>To run the controlled time evolution operator <span class="math notranslate nohighlight">\(\Lambda \left( \left( U_{\textrm{Trot}}^{(N)} \right)^{2^k} \right)\)</span> on a quantum computer, we need to decompose this into simple quantum gates. In this example, we need to decompose the following controlled rotation gate included in <span class="math notranslate nohighlight">\(U_{\textrm{Trot}}^{(N)}\)</span>.</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(\Lambda(R_Z(\theta))\)</span></p></li>
 <li><p><span class="math notranslate nohighlight">\(\Lambda(R_{XX}(\theta))\)</span></p></li>
@@ -504,28 +630,34 @@ N, E_trot, |exact_eig - E_trot|
 \[\textrm{CNOT}_{0,1} \left(I_0 \otimes Z_1 \right) \textrm{CNOT}_{0,1} = Z_0 \otimes Z_1\]</div>
 <p>Using the above, <span class="math notranslate nohighlight">\(\Lambda(R_{ZZ}(\theta))\)</span> can be realized.</p>
 <p>Then, using <span class="math notranslate nohighlight">\(H Z H = X\)</span> or <span class="math notranslate nohighlight">\(SH Z HS^{\dagger} = Y\)</span>, <span class="math notranslate nohighlight">\(\Lambda(R_{XX}(\theta))\)</span>, <span class="math notranslate nohighlight">\(\Lambda(R_{YY}(\theta) )\)</span> can be realized respectively. See also the implementation below for details.</p>
-<p>In the code below, in Qulacs, we implemente a quantum circuit of time evolution operator <span class="math notranslate nohighlight">\(\Lambda \left( \left( U_{\textrm{Trot}}^{(N)} \right)^{2^k} \right)\)</span> and construct a circuit to run in IQPE. The circuit diagram is as follows.</p>
+<p>In the code below, in Qulacs, we implement a quantum circuit of time evolution operator <span class="math notranslate nohighlight">\(\Lambda \left( \left( U_{\textrm{Trot}}^{(N)} \right)^{2^k} \right)\)</span> and construct a circuit to run in IQPE. The circuit diagram is as follows.</p>
 <img alt="IQPE circuit" src="../_images/IQPE.png" />
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">IQPE_circuit</span><span class="p">(</span><span class="n">g_list</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">kickback_phase</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">n_trotter_step</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.circuit</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
+
+<span class="k">def</span> <span class="nf">psi_register_circuit</span><span class="p">(</span>
+    <span class="n">g_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">tau</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">n_trotter_step</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QuantumCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Construct controlled U^{2^{k-1}} circuit.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">n_qubits</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1">## 2 for system, 1 for ancillary</span>
-    <span class="n">a_idx</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1">## ancilla index</span>
+    <span class="n">a_idx</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="n">phi</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">tau</span> <span class="o">/</span> <span class="n">n_trotter_step</span><span class="p">)</span> <span class="o">*</span> <span class="n">g_list</span> <span class="c1">## coefficient for Pauli</span>
     <span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
-    <span class="c1">## Apply Hadamard to ancilla</span>
-    <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="n">a_idx</span><span class="p">)</span>
-    <span class="c1">## Apply kickback phase rotation to ancilla bit</span>
-    <span class="n">circuit</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="n">a_idx</span><span class="p">,</span> <span class="n">kickback_phase</span><span class="p">)</span>
+
     <span class="c1">## controlled time evolution (Apply controll-e^{-iH*tau} for 2^{k-1} times</span>
     <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">):</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_trotter_step</span><span class="p">):</span>
             <span class="c1"># CU(Z0) i.e. controlled exp(i phi[0]*Z_0)</span>
-            <span class="n">circuit</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1">## note that qulacs&#39; RZ is defined as RZ(theta) = e^{i*theta/2*Z}</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="c1">## note that QURI Parts RZ is defined as RZ(theta) = e^{-i*theta/2*Z}</span>
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="n">a_idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="n">circuit</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="n">a_idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
             <span class="c1"># CU(Y0 Y1)</span>
@@ -534,9 +666,9 @@ N, E_trot, |exact_eig - E_trot|
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="n">circuit</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">phi</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="n">a_idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">phi</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="n">a_idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">phi</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="n">a_idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -545,27 +677,46 @@ N, E_trot, |exact_eig - E_trot|
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_S_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
             <span class="c1"># CU(Z1)</span>
-            <span class="n">circuit</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">phi</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-            <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="n">a_idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">phi</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="n">a_idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">phi</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="n">a_idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
             <span class="c1"># CU(X0 X1)</span>
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-            <span class="n">circuit</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">phi</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
-            <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="n">a_idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="n">phi</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="n">a_idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">phi</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="n">a_idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
+    <span class="k">return</span> <span class="n">circuit</span>
+
+<span class="k">def</span> <span class="nf">IQPE_circuit</span><span class="p">(</span>
+    <span class="n">g_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">tau</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">kickback_phase</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">n_trotter_step</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QuantumCircuit</span><span class="p">:</span>
+    <span class="n">n_qubits</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1">## 2 for system, 1 for ancillary</span>
+    <span class="n">a_idx</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1">## ancilla index</span>
+
+    <span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">,</span> <span class="n">cbit_count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1">## Apply Hadamard to ancilla</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="n">a_idx</span><span class="p">)</span>
+    <span class="c1">## Apply kickback phase rotation to ancilla bit</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="n">a_idx</span><span class="p">,</span> <span class="o">-</span><span class="n">kickback_phase</span><span class="p">)</span>
+    <span class="c1">## controlled time evolution (Apply controll-e^{-iH*tau} for 2^{k-1} times</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">psi_register_circuit</span><span class="p">(</span><span class="n">g_list</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">n_trotter_step</span><span class="p">))</span>
     <span class="c1">## Apply Hadamard to ancilla</span>
     <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="n">a_idx</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">circuit</span>
-</pre></div>
+<br/></pre></div>
 </div>
 </div>
 </section>
@@ -582,29 +733,45 @@ to obtain the desired eigenvalue of (See also Nielsen-Chuang’s <code class="do
 <section id="4.-Measure-energy-eigenvalues-​​with-IQPE">
 <h3>4. Measure energy eigenvalues ​​with IQPE<a class="headerlink" href="#4.-Measure-energy-eigenvalues-​​with-IQPE" title="Link to this heading">¶</a></h3>
 <p>Now let’s run IQPE.</p>
-<p>The implementation below uses <code class="docutils literal notranslate"><span class="pre">state.get_marginal_probability(bit_list)</span></code> which is convenient when measuring only specific qubits such as auxiliary bits and using the results. This is a function that calculates the probability that a particular qubit of a quantum state <code class="docutils literal notranslate"><span class="pre">state</span></code> has a particular bit value from the amplitude of the wave function. For example, the probability that the ancillary bit (<code class="docutils literal notranslate"><span class="pre">index=2</span></code>) is in the <code class="docutils literal notranslate"><span class="pre">0</span></code> state (0, do not measure for the 1st qubit) are obtained with
-<code class="docutils literal notranslate"><span class="pre">get_marginal_probability([2,</span> <span class="pre">2,</span> <span class="pre">0])</span></code> (<code class="docutils literal notranslate"><span class="pre">2</span></code> stands for no measurement).</p>
+<p>The implementation below uses <code class="docutils literal notranslate"><span class="pre">get_marginal_probability</span></code> function in the <code class="docutils literal notranslate"><span class="pre">quri_parts.qulacs.simulator</span></code> module. This is convenient when measuring only specific qubits such as auxiliary bits and using the results. This is a function that calculates the probability that a particular qubit of a quantum state <code class="docutils literal notranslate"><span class="pre">state</span></code> has a particular bit value from the amplitude of the wave function. For example, the probability that the ancillary bit (<code class="docutils literal notranslate"><span class="pre">index=2</span></code>) is in the <code class="docutils literal notranslate"><span class="pre">0</span></code> state is obtained with
+<code class="docutils literal notranslate"><span class="pre">get_marginal_probability(state:</span> <span class="pre">{2:</span> <span class="pre">0})</span></code>.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs.circuit</span> <span class="kn">import</span> <span class="n">QuantumCircuitOptimizer</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.core.state</span> <span class="kn">import</span> <span class="n">GeneralCircuitQuantumState</span>
+<span class="kn">from</span> <span class="nn">quri_parts.qulacs.simulator</span> <span class="kn">import</span> <span class="n">evaluate_state_to_vector</span><span class="p">,</span> <span class="n">get_marginal_probability</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="k">def</span> <span class="nf">iterative_phase_estimation</span><span class="p">(</span><span class="n">g_list</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">n_itter</span><span class="p">,</span> <span class="n">init_state</span><span class="p">,</span> <span class="n">n_trotter_step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">kickback_phase</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+
+<span class="k">def</span> <span class="nf">iterative_phase_estimation</span><span class="p">(</span>
+    <span class="n">g_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">tau</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">n_itter</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">init_state</span><span class="p">:</span> <span class="n">GeneralCircuitQuantumState</span><span class="p">,</span>
+    <span class="n">n_trotter_step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">kickback_phase</span><span class="o">=</span><span class="mf">0.0</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_itter</span><span class="o">+</span><span class="mi">1</span><span class="p">)):</span> <span class="c1">## run from n_itter to 1</span>
-        <span class="n">psi</span> <span class="o">=</span> <span class="n">init_state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">circuit</span> <span class="o">=</span> <span class="n">IQPE_circuit</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">g_list</span><span class="p">),</span> <span class="n">tau</span><span class="p">,</span> <span class="n">kickback_phase</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">n_trotter_step</span><span class="o">=</span><span class="n">n_trotter_step</span><span class="p">)</span>
-        <span class="c1">## Optimize loops for faster execution time</span>
-        <span class="n">opt</span> <span class="o">=</span> <span class="n">QuantumCircuitOptimizer</span><span class="p">()</span>
-        <span class="n">max_block_size</span> <span class="o">=</span> <span class="mi">4</span>
-        <span class="n">opt</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">max_block_size</span><span class="p">)</span>
+        <span class="n">circuit</span> <span class="o">=</span> <span class="n">IQPE_circuit</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">g_list</span><span class="p">)</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+            <span class="n">tau</span><span class="p">,</span>
+            <span class="n">kickback_phase</span><span class="p">,</span>
+            <span class="n">k</span><span class="p">,</span>
+            <span class="n">n_trotter_step</span><span class="o">=</span><span class="n">n_trotter_step</span>
+        <span class="p">)</span>
+
         <span class="c1">## execute circuit</span>
-        <span class="n">circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">evaluate_state_to_vector</span><span class="p">(</span>
+            <span class="n">init_state</span><span class="o">.</span><span class="n">with_gates_applied</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">vector</span>
+
         <span class="c1"># partial trace</span>
-        <span class="n">p0</span> <span class="o">=</span> <span class="n">psi</span><span class="o">.</span><span class="n">get_marginal_probability</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-        <span class="n">p1</span> <span class="o">=</span> <span class="n">psi</span><span class="o">.</span><span class="n">get_marginal_probability</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">p0</span> <span class="o">=</span> <span class="n">get_marginal_probability</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+        <span class="n">p1</span> <span class="o">=</span> <span class="n">get_marginal_probability</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+        <span class="c1"># print(f&quot;    k={k:2d}, p0={p0:.3f}, p1={p1:.3f}&quot;)</span>
+
         <span class="c1"># update kickback phase</span>
-        <span class="c1">#print(f&quot;k={k:2d}, p0={p0:.3f}, p1={p1:.3f}&quot;)</span>
         <span class="n">kth_digit</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="p">(</span><span class="n">p0</span> <span class="o">&lt;</span> <span class="n">p1</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
         <span class="n">kickback_phase</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">kickback_phase</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">kth_digit</span>
     <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">kickback_phase</span>
@@ -616,17 +783,25 @@ to obtain the desired eigenvalue of (See also Nielsen-Chuang’s <code class="do
 \[t = - \log_2 (1.6 \times 10^{-3}) + \log_2 \left(2 + \frac{1}{2 \times 0.5} \right) \approx 10.87\]</div>
 <p>In other words, <span class="math notranslate nohighlight">\(t = 11\)</span> is sufficient. Let’s actually calculate it.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_qubits</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1"># 2 for electron configurations and 1 for ancilla</span>
-<span class="n">g_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.3593</span><span class="p">,</span> <span class="mf">0.0896</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.4826</span><span class="p">,</span> <span class="mf">0.0896</span><span class="p">]</span>
-<span class="c1"># pauli_strings = [&#39;Z 0&#39;, &#39;Y 0 Y 1&#39;, &#39;Z 1&#39;, &#39;X 0 X 1&#39;]</span>
-<span class="n">hf_state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
-<span class="n">hf_state</span><span class="o">.</span><span class="n">set_computational_basis</span><span class="p">(</span><span class="mb">0b001</span><span class="p">)</span> <span class="c1"># |0&gt;|01&gt;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.core.state</span> <span class="kn">import</span> <span class="n">ComputationalBasisState</span>
+<span class="n">n_elec_conf_qubit</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">n_ancilla</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">n_qubits</span> <span class="o">=</span> <span class="n">n_elec_conf_qubit</span> <span class="o">+</span> <span class="n">n_ancilla</span>
+
+<span class="n">g_list</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">reduced_hamiltonian</span><span class="p">[</span><span class="n">pauli_label</span><span class="p">(</span><span class="s2">&quot;Z0&quot;</span><span class="p">)],</span>
+    <span class="n">reduced_hamiltonian</span><span class="p">[</span><span class="n">pauli_label</span><span class="p">(</span><span class="s2">&quot;Y0 Y1&quot;</span><span class="p">)],</span>
+    <span class="n">reduced_hamiltonian</span><span class="p">[</span><span class="n">pauli_label</span><span class="p">(</span><span class="s2">&quot;Z1&quot;</span><span class="p">)],</span>
+    <span class="n">reduced_hamiltonian</span><span class="p">[</span><span class="n">pauli_label</span><span class="p">(</span><span class="s2">&quot;Y0 Y1&quot;</span><span class="p">)],</span>
+<span class="p">]</span>
+
+<span class="n">hf_state</span> <span class="o">=</span> <span class="n">bk_state_mapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 <span class="n">tau</span> <span class="o">=</span> <span class="mf">0.640</span>
 
-<span class="n">e_trotter</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.8602760325707504</span> <span class="c1">## exact one of U_{Trot}^{(N)}</span>
+<span class="n">e_trotter</span> <span class="o">=</span> <span class="n">order_n_trotter_approx</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">n_trotter_steps</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">tau</span> <span class="c1">## exact one of U_{Trot}^{(N)}</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;e_trotter=</span><span class="si">{</span><span class="n">e_trotter</span><span class="si">:</span><span class="s2">.10f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 <span class="n">result_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -645,26 +820,27 @@ to obtain the desired eigenvalue of (See also Nielsen-Chuang’s <code class="do
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-e_trotter=-0.8602760326
-n_itter= 1, e_iqpe= -0.000000, error=8.60276e-01
-n_itter= 2, e_iqpe= -0.000000, error=8.60276e-01
-n_itter= 3, e_iqpe= -1.227185, error=3.66909e-01
-n_itter= 4, e_iqpe= -0.613592, error=2.46684e-01
-n_itter= 5, e_iqpe= -0.920388, error=6.01124e-02
-n_itter= 6, e_iqpe= -0.920388, error=6.01124e-02
-n_itter= 7, e_iqpe= -0.843689, error=1.65866e-02
-n_itter= 8, e_iqpe= -0.843689, error=1.65866e-02
-n_itter= 9, e_iqpe= -0.862864, error=2.58816e-03
-n_itter=10, e_iqpe= -0.862864, error=2.58816e-03
-n_itter=11, e_iqpe= -0.858071, error=2.20553e-03
-n_itter=12, e_iqpe= -0.860467, error=1.91316e-04
+e_trotter=-0.8602638575
+n_itter= 1, e_iqpe= -0.000000, error=8.60264e-01
+n_itter= 2, e_iqpe= -0.000000, error=8.60264e-01
+n_itter= 3, e_iqpe= -1.227185, error=3.66921e-01
+n_itter= 4, e_iqpe= -0.613592, error=2.46672e-01
+n_itter= 5, e_iqpe= -0.920388, error=6.01246e-02
+n_itter= 6, e_iqpe= -0.920388, error=6.01246e-02
+n_itter= 7, e_iqpe= -0.843689, error=1.65744e-02
+n_itter= 8, e_iqpe= -0.843689, error=1.65744e-02
+n_itter= 9, e_iqpe= -0.862864, error=2.60034e-03
+n_itter=10, e_iqpe= -0.862864, error=2.60034e-03
+n_itter=11, e_iqpe= -0.858071, error=2.19335e-03
+n_itter=12, e_iqpe= -0.860467, error=2.03491e-04
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## plotting the result</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="c1">## plotting the result</span>
 <span class="n">result_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">result_list</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;# of digit&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Error&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
@@ -675,24 +851,165 @@ n_itter=12, e_iqpe= -0.860467, error=1.91316e-04
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.collections.PolyCollection at 0x121d55150&gt;
+&lt;matplotlib.collections.PolyCollection at 0x29b4472e0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_7.1_quantum_phase_estimation_detailed_23_1.png" src="../_images/notebooks_7.1_quantum_phase_estimation_detailed_23_1.png" />
+<img alt="../_images/notebooks_7.1_quantum_phase_estimation_detailed_26_1.png" src="../_images/notebooks_7.1_quantum_phase_estimation_detailed_26_1.png" />
 </div>
 </div>
 <p>As expected, we finally reached chemical accuracy at <code class="docutils literal notranslate"><span class="pre">n_itter</span> <span class="pre">=</span> <span class="pre">12</span></code>.</p>
 <p>One thing to note here is that the sample code introduced here uses the (controlled) time evolution operator <span class="math notranslate nohighlight">\(\Lambda \left( \left( U_{\textrm{Trot}}^{(N)} \right)^{2^k} \right)\)</span> whose depth grows exponentially with respect to <span class="math notranslate nohighlight">\(t\)</span>. That is, exponentially more gates must be used to improve accuracy. Here, we introduced a method based on a simple Trotter decomposition, there have been many studies using other methods to efficiently implement the time evolution operator. Interested
 readers are referred to references [4][5][6].</p>
+</section>
+<section id="5.-Iterative-Phase-estimation-with-QURI-Parts-Sampler">
+<h3>5. Iterative Phase estimation with QURI Parts Sampler<a class="headerlink" href="#5.-Iterative-Phase-estimation-with-QURI-Parts-Sampler" title="Link to this heading">¶</a></h3>
+<p>The above implementation uses a simulator that evaluates the probability of the measurement outcome deterministically. However, this is not possible on real devices. Thus, we slightly change the function to use a sampler instead of a simulator. For each number of iterations, we repeat the algorithm 100 times and pick the phase the shows up with the most number of times as the estimated phase.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.qulacs.sampler</span> <span class="kn">import</span> <span class="n">create_qulacs_vector_sampler</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.sampling</span> <span class="kn">import</span> <span class="n">Sampler</span>
+
+
+<span class="n">sampler</span> <span class="o">=</span> <span class="n">create_qulacs_vector_sampler</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">iterative_phase_estimation_sampler</span><span class="p">(</span>
+    <span class="n">g_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">tau</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">n_itter</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">init_state</span><span class="p">:</span> <span class="n">GeneralCircuitQuantumState</span><span class="p">,</span>
+    <span class="n">n_trotter_step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">kickback_phase</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">sampler</span><span class="p">:</span> <span class="n">Sampler</span><span class="o">=</span><span class="n">sampler</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_itter</span><span class="o">+</span><span class="mi">1</span><span class="p">)):</span> <span class="c1">## run from n_itter to 1</span>
+        <span class="n">circuit</span> <span class="o">=</span> <span class="n">IQPE_circuit</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">g_list</span><span class="p">)</span><span class="o">.</span><span class="n">real</span><span class="p">,</span>
+            <span class="n">tau</span><span class="p">,</span>
+            <span class="n">kickback_phase</span><span class="p">,</span>
+            <span class="n">k</span><span class="p">,</span>
+            <span class="n">n_trotter_step</span><span class="o">=</span><span class="n">n_trotter_step</span>
+        <span class="p">)</span>
+
+        <span class="c1">## execute circuit</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">init_state</span><span class="o">.</span><span class="n">with_gates_applied</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+        <span class="n">kth_digit</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">sampler</span><span class="p">(</span><span class="n">psi</span><span class="o">.</span><span class="n">circuit</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span> <span class="o">&gt;&gt;</span> <span class="mi">2</span>
+
+        <span class="c1"># update kickback phase</span>
+        <span class="n">kickback_phase</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">kickback_phase</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">kth_digit</span>
+
+    <span class="k">return</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">kickback_phase</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span>
+
+<span class="n">n_elec_conf_qubit</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">n_ancilla</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">n_qubits</span> <span class="o">=</span> <span class="n">n_elec_conf_qubit</span> <span class="o">+</span> <span class="n">n_ancilla</span>
+
+<span class="n">g_list</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">reduced_hamiltonian</span><span class="p">[</span><span class="n">pauli_label</span><span class="p">(</span><span class="s2">&quot;Z0&quot;</span><span class="p">)],</span>
+    <span class="n">reduced_hamiltonian</span><span class="p">[</span><span class="n">pauli_label</span><span class="p">(</span><span class="s2">&quot;Y0 Y1&quot;</span><span class="p">)],</span>
+    <span class="n">reduced_hamiltonian</span><span class="p">[</span><span class="n">pauli_label</span><span class="p">(</span><span class="s2">&quot;Z1&quot;</span><span class="p">)],</span>
+    <span class="n">reduced_hamiltonian</span><span class="p">[</span><span class="n">pauli_label</span><span class="p">(</span><span class="s2">&quot;Y0 Y1&quot;</span><span class="p">)],</span>
+<span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">run_qpe_with_sampler</span><span class="p">(</span><span class="n">n_iter</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">repeat</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="n">hf_state</span> <span class="o">=</span> <span class="n">bk_state_mapper</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">tau</span> <span class="o">=</span> <span class="mf">0.640</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repeat</span><span class="p">):</span>
+        <span class="n">iqpe_phase</span> <span class="o">=</span> <span class="n">iterative_phase_estimation_sampler</span><span class="p">(</span><span class="n">g_list</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">n_iter</span><span class="p">,</span> <span class="n">hf_state</span><span class="p">,</span> <span class="n">n_trotter_step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">kickback_phase</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="o">-</span> <span class="n">iqpe_phase</span><span class="o">/</span><span class="n">tau</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+    <span class="n">times</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">phase</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">Counter</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="n">times</span><span class="p">:</span>
+            <span class="n">times</span> <span class="o">=</span> <span class="n">t</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="n">phase</span>
+
+    <span class="k">return</span> <span class="n">best</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sampler_result_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">n_iter</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">12</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span> <span class="c1"># precission in digit</span>
+    <span class="n">e_iqpe</span> <span class="o">=</span> <span class="n">run_qpe_with_sampler</span><span class="p">(</span><span class="n">n_iter</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;n_itter=</span><span class="si">{</span><span class="n">n_iter</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2">, e_iqpe=</span><span class="si">{</span><span class="n">e_iqpe</span><span class="si">:</span><span class="s2">10f</span><span class="si">}</span><span class="s2">, error=</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">e_iqpe</span><span class="o">-</span><span class="n">e_trotter</span><span class="p">)</span><span class="si">:</span><span class="s2">.5e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">sampler_result_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">n_iter</span><span class="p">,</span> <span class="n">e_iqpe</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+n_itter= 1, e_iqpe= -0.000000, error=8.60264e-01
+n_itter= 2, e_iqpe= -0.000000, error=8.60264e-01
+n_itter= 3, e_iqpe= -1.227185, error=3.66921e-01
+n_itter= 4, e_iqpe= -0.613592, error=2.46672e-01
+n_itter= 5, e_iqpe= -0.920388, error=6.01246e-02
+n_itter= 6, e_iqpe= -0.920388, error=6.01246e-02
+n_itter= 7, e_iqpe= -0.843689, error=1.65744e-02
+n_itter= 8, e_iqpe= -0.843689, error=1.65744e-02
+n_itter= 9, e_iqpe= -0.862864, error=2.60033e-03
+n_itter=10, e_iqpe= -0.862864, error=2.60033e-03
+n_itter=11, e_iqpe= -0.858070, error=2.19336e-03
+n_itter=12, e_iqpe= -0.860467, error=2.03493e-04
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="c1">## plotting the result</span>
+<span class="n">result_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sampler_result_list</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;# of digit&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Error&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">result_array</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">result_array</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">e_trotter</span><span class="p">),</span> <span class="s2">&quot;bo-&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">13</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">13</span><span class="p">],</span> <span class="mf">1.6e-3</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;lightgrey&quot;</span><span class="p">)</span> <span class="c1">## fill the chemical accuracy region</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.collections.PolyCollection at 0x29b319490&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_7.1_quantum_phase_estimation_detailed_32_1.png" src="../_images/notebooks_7.1_quantum_phase_estimation_detailed_32_1.png" />
+</div>
+</div>
 </section>
 </section>
 <section id="Reference">
@@ -720,7 +1037,7 @@ readers are referred to references [4][5][6].</p>
             <div class="collapse nftt-toc-collapse" id="tocContents">
               <nav id="TableOfContents">
                 <ul>
-<li><a class="reference internal" href="#">7-1. Quantum Phase Estimation Algorithm in Detail:Application to Hydrogen Molecule as an Example</a><ul>
+<li><a class="reference internal" href="#">7-1. Quantum Phase Estimation Algorithm in Detail: Application to Hydrogen Molecule as an Example</a><ul>
 <li><a class="reference internal" href="#Review-of-Phase-Estimation">Review of Phase Estimation</a></li>
 <li><a class="reference internal" href="#Iterative-Quantum-Phase-Estimation">Iterative Quantum Phase Estimation</a><ul>
 <li><a class="reference internal" href="#k-=-t"><span class="math notranslate nohighlight">\(k = t\)</span></a></li>
@@ -734,6 +1051,7 @@ readers are referred to references [4][5][6].</p>
 <li><a class="reference internal" href="#2.-Decomposition-of-the-control-time-evolution-operator-into-a-set-of-gates-that-can-be-easily-executed-on-a-quantum-computer-and-implementation.">2. Decomposition of the control time evolution operator into a set of gates that can be easily executed on a quantum computer and implementation.</a></li>
 <li><a class="reference internal" href="#3.-Prepare-an-initial-state-with-sufficient-overlap-with-the-ground-state">3. Prepare an initial state with sufficient overlap with the ground state</a></li>
 <li><a class="reference internal" href="#4.-Measure-energy-eigenvalues-​​with-IQPE">4. Measure energy eigenvalues ​​with IQPE</a></li>
+<li><a class="reference internal" href="#5.-Iterative-Phase-estimation-with-QURI-Parts-Sampler">5. Iterative Phase estimation with QURI Parts Sampler</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#Reference">Reference</a></li>

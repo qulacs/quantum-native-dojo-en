@@ -1,15 +1,13 @@
 {
  "cells": [
   {
-   "attachments": {},
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "## 9-2. quantum error"
+    "## 9-2. Quantum Error Correction"
    ]
   },
   {
-   "attachments": {},
    "cell_type": "markdown",
    "metadata": {},
    "source": [
@@ -38,7 +36,6 @@
    ]
   },
   {
-   "attachments": {},
    "cell_type": "markdown",
    "metadata": {},
    "source": [
@@ -84,111 +81,99 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 120,
+   "execution_count": 1,
    "metadata": {},
    "outputs": [],
    "source": [
     "# set code info\n",
     "repetition = 3\n",
+    "ancilla = 2\n",
+    "\n",
+    "n_qubit = repetition + ancilla\n",
+    "n_cbit = ancilla\n",
+    "\n",
     "error_probability = 0.2\n",
     "initial_bit = 1"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 121,
+   "execution_count": 2,
    "metadata": {},
    "outputs": [],
    "source": [
-    "def show_quantum_state(state, eps = 1e-10, round_digit=3):\n",
-    "    vector = state.get_vector()\n",
-    "    state_str = \"\"\n",
-    "    qubit_count = int( np.log2(len(vector)+eps))\n",
-    "    binary_format = \"{\" + \":0{}b\".format(qubit_count) + \"}\"\n",
-    "    for ind in range(len(vector)):\n",
-    "        if abs(vector[ind]) > 1e-10:\n",
-    "            if len(state_str) > 0:\n",
-    "                state_str += \" + \"\n",
-    "            state_str += (\"{} |\" + binary_format + \">\").format(round(vector[ind],round_digit ),ind)\n",
-    "    print(state_str)"
-   ]
-  },
-  {
-   "attachments": {},
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "Secure the quantum state and write the initial state to the 0-th bit."
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "## Run only for Google Colaboratory and local environment where Qulacs is not installed\n",
-    "!pip install qulacs\n",
-    "\n",
-    "## Run only if you are in a Google Colaboratory / (Linux or Mac) jupyter notebook environment.\n",
-    "## Qulacs errors will be output normally.\n",
-    "!pip3 install wurlitzer\n",
-    "%load_ext wurlitzer"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 122,
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "(1+0j) |001>\n"
-     ]
-    }
-   ],
-   "source": [
+    "from numpy.typing import NDArray\n",
     "import numpy as np\n",
-    "from qulacs import QuantumState\n",
-    "state = QuantumState(repetition)\n",
-    "state.set_computational_basis(initial_bit)\n",
-    "show_quantum_state(state)"
-   ]
-  },
-  {
-   "attachments": {},
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "Create a circuit for encoding."
+    "\n",
+    "def show_quantum_state(\n",
+    "    state_vector: NDArray[np.complex128], show_ancilla: bool = False,\n",
+    "    tol: float = 1e-10\n",
+    ") -> None:\n",
+    "    \n",
+    "    n_qubit = int(np.log2(len(state_vector)))\n",
+    "    subterm = []\n",
+    "    for i, v in enumerate(state_vector):\n",
+    "        if np.abs(v) < tol:\n",
+    "            continue\n",
+    "        ket = bin(i)[2:].zfill(n_qubit)\n",
+    "        if not show_ancilla:\n",
+    "            ket = ket[ancilla:]\n",
+    "        subterm.append(f\"{np.round(v, 3)} * |{ket}>\")\n",
+    "\n",
+    "    print(\" + \".join(subterm))"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 123,
+   "execution_count": 3,
    "metadata": {},
    "outputs": [
     {
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "(1+0j) |111>\n"
+      "(1+0j) * |001>\n"
      ]
     }
    ],
    "source": [
-    "from qulacs import QuantumCircuit\n",
-    "encode_circuit = QuantumCircuit(repetition)\n",
-    "for ind in range(1,repetition):\n",
-    "    encode_circuit.add_CNOT_gate(0, ind)\n",
-    "encode_circuit.update_quantum_state(state)\n",
-    "show_quantum_state(state)"
+    "from quri_parts.qulacs.simulator import evaluate_state_to_vector\n",
+    "from quri_parts.core.state import ComputationalBasisState\n",
+    "\n",
+    "state = ComputationalBasisState(n_qubit, bits=1)\n",
+    "show_quantum_state(\n",
+    "    evaluate_state_to_vector(state).vector\n",
+    ")"
    ]
   },
   {
-   "attachments": {},
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(1+0j) * |111>\n"
+     ]
+    }
+   ],
+   "source": [
+    "from quri_parts.circuit import QuantumCircuit\n",
+    "\n",
+    "encode_circuit = QuantumCircuit(n_qubit, n_cbit)\n",
+    "for i in range(1, repetition):\n",
+    "    encode_circuit.add_CNOT_gate(0, i)\n",
+    "\n",
+    "encoded_state = evaluate_state_to_vector(\n",
+    "    state.with_gates_applied(encode_circuit)\n",
+    ").vector\n",
+    "\n",
+    "show_quantum_state(encoded_state)"
+   ]
+  },
+  {
    "cell_type": "markdown",
    "metadata": {},
    "source": [
@@ -197,45 +182,52 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 124,
+   "execution_count": 5,
    "metadata": {},
    "outputs": [
     {
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "(1+0j) |111>\n",
-      "parity(0,1): 0\n",
-      "parity(1,2): 0\n"
+      "(1+0j) * |111>\n",
+      "parity(0, 1): 0\n",
+      "parity(0, 2): 0\n"
      ]
     }
    ],
    "source": [
-    "from qulacs.gate import Instrument\n",
-    "from qulacs.gate import DenseMatrix\n",
+    "from quri_parts.circuit import DynamicCircuit\n",
+    "from quri_parts.circuit.gates import X, CNOT, Measurement\n",
+    "from quri_parts.qulacs.simulator import run_dynamic_circuit\n",
     "\n",
-    "def parity_measure_gate(fst,scn,register_pos):\n",
-    "    parity_measure_matrix_0 = np.zeros( (4,4) )\n",
-    "    parity_measure_matrix_1 = np.zeros( (4,4) )\n",
-    "    parity_measure_matrix_0[0,0] = parity_measure_matrix_0[3,3] = 1\n",
-    "    parity_measure_matrix_1[1,1] = parity_measure_matrix_1[2,2] = 1\n",
-    "    parity_measure_0 = DenseMatrix([fst,scn],parity_measure_matrix_0)\n",
-    "    parity_measure_1 = DenseMatrix([fst,scn],parity_measure_matrix_1)\n",
-    "    parity_measure = Instrument([parity_measure_0, parity_measure_1],register_pos)\n",
-    "    return parity_measure\n",
+    "def get_parity_measurement_circuit():\n",
+    "    dynamic_circuit = DynamicCircuit(n_qubit, n_cbit)\n",
+    "    dynamic_circuit.add_gate(CNOT(0, 3))\n",
+    "    dynamic_circuit.add_gate(CNOT(1, 3))\n",
+    "    dynamic_circuit.add_gate(CNOT(0, 4))\n",
+    "    dynamic_circuit.add_gate(CNOT(2, 4))\n",
+    "    dynamic_circuit.add_gate(Measurement([3, 4], [0, 1]))\n",
+    "    return dynamic_circuit\n",
     "\n",
-    "parity_measure_circuit = QuantumCircuit(repetition)\n",
-    "for ind in range(repetition-1):\n",
-    "    parity_measure_circuit.add_gate(parity_measure_gate(ind,ind+1,ind))\n",
+    "def show_parity_of_state(state: NDArray[np.complex128]) -> tuple[int, int]:\n",
+    "    non_zero_component = np.where(state != 0)[0]\n",
+    "    parity_01 = (non_zero_component >> repetition) & 1\n",
+    "    parity_02 = non_zero_component >> (repetition + 1)\n",
+    "    print(\"parity(0, 1):\", parity_01[0])\n",
+    "    print(\"parity(0, 2):\", parity_02[0])\n",
     "\n",
-    "parity_measure_circuit.update_quantum_state(state)\n",
-    "show_quantum_state(state)\n",
-    "for ind in range(repetition-1):\n",
-    "    print(\"parity({},{}): {}\".format(ind,ind+1,state.get_classical_value(ind)))"
+    "parity_measurement_circuit = get_parity_measurement_circuit()\n",
+    "\n",
+    "parity_measured_state = run_dynamic_circuit(\n",
+    "    parity_measurement_circuit,\n",
+    "    encoded_state\n",
+    ")\n",
+    "\n",
+    "show_quantum_state(parity_measured_state)\n",
+    "show_parity_of_state(parity_measured_state)"
    ]
   },
   {
-   "attachments": {},
    "cell_type": "markdown",
    "metadata": {},
    "source": [
@@ -244,35 +236,43 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 125,
+   "execution_count": 6,
    "metadata": {},
    "outputs": [
     {
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "(1+0j) |011>\n"
+      "error_array = [0, 0, 0]\n",
+      "(1+0j) * |111>\n"
      ]
     }
    ],
    "source": [
-    "# invoke random error\n",
-    "from qulacs.gate import Pauli\n",
-    "def random_X_error(num_qubit, error_probability):\n",
+    "from quri_parts.circuit.gates import Pauli\n",
+    "from quri_parts.qulacs.simulator import run_circuit\n",
+    "\n",
+    "def random_X_error() -> QuantumCircuit:\n",
+    "    error_probability = 0.2\n",
+    "    \n",
     "    error_array = []\n",
-    "    for _ in range(num_qubit):\n",
+    "    for _ in range(repetition):\n",
     "        if np.random.rand() < error_probability:\n",
     "            error_array.append(1)\n",
     "        else:\n",
     "            error_array.append(0)\n",
-    "    return Pauli(np.arange(num_qubit), error_array)\n",
-    "error_operator = random_X_error(repetition, error_probability)\n",
-    "error_operator.update_quantum_state(state)\n",
-    "show_quantum_state(state)"
+    "    \n",
+    "    print(f\"{error_array = }\")\n",
+    "    return QuantumCircuit(\n",
+    "        n_qubit, n_cbit,\n",
+    "        gates=[Pauli(np.arange(n_qubit), error_array + [0, 0])]\n",
+    "    )\n",
+    "\n",
+    "error_applied_state = run_circuit(random_X_error(), encoded_state)\n",
+    "show_quantum_state(error_applied_state)"
    ]
   },
   {
-   "attachments": {},
    "cell_type": "markdown",
    "metadata": {},
    "source": [
@@ -281,78 +281,83 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 126,
+   "execution_count": 7,
    "metadata": {},
    "outputs": [
     {
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "(1+0j) |011>\n",
-      "parity(0,1): 0\n",
-      "parity(1,2): 1\n"
+      "(1+0j) * |111>\n",
+      "parity(0, 1): 0\n",
+      "parity(0, 2): 0\n"
      ]
     }
    ],
    "source": [
-    "parity_measure_circuit.update_quantum_state(state)\n",
-    "show_quantum_state(state)\n",
-    "for ind in range(repetition-1):\n",
-    "    print(\"parity({},{}): {}\".format(ind,ind+1,state.get_classical_value(ind)))"
+    "parity_measured_error_state = run_dynamic_circuit(parity_measurement_circuit, error_applied_state)\n",
+    "show_quantum_state(parity_measured_error_state)\n",
+    "show_parity_of_state(parity_measured_error_state)"
    ]
   },
   {
-   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": []
+  },
+  {
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Decryption."
+    "Decryption"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 135,
+   "execution_count": 8,
    "metadata": {},
    "outputs": [
     {
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "(1+0j) |111>\n"
+      "(1+0j) * |111>\n"
      ]
     }
    ],
    "source": [
-    "# decoding process\n",
-    "def compute_recovery_operation(state, repetition):\n",
-    "    cand1 = []\n",
-    "    cand2 = []\n",
-    "    cand1.append(0)\n",
-    "    cand2.append(1)\n",
-    "    flag = True\n",
-    "    for ind in range(repetition-1):\n",
-    "        val = state.get_classical_value(ind)\n",
-    "        if val == 1:\n",
-    "            flag = not flag\n",
-    "        if flag:\n",
-    "            cand1.append(0)\n",
-    "            cand2.append(1)\n",
-    "        else:\n",
-    "            cand1.append(1)\n",
-    "            cand2.append(0)\n",
-    "    if np.sum(cand1) < np.sum(cand2):\n",
-    "        cand = cand1\n",
-    "    else:\n",
-    "        cand = cand2\n",
-    "    return Pauli(np.arange(repetition), cand)\n",
+    "def compute_recovery_operation(state: NDArray[np.complex128]) -> QuantumCircuit:\n",
+    "    non_zero_component = np.where(state != 0)[0]\n",
+    "    parity_bit = non_zero_component >> repetition\n",
+    "    assert len(set(parity_bit)) == 1\n",
     "\n",
-    "recovery_operation = compute_recovery_operation(state,repetition)\n",
-    "recovery_operation.update_quantum_state(state)\n",
-    "show_quantum_state(state)"
+    "    if parity_bit == 0:\n",
+    "        return QuantumCircuit(n_qubit, n_cbit)\n",
+    "    \n",
+    "    elif parity_bit == 0b01:\n",
+    "        return QuantumCircuit(n_qubit, n_cbit, gates=[X(1)])\n",
+    "    \n",
+    "    elif parity_bit == 0b10:\n",
+    "        return QuantumCircuit(n_qubit, n_cbit, gates=[X(2)])\n",
+    "    \n",
+    "    elif parity_bit == 0b11:\n",
+    "        return QuantumCircuit(n_qubit, n_cbit, gates=[X(0)])\n",
+    "    \n",
+    "    else:\n",
+    "        assert False\n",
+    "\n",
+    "parity_measured_state = run_dynamic_circuit(\n",
+    "    parity_measurement_circuit,\n",
+    "    error_applied_state\n",
+    ")\n",
+    "recovered_state = run_circuit(\n",
+    "    compute_recovery_operation(parity_measured_state),\n",
+    "    parity_measured_state\n",
+    ")\n",
+    "show_quantum_state(recovered_state)"
    ]
   },
   {
-   "attachments": {},
    "cell_type": "markdown",
    "metadata": {},
    "source": [
@@ -361,60 +366,154 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 146,
+   "execution_count": 9,
    "metadata": {},
    "outputs": [
     {
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "initial state\n",
-      "(-0.111+0.987j) |000> + (0.053-0.101j) |001>\n",
-      "encode\n",
-      "(-0.111+0.987j) |000> + (0.053-0.101j) |111>\n",
-      "error\n",
-      "(-0.111+0.987j) |010> + (0.053-0.101j) |101>\n",
-      "parity measurement\n",
-      "(-0.111+0.987j) |010> + (0.053-0.101j) |101>\n",
-      "recovery\n",
-      "(-0.111+0.987j) |000> + (0.053-0.101j) |111>\n"
+      "1. initial state:\n",
+      "(0.196-0.618j) * |000> + (0.558-0.518j) * |001>\n",
+      "\n",
+      "2. encoded state:\n",
+      "(0.196-0.618j) * |000> + (0.558-0.518j) * |111>\n",
+      "\n",
+      "3. noise applied state:\n",
+      "error_array = [0, 0, 1]\n",
+      "(0.558-0.518j) * |011> + (0.196-0.618j) * |100>\n",
+      "\n",
+      "4. parity measurement state:\n",
+      "(0.558-0.518j) * |011> + (0.196-0.618j) * |100>\n",
+      "parity(0, 1): 0\n",
+      "parity(0, 2): 1\n",
+      "\n",
+      "5. Apply correction gate:\n",
+      "(0.196-0.618j) * |000> + (0.558-0.518j) * |111>\n",
+      "\n",
+      "6. Get decoded state:\n",
+      "(0.196-0.618j) * |000> + (0.558-0.518j) * |001>\n"
      ]
     }
    ],
    "source": [
-    "# set code info\n",
+    "import numpy as np\n",
+    "from quri_parts.circuit import QuantumCircuit, DynamicCircuit, ConditionalCircuit\n",
+    "from quri_parts.circuit.gates import UnitaryMatrix, CNOT, Pauli, Measurement, X\n",
+    "from scipy.stats import unitary_group\n",
+    "from quri_parts.qulacs.simulator import run_dynamic_circuit\n",
+    "\n",
     "repetition = 3\n",
-    "error_probability = 0.2\n",
-    "initial_bit = 1\n",
+    "ancilla = 2\n",
     "\n",
-    "from qulacs.gate import RandomUnitary\n",
-    "state = QuantumState(repetition)\n",
-    "state.set_computational_basis(0)\n",
-    "RandomUnitary([0]).update_quantum_state(state)\n",
-    "print(\"initial state\")\n",
-    "show_quantum_state(state)\n",
+    "n_qubit = repetition + ancilla\n",
+    "n_cbit = ancilla\n",
     "\n",
-    "encode_circuit.update_quantum_state(state)\n",
-    "print(\"encode\")\n",
-    "show_quantum_state(state)\n",
+    "def add_encode_circuit(dynamic_circuit: DynamicCircuit) -> None:\n",
+    "    dynamic_circuit.add_gate(CNOT(0, 1))\n",
+    "    dynamic_circuit.add_gate(CNOT(0, 2))\n",
     "\n",
-    "error_operator = random_X_error(repetition, error_probability)\n",
-    "error_operator.update_quantum_state(state)\n",
-    "print(\"error\")\n",
-    "show_quantum_state(state)\n",
+    "def add_noisy_bit_flip_channel(dynamic_circuit: DynamicCircuit) -> None:\n",
+    "    error_probability = 0.2\n",
+    "    \n",
+    "    error_array = []\n",
+    "    for _ in range(repetition):\n",
+    "        if np.random.rand() < error_probability:\n",
+    "            error_array.append(1)\n",
+    "        else:\n",
+    "            error_array.append(0)\n",
+    "    \n",
+    "    print(f\"{error_array = }\")\n",
+    "    gate = Pauli(np.arange(n_qubit), error_array + [0, 0])\n",
+    "    \n",
+    "    dynamic_circuit.add_gate(gate)\n",
     "\n",
-    "parity_measure_circuit.update_quantum_state(state)\n",
-    "print(\"parity measurement\")\n",
-    "show_quantum_state(state)\n",
+    "def add_parity_measurement_gate(dynamic_circuit: DynamicCircuit) -> None:\n",
+    "    dynamic_circuit.add_gate(CNOT(0, 3))\n",
+    "    dynamic_circuit.add_gate(CNOT(1, 3))\n",
+    "    dynamic_circuit.add_gate(CNOT(0, 4))\n",
+    "    dynamic_circuit.add_gate(CNOT(2, 4))\n",
+    "    dynamic_circuit.add_gate(Measurement([3, 4], [0, 1]))\n",
     "\n",
-    "recovery_operation = compute_recovery_operation(state,repetition)\n",
-    "recovery_operation.update_quantum_state(state)\n",
-    "print(\"recovery\")\n",
-    "show_quantum_state(state)\n"
+    "def add_correction_gate(dynamic_circuit: DynamicCircuit) -> None:\n",
+    "    dynamic_circuit.add_conditional(\n",
+    "        if_block=QuantumCircuit(n_qubit, n_cbit, [X(0), X(3), X(4)]),\n",
+    "        else_block=None,\n",
+    "        classical_indices=[0, 1],\n",
+    "        patterns={0b11}\n",
+    "    )\n",
+    "    dynamic_circuit.add_conditional(\n",
+    "        if_block=QuantumCircuit(n_qubit, n_cbit, [X(1), X(3)]),\n",
+    "        else_block=None,\n",
+    "        classical_indices=[0, 1],\n",
+    "        patterns={0b01}\n",
+    "    )\n",
+    "    dynamic_circuit.add_conditional(\n",
+    "        if_block=QuantumCircuit(n_qubit, n_cbit, [X(2), X(4)]),\n",
+    "        else_block=None,\n",
+    "        classical_indices=[0, 1],\n",
+    "        patterns={0b10}\n",
+    "    )\n",
+    "\n",
+    "def add_decode_gate(dynamic_circuit: DynamicCircuit) -> None:\n",
+    "    dynamic_circuit.add_gate(CNOT(0, 2))\n",
+    "    dynamic_circuit.add_gate(CNOT(0, 1))\n",
+    "\n",
+    "# random unitary\n",
+    "random_unitary = unitary_group.rvs(2)\n",
+    "inital_state = random_unitary[:, 0]\n",
+    "\n",
+    "dynamic_circuit = DynamicCircuit(n_qubit, n_cbit)\n",
+    "dynamic_circuit.add_gate(UnitaryMatrix([0], random_unitary))\n",
+    "\n",
+    "inital_state = [1 if i == 1 else 0 for i in range(2**n_qubit)]\n",
+    "current_state = run_dynamic_circuit(dynamic_circuit, inital_state)\n",
+    "\n",
+    "print(\"1. initial state:\")\n",
+    "show_quantum_state(current_state)\n",
+    "\n",
+    "# run QEC algorithm\n",
+    "print(\"\")\n",
+    "print(\"2. encoded state:\")\n",
+    "add_encode_circuit(dynamic_circuit)\n",
+    "show_quantum_state(\n",
+    "    run_dynamic_circuit(dynamic_circuit, inital_state)\n",
+    ")\n",
+    "\n",
+    "print(\"\")\n",
+    "print(\"3. noise applied state:\")\n",
+    "add_noisy_bit_flip_channel(dynamic_circuit)\n",
+    "show_quantum_state(\n",
+    "    run_dynamic_circuit(dynamic_circuit, inital_state)\n",
+    ")\n",
+    "\n",
+    "print(\"\")\n",
+    "print(\"4. parity measurement state:\")\n",
+    "add_parity_measurement_gate(dynamic_circuit)\n",
+    "show_quantum_state(\n",
+    "    run_dynamic_circuit(dynamic_circuit, inital_state),\n",
+    ")\n",
+    "show_parity_of_state(\n",
+    "    run_dynamic_circuit(dynamic_circuit, inital_state),\n",
+    ")\n",
+    "\n",
+    "\n",
+    "print(\"\")\n",
+    "print(\"5. Apply correction gate:\")\n",
+    "add_correction_gate(dynamic_circuit)\n",
+    "show_quantum_state(\n",
+    "    run_dynamic_circuit(dynamic_circuit, inital_state)\n",
+    ")\n",
+    "\n",
+    "print(\"\")\n",
+    "print(\"6. Get decoded state:\")\n",
+    "add_decode_gate(dynamic_circuit)\n",
+    "show_quantum_state(\n",
+    "    run_dynamic_circuit(dynamic_circuit, inital_state)\n",
+    ")\n"
    ]
   },
   {
-   "attachments": {},
    "cell_type": "markdown",
    "metadata": {},
    "source": [
@@ -439,7 +538,6 @@
    ]
   },
   {
-   "attachments": {},
    "cell_type": "markdown",
    "metadata": {},
    "source": [
@@ -491,7 +589,6 @@
    ]
   },
   {
-   "attachments": {},
    "cell_type": "markdown",
    "metadata": {},
    "source": [
@@ -506,15 +603,6 @@
    ]
   },
   {
-   "attachments": {},
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "Topological codes also inherit the drawbacks of low-density parity checking codes, which generally make decoding NP-hard. In reality, some approximations to the nature of the error are often used to formulate an efficient decoding algorithm that can be solved."
-   ]
-  },
-  {
-   "attachments": {},
    "cell_type": "markdown",
    "metadata": {},
    "source": [
@@ -530,18 +618,11 @@
     "\n",
     "Therefore, it is necessary to somehow procure the missing operations for universal operation. On the surface code, $X, Y, Z, H$, etc. are transversals, and although it is nontrivial whether CNOT is possible, it is known that it can be done efficiently by lattice surgery. Since $S$, $T$, etc. are not transversal, it is possible to create $S$, $T$gate states, etc. with another code and use a method called magic state distillation to gate-teleport these states, thereby creating a universal set."
    ]
-  },
-  {
-   "attachments": {},
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": []
   }
  ],
  "metadata": {
-  "anaconda-cloud": {},
   "kernelspec": {
-   "display_name": "sample_env",
+   "display_name": "qp_dev",
    "language": "python",
    "name": "python3"
   },
@@ -555,42 +636,9 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.9.15"
+   "version": "3.9.16"
   },
-  "varInspector": {
-   "cols": {
-    "lenName": 16,
-    "lenType": 16,
-    "lenVar": 40
-   },
-   "kernels_config": {
-    "python": {
-     "delete_cmd_postfix": "",
-     "delete_cmd_prefix": "del ",
-     "library": "var_list.py",
-     "varRefreshCmd": "print(var_dic_list())"
-    },
-    "r": {
-     "delete_cmd_postfix": ") ",
-     "delete_cmd_prefix": "rm(",
-     "library": "var_list.r",
-     "varRefreshCmd": "cat(var_dic_list()) "
-    }
-   },
-   "types_to_exclude": [
-    "module",
-    "function",
-    "builtin_function_or_method",
-    "instance",
-    "_Feature"
-   ],
-   "window_display": false
-  },
-  "vscode": {
-   "interpreter": {
-    "hash": "aba3de3b8dbe48b5e4e51e098a04a30a0927795f9567e6bf7f68774a73528d2f"
-   }
-  }
+  "orig_nbformat": 4
  },
  "nbformat": 4,
  "nbformat_minor": 2

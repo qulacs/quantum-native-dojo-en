@@ -18,8 +18,8 @@
           <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
           <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
           <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
-          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
-          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css" />
           <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
         <link rel="index" title="Index" href="../genindex.html" />
         <link rel="search" title="Search" href="../search.html" />
@@ -199,7 +199,7 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Chapter 6 Quantum chemistry calculation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="6.1_openfermion_basics.html">6-1. OpenFermion Basics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qp_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using QURI Parts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
 </ul>
 </li>
@@ -258,22 +258,28 @@
 <li class="toctree-l2"><a class="reference internal" href="6.1_openfermion_basics.html#Reference">Reference</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html#Install-and-Import-of-required-packages">Install and Import of required packages</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html#Creation-of-Hamiltonian">Creation of Hamiltonian</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html#Convert-Hamiltonian-into-qulacs-Hamiltonian">Convert Hamiltonian into qulacs Hamiltonian</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html#compose-ansatz">compose ansatz</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html#Define-VQE-cost-function">Define VQE cost function</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html#Execute-VQE">Execute VQE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6.2_qp_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using QURI Parts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qp_VQE.html#Creation-of-Hamiltonian">Creation of Hamiltonian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qp_VQE.html#Compose-ansatz">Compose ansatz</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qp_VQE.html#Define-VQE-cost-function">Define VQE cost function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qp_VQE.html#Execute-VQE">Execute VQE</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="6.2_qp_VQE.html#VQE-using-QURI-Parts">VQE using QURI Parts</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html#Algorithm">Algorithm</a></li>
 <li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html#SSVQE-implementation">SSVQE implementation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="6.3_subspace_search_VQE.html#Preparation-of-Hamiltonian">Preparation of Hamiltonian</a></li>
-<li class="toctree-l3"><a class="reference internal" href="6.3_subspace_search_VQE.html#preparation-of-ansatz">preparation of ansatz</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html#Compose-ansatz">Compose ansatz</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="6.3_subspace_search_VQE.html#define-cost-function-of-SSVQE">define cost function of SSVQE</a></li>
-<li class="toctree-l3"><a class="reference internal" href="6.3_subspace_search_VQE.html#Execution-of-SSVQE">Execution of SSVQE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="6.3_subspace_search_VQE.html#Execution-of-SSVQE">Execution of SSVQE</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="6.3_subspace_search_VQE.html#VQE-using-QURI-Parts">VQE using QURI Parts</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html#Reference">Reference</a></li>
