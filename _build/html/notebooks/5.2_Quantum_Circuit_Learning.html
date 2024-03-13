@@ -17,10 +17,10 @@
     <link rel="stylesheet" href="../_static/bootstrap-icons.css" type="text/css" />
           <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
           <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
-          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
           <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
-          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
-          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css" />
           <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
         <link rel="index" title="Index" href="../genindex.html" />
         <link rel="search" title="Search" href="../search.html" />
@@ -201,7 +201,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="6_quantum_chemistry_calculation.html">Chapter 6 Quantum chemistry calculation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="6.1_openfermion_basics.html">6-1. OpenFermion Basics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qp_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using QURI Parts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
 </ul>
 </li>
@@ -241,7 +241,7 @@
 <div class="line"><strong>Quantum Circuit Learning</strong> (Quantum Circuit Learning, QCL) is an algorithm for applying quantum computers to machine learning <a class="reference external" href="https://arxiv.org/abs/1803.00745">[1]</a>.</div>
 <div class="line">Like VQE (Variational Quantum Eigensolver) studied in the previous section, it is a <strong>quantum/classical hybrid algorithm</strong> is designed to work on <strong>NISQ</strong> (Noisy Intermediate-Scale Quantum Computer), a medium-scale quantum computer without error correction capability. Experiments using actual NISQ devices have already been conducted, and a paper on an actual implementation of QCL by an IBM experimental team was published in Nature in March 2019 and became a hot topic.</div>
 </div>
-<p>In the following, we first provide an overview of the algorithm and specific learning steps, and finally present an example implementation using the quantum simulator Qulacs.</p>
+<p>In the following, we first provide an overview of the algorithm and specific learning steps, and finally present an example implementation using QURI Parts.</p>
 <section id="Overview-of-QCL">
 <h2>Overview of QCL<a class="headerlink" href="#Overview-of-QCL" title="Link to this heading">¶</a></h2>
 <div class="line-block">
@@ -272,11 +272,11 @@ This is expected to further improve performance beyond that of machine learning 
 </ol>
 <p>(In QCL, input data <span class="math notranslate nohighlight">\(x\)</span> is first transformed to a quantum state using <span class="math notranslate nohighlight">\(U_{\text{in}}(x)\)</span>. Then, by using a variational quantum circuit <span class="math notranslate nohighlight">\(U(\theta)\)</span> and measurements, the output <span class="math notranslate nohighlight">\(y\)</span> is obtained. (In the figure, the output is <span class="math notranslate nohighlight">\(\langle B(x,\theta)\rangle\)</span>) (Source: Modified from Figure 1 in reference [1])</p>
 </section>
-<section id="Implementation-using-the-quantum-simulator-Qulacs">
-<h2>Implementation using the quantum simulator Qulacs<a class="headerlink" href="#Implementation-using-the-quantum-simulator-Qulacs" title="Link to this heading">¶</a></h2>
+<section id="Implementation-using-QURI-Parts">
+<h2>Implementation using QURI Parts<a class="headerlink" href="#Implementation-using-QURI-Parts" title="Link to this heading">¶</a></h2>
 <p>In the following, as a demonstration of function approximation, let’s perform fitting of the sin function <span class="math notranslate nohighlight">\(y=\sin(\pi x)\)</span> .</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -290,12 +290,13 @@ This is expected to further improve performance beyond that of machine learning 
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">########  parameter  #############</span>
-<span class="n">nqubit</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1">##number of qubits</span>
+<span class="n">n_qubit</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1">##number of qubits</span>
 <span class="n">c_depth</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1">## depth of circuit</span>
 <span class="n">time_step</span> <span class="o">=</span> <span class="mf">0.77</span>  <span class="c1">##Elapsed time of time evolution by random Hamiltonian</span>
 
 <span class="c1">## Take number_x_train points from [x_min, x_max] randomly and use them as the training data.</span>
-<span class="n">x_min</span> <span class="o">=</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">;</span> <span class="n">x_max</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">;</span>
+<span class="n">x_min</span> <span class="o">=</span> <span class="o">-</span> <span class="mf">1.</span>
+<span class="n">x_max</span> <span class="o">=</span> <span class="mf">1.</span>
 <span class="n">num_x_train</span> <span class="o">=</span> <span class="mi">50</span>
 
 <span class="c1">## The 1-variable function we want to learn</span>
@@ -309,13 +310,10 @@ This is expected to further improve performance beyond that of machine learning 
 </pre></div>
 </div>
 </div>
-<section id="学習データの準備">
-<h3>学習データの準備<a class="headerlink" href="#学習データの準備" title="Link to this heading">¶</a></h3>
-</section>
 <section id="Prepare-training-data">
 <h3>Prepare training data<a class="headerlink" href="#Prepare-training-data" title="Link to this heading">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#### Prepare training data</span>
@@ -343,83 +341,56 @@ This is expected to further improve performance beyond that of machine learning 
 <h3>Composition of input state<a class="headerlink" href="#Composition-of-input-state" title="Link to this heading">¶</a></h3>
 <div class="line-block">
 <div class="line">First, create a gate <span class="math notranslate nohighlight">\(U_{\rm in}(x_i)\)</span> to embed the input value <span class="math notranslate nohighlight">\(x_i\)</span> into the initial state <span class="math notranslate nohighlight">\(|00\ldots0\rangle\)</span>.</div>
-<div class="line">Following reference [1], by using the rotation gates <span class="math notranslate nohighlight">\(R_j^X(\theta)=e^{i\theta X_j/2}, R_j^Z(\theta)=e^{i\theta Z_j/2}\)</span> and we define the gate as follow. <span class="math notranslate nohighlight">\(U_{\rm in}(x) = \prod_j R^Z_j(\cos^{-1} x^2) R^Y_j(\ sin^{-1}x)\)</span>.</div>
+<div class="line">Following reference [1], by using the rotation gates <span class="math notranslate nohighlight">\(R_j^X(\theta)=e^{i\theta X_j/2}, R_j^Z(\theta)=e^{i\theta Z_j/2}\)</span> and we define the gate as follow. <span class="math notranslate nohighlight">\(U_{\rm in}(x) = \prod_j R^Z_j(\cos^{-1} x^2) R^Y_j(\sin^{-1}x)\)</span>.</div>
 <div class="line">The input value <span class="math notranslate nohighlight">\(x_i\)</span> will be converted to the quantum state <span class="math notranslate nohighlight">\(|\psi_{\rm in}(x_i)\rangle =U_{\rm in}(x_i)|00\ldots0\rangle\)</span>.</div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Run only if you are in Google Colaboratory or in a local environment where Qulacs is not installed</span>
-<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>qulacs
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.circuit</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
 
-<span class="c1">## Run only in Google Colaboratory or (Linux or Mac) jupyter notebook environment</span>
-<span class="c1">## Qulacs errors will be output normally.</span>
-<span class="o">!</span>pip3<span class="w"> </span>install<span class="w"> </span>wurlitzer
-<span class="o">%</span><span class="k">load_ext</span> wurlitzer
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Import required libraries</span>
-<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span><span class="p">,</span> <span class="n">QuantumCircuit</span>
-
-<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubit</span><span class="p">)</span> <span class="c1"># The initial state</span>
-<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-[1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j]
-</pre></div></div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># a function to create a gate which encodes x</span>
 <span class="k">def</span> <span class="nf">U_in</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="n">U</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">nqubit</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;a function to create a circuit which encodes x</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">)</span>
 
     <span class="n">angle_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="n">angle_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubit</span><span class="p">):</span>
-        <span class="n">U</span><span class="o">.</span><span class="n">add_RY_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">angle_y</span><span class="p">)</span>
-        <span class="n">U</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">angle_z</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">):</span>
+        <span class="n">U</span><span class="o">.</span><span class="n">add_RY_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="o">-</span><span class="n">angle_y</span><span class="p">)</span>
+        <span class="n">U</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="o">-</span><span class="n">angle_z</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">U</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># sample calculation of an input state</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.state</span> <span class="kn">import</span> <span class="n">quantum_state</span><span class="p">,</span> <span class="n">apply_circuit</span>
+<span class="kn">from</span> <span class="nn">quri_parts.qulacs.simulator</span> <span class="kn">import</span> <span class="n">evaluate_state_to_vector</span>
+
 <span class="n">x</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="c1"># a sample value</span>
-<span class="n">U_in</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="c1"># calculation of U_in|000&gt;</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
+<span class="n">evaluate_state_to_vector</span><span class="p">(</span>
+    <span class="n">apply_circuit</span><span class="p">(</span><span class="n">U_in</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">quantum_state</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">))</span>
+<span class="p">)</span><span class="o">.</span><span class="n">vector</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[-6.93804351e-01+7.14937415e-01j -3.54871219e-02-3.51340074e-02j
- -3.54871219e-02-3.51340074e-02j  1.77881430e-03-1.76111422e-03j
- -3.54871219e-02-3.51340074e-02j  1.77881430e-03-1.76111422e-03j
-  1.77881430e-03-1.76111422e-03j  8.73809020e-05+9.00424970e-05j]
+array([-6.93804351e-01+7.14937415e-01j, -3.54871219e-02-3.51340074e-02j,
+       -3.54871219e-02-3.51340074e-02j,  1.77881430e-03-1.76111422e-03j,
+       -3.54871219e-02-3.51340074e-02j,  1.77881430e-03-1.76111422e-03j,
+        1.77881430e-03-1.76111422e-03j,  8.73809020e-05+9.00424970e-05j])
 </pre></div></div>
 </div>
 </section>
@@ -431,6 +402,10 @@ This is expected to further improve performance beyond that of machine learning 
 <li><p>Creation of rotating gate</p></li>
 <li><p>Alternately combine the gates of 1. and 2. to create one large variational quantum circuit <span class="math notranslate nohighlight">\(U(\theta)\)</span></p></li>
 </ol>
+<p>The Hamiltonian of the transverse Ising model is as follows and is used to define the time evolution operator <span class="math notranslate nohighlight">\(U_{\text{rand}} = e^{-iHt}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[H = \sum_{j=1}^N a_j X_j + \sum_{j=1}^N \sum_{k=1}^{j-1} J_{jk} Z_j Z_k\]</div>
+<p>Here, the coefficients <span class="math notranslate nohighlight">\(a\)</span>, <span class="math notranslate nohighlight">\(J\)</span> are the uniform distribution of <span class="math notranslate nohighlight">\([-1, 1]\)</span>.</p>
 <section id="1.-Creation-of-transverse-magnetic-field-Ising-Hamiltonian">
 <h4>1. Creation of transverse magnetic field Ising Hamiltonian<a class="headerlink" href="#1.-Creation-of-transverse-magnetic-field-Ising-Hamiltonian" title="Link to this heading">¶</a></h4>
 <p>By performing time evolution using the transverse magnetic field Ising model learned in Section 4-2 and increasing the complexity (entanglement) of the quantum circuit, the expressive power of the model is enhanced. (This part can be skipped unless the reader wants to know the details.)</p>
@@ -439,85 +414,29 @@ This is expected to further improve performance beyond that of machine learning 
 \[H = \sum_{j=1}^N a_j X_j + \sum_{j=1}^N \sum_{k=1}^{j-1} J_{jk} Z_j Z_k\]</div>
 <p>Here, the coefficients <span class="math notranslate nohighlight">\(a\)</span>, <span class="math notranslate nohighlight">\(J\)</span> are the uniform distribution of <span class="math notranslate nohighlight">\([-1, 1]\)</span>.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## basic gates</span>
-<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">X</span><span class="p">,</span> <span class="n">Z</span>
-<span class="n">I_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
-<span class="n">X_mat</span> <span class="o">=</span> <span class="n">X</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">get_matrix</span><span class="p">()</span>
-<span class="n">Z_mat</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">get_matrix</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## a function to create fullsize gate.</span>
-<span class="k">def</span> <span class="nf">make_fullgate</span><span class="p">(</span><span class="n">list_SiteAndOperator</span><span class="p">,</span> <span class="n">nqubit</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Receive list_SiteAndOperator = [ [i_0, O_0], [i_1, O_1], ...] ,</span>
-<span class="sd">    insert Identity into irrelevent qubit, and create (2**nqubit, 2**nqubit) size matrix</span>
-<span class="sd">    I(0) * ... * O_0(i_0) * ... * O_1(i_1) ...</span>
-<span class="sd">    &#39;&#39;&#39;</span>    <span class="n">list_Site</span> <span class="o">=</span> <span class="p">[</span><span class="n">SiteAndOperator</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">SiteAndOperator</span> <span class="ow">in</span> <span class="n">list_SiteAndOperator</span><span class="p">]</span>
-    <span class="n">list_SingleGates</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1">## list single 1-qubit gates and reduce them using np.kron</span>
-    <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubit</span><span class="p">):</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="ow">in</span> <span class="n">list_Site</span><span class="p">):</span>
-            <span class="n">list_SingleGates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">list_SiteAndOperator</span><span class="p">[</span><span class="n">cnt</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span>
-            <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">else</span><span class="p">:</span> <span class="c1">## insert identity if i is not included in list_Site</span>
-            <span class="n">list_SingleGates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">I_mat</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">expm</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.operator</span> <span class="kn">import</span> <span class="n">Operator</span><span class="p">,</span> <span class="n">pauli_label</span><span class="p">,</span> <span class="n">get_sparse_matrix</span>
 
-    <span class="k">return</span> <span class="n">reduce</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">,</span> <span class="n">list_SingleGates</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">####  Create a time evolution operator by creating a random magnetic field/random coupling Ising Hamiltonian</span>
+<span class="k">def</span> <span class="nf">get_hamiltonian</span><span class="p">():</span>
+    <span class="n">ham</span> <span class="o">=</span> <span class="n">Operator</span><span class="p">()</span>
 
-<span class="n">ham</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="o">**</span><span class="n">nqubit</span><span class="p">,</span><span class="mi">2</span><span class="o">**</span><span class="n">nqubit</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="nb">complex</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubit</span><span class="p">):</span> <span class="c1">## i runs 0 to nqubit-1</span>
-    <span class="n">Jx</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span> <span class="o">+</span> <span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="c1">## random number between -1~1</span>
-    <span class="n">ham</span> <span class="o">+=</span> <span class="n">Jx</span> <span class="o">*</span> <span class="n">make_fullgate</span><span class="p">(</span> <span class="p">[</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">X_mat</span><span class="p">]</span> <span class="p">],</span> <span class="n">nqubit</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">nqubit</span><span class="p">):</span>
-        <span class="n">J_ij</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span> <span class="o">+</span> <span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
-        <span class="n">ham</span> <span class="o">+=</span> <span class="n">J_ij</span> <span class="o">*</span> <span class="n">make_fullgate</span> <span class="p">([</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">Z_mat</span><span class="p">],</span> <span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">Z_mat</span><span class="p">]],</span> <span class="n">nqubit</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">):</span> <span class="c1">## i runs 0 to nqubit-1</span>
+        <span class="n">a_j</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span> <span class="o">+</span> <span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="c1">## random number between -1~1</span>
+        <span class="n">ham</span><span class="o">.</span><span class="n">add_term</span><span class="p">(</span><span class="n">pauli_label</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;X</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">a_j</span><span class="p">)</span>
 
-<span class="c1">## Create a time evolution operator by diagonalizing.  H*P = P*D &lt;-&gt; H = P*D*P^dagger</span>
-<span class="n">diag</span><span class="p">,</span> <span class="n">eigen_vecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">ham</span><span class="p">)</span>
-<span class="n">time_evol_op</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">eigen_vecs</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">time_step</span><span class="o">*</span><span class="n">diag</span><span class="p">))),</span> <span class="n">eigen_vecs</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">conj</span><span class="p">())</span> <span class="c1"># e^-iHT</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time_evol_op</span><span class="o">.</span><span class="n">shape</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(8, 8)
-</pre></div></div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># convert to qulacs gate</span>
-<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">DenseMatrix</span>
-<span class="n">time_evol_gate</span> <span class="o">=</span> <span class="n">DenseMatrix</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubit</span><span class="p">)],</span> <span class="n">time_evol_op</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">J_jk</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span> <span class="o">+</span> <span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="c1">## random number between -1~1</span>
+            <span class="n">ham</span><span class="o">.</span><span class="n">add_term</span><span class="p">(</span><span class="n">pauli_label</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Z</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> Z</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">J_jk</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">get_sparse_matrix</span><span class="p">(</span><span class="n">ham</span><span class="p">)</span>
+
+<span class="n">ham</span> <span class="o">=</span> <span class="n">get_hamiltonian</span><span class="p">()</span>
+
+<span class="n">time_evol_op</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">)</span>
+<span class="n">time_evol_op</span><span class="o">.</span><span class="n">add_UnitaryMatrix_gate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">),</span> <span class="n">expm</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">ham</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span> <span class="o">*</span> <span class="n">time_step</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -527,100 +446,25 @@ This is expected to further improve performance beyond that of machine learning 
 <p>we create a variational quantum circuit <span class="math notranslate nohighlight">\(U(\theta)\)</span> by combining time evolution by random transverse magnetic Ising model <span class="math notranslate nohighlight">\(U_{\text{rand}}\)</span>, and <span class="math notranslate nohighlight">\(j \:(=1,2,\cdots n)\)</span> th quantum qubit multiplied by the following rotation gate</p>
 <div class="math notranslate nohighlight">
 \[U_{\text{rot}}(\theta_j^{(i)}) = R_j^X(\theta_{j1}^{(i)})R_j^Z(\theta_{j2}^{(i)})R_j^X(\theta_{j3}^{(i)})\]</div>
-<p>Here, <span class="math notranslate nohighlight">\(i\)</span> is a subscript representing the layer of the quantum circuit, and <span class="math notranslate nohighlight">\(U_{\text{rand}}\)</span> and the above rotation are repeated for a total of <span class="math notranslate nohighlight">\(d\)</span> layers. In other words, on the whole, we compose the variational Quantum circuit as follows. In total, there are <span class="math notranslate nohighlight">\(3nd\)</span> parameters. the initital values of each <span class="math notranslate nohighlight">\(\theta\)</span> follows uniform distribution of <span class="math notranslate nohighlight">\([0, 2\pi]\)</span>.</p>
+<p>Here, <span class="math notranslate nohighlight">\(i\)</span> is a subscript representing the layer of the quantum circuit, and <span class="math notranslate nohighlight">\(U_{\text{rand}}\)</span> and the above rotation are repeated for a total of <span class="math notranslate nohighlight">\(d\)</span> layers. In other words, on the whole, we compose the variational Quantum circuit as follows. In total, there are <span class="math notranslate nohighlight">\(3\)</span> parameters. the initital values of each <span class="math notranslate nohighlight">\(\theta\)</span> follows uniform distribution of <span class="math notranslate nohighlight">\([0, 2\pi]\)</span>.</p>
+<p>Here, we use the <code class="docutils literal notranslate"><span class="pre">UnboundParametricQuantumCircuit</span></code> in QURI Parts to construct the circuit. You may find details of parametric circuit in this <a class="reference external" href="https://quri-parts.qunasys.com/tutorials/parametric">QURI Parts tutorial page</a>.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">ParametricQuantumCircuit</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># composition of gate for output U_out &amp; setting the initial parameter</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.circuit</span> <span class="kn">import</span> <span class="n">UnboundParametricQuantumCircuit</span>
 
-<span class="n">U_out</span> <span class="o">=</span> <span class="n">ParametricQuantumCircuit</span><span class="p">(</span><span class="n">nqubit</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">c_depth</span><span class="p">):</span>
-    <span class="n">U_out</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">time_evol_gate</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubit</span><span class="p">):</span>
-        <span class="n">angle</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
-        <span class="n">U_out</span><span class="o">.</span><span class="n">add_parametric_RX_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">angle</span><span class="p">)</span>
-        <span class="n">angle</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
-        <span class="n">U_out</span><span class="o">.</span><span class="n">add_parametric_RZ_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">angle</span><span class="p">)</span>
-        <span class="n">angle</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
-        <span class="n">U_out</span><span class="o">.</span><span class="n">add_parametric_RX_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">angle</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#  Get a list of initial values ​​for the parameter theta</span>
-<span class="n">parameter_count</span> <span class="o">=</span> <span class="n">U_out</span><span class="o">.</span><span class="n">get_parameter_count</span><span class="p">()</span>
-<span class="n">theta_init</span> <span class="o">=</span> <span class="p">[</span><span class="n">U_out</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">parameter_count</span><span class="p">)]</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">theta_init</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-[6.007250646127814,
- 4.046309757767312,
- 2.663159813474645,
- 3.810080933381979,
- 0.12059442161498848,
- 1.8948504571449056,
- 4.14799267096281,
- 1.8226113595664735,
- 3.88310546309581,
- 2.6940332019609157,
- 0.851208649826403,
- 1.8741631278382846,
- 3.5811951525261123,
- 3.7125630518871535,
- 3.6085919651139333,
- 4.104181793964002,
- 4.097285684838374,
- 2.71068197476515,
- 5.633168398253273,
- 2.309459341364396,
- 2.738620094343915,
- 5.6041197193647925,
- 5.065466226710866,
- 4.4226624059922806,
- 0.6297441057449945,
- 5.777279648887616,
- 4.487710439107831]
-</pre></div></div>
-</div>
-<p>For convenience, create a function to update <span class="math notranslate nohighlight">\(\theta\)</span>, the parameter of <span class="math notranslate nohighlight">\(U(\theta)\)</span></p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># function to update parameter theta</span>
-<span class="k">def</span> <span class="nf">set_U_out</span><span class="p">(</span><span class="n">theta</span><span class="p">):</span>
-    <span class="k">global</span> <span class="n">U_out</span>
+<span class="k">def</span> <span class="nf">get_U_out</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">UnboundParametricQuantumCircuit</span><span class="p">:</span>
+    <span class="n">U_out</span> <span class="o">=</span> <span class="n">UnboundParametricQuantumCircuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">c_depth</span><span class="p">):</span>
+        <span class="n">U_out</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">time_evol_op</span><span class="o">.</span><span class="n">gates</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">):</span>
+            <span class="n">U_out</span><span class="o">.</span><span class="n">add_ParametricRX_gate</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">U_out</span><span class="o">.</span><span class="n">add_ParametricRZ_gate</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">U_out</span><span class="o">.</span><span class="n">add_ParametricRX_gate</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">U_out</span>
 
-    <span class="n">parameter_count</span> <span class="o">=</span> <span class="n">U_out</span><span class="o">.</span><span class="n">get_parameter_count</span><span class="p">()</span>
-
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">parameter_count</span><span class="p">):</span>
-        <span class="n">U_out</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">theta</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="n">U_out</span> <span class="o">=</span> <span class="n">get_U_out</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -630,56 +474,40 @@ This is expected to further improve performance beyond that of machine learning 
 <h3>Measurement<a class="headerlink" href="#Measurement" title="Link to this heading">¶</a></h3>
 <p>The output of the model is the expected value of pauli Z of the 0th qubit at the output state <span class="math notranslate nohighlight">\(|\psi_{\rm out}\rangle\)</span>. That is, <span class="math notranslate nohighlight">\(y(\theta, x_i) = \langle Z_0 \rangle = \langle \psi_{\rm out}|Z_0|\psi_{\rm out}\rangle\)</span>.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create Observable Z_0</span>
-<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">Observable</span>
-<span class="n">obs</span> <span class="o">=</span> <span class="n">Observable</span><span class="p">(</span><span class="n">nqubit</span><span class="p">)</span>
-<span class="n">obs</span><span class="o">.</span><span class="n">add_operator</span><span class="p">(</span><span class="mf">2.</span><span class="p">,</span><span class="s1">&#39;Z 0&#39;</span><span class="p">)</span> <span class="c1"># set Observable 2 * Z. Multipy 2 to widen the final range of &lt;Z&gt;. This constant must be optimized as one of the parameters in order to deal with unknown functions.</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.core.operator</span> <span class="kn">import</span> <span class="n">pauli_label</span><span class="p">,</span> <span class="n">Operator</span>
+<span class="c1"># create Observable Z_0:</span>
+<span class="c1"># Set Observable to be 2 * Z. Factor of 2 is to widen the final range of &lt;Z&gt;.</span>
+<span class="c1"># This constant must be optimized as one of the parameters in order to deal with unknown functions.</span>
+<span class="n">obs</span> <span class="o">=</span> <span class="n">Operator</span><span class="p">({</span><span class="n">pauli_label</span><span class="p">(</span><span class="s2">&quot;Z0&quot;</span><span class="p">):</span> <span class="mi">2</span><span class="p">})</span>
 </pre></div>
 </div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">obs</span><span class="o">.</span><span class="n">get_expectation_value</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-1.9899748742132404
-</pre></div></div>
 </div>
 </section>
 <section id="Organize-a-series-of-steps-into-a-function">
 <h3>Organize a series of steps into a function<a class="headerlink" href="#Organize-a-series-of-steps-into-a-function" title="Link to this heading">¶</a></h3>
 <p>Summarize the flow up to this point and define a function that returns the predicted value <span class="math notranslate nohighlight">\(y(x_i, \theta)\)</span> of the model from the input <span class="math notranslate nohighlight">\(x_i\)</span>.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># A function that returns the model&#39;s predicted value y(x_i, theta) from the input x_i</span>
-<span class="k">def</span> <span class="nf">qcl_pred</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">U_out</span><span class="p">):</span>
-    <span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubit</span><span class="p">)</span>
-    <span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.qulacs.estimator</span> <span class="kn">import</span> <span class="n">create_qulacs_vector_estimator</span>
+
+<span class="n">estimator</span> <span class="o">=</span> <span class="n">create_qulacs_vector_estimator</span><span class="p">()</span>
+
+<span class="c1"># A function that returns the model&#39;s predicted value y(x_i, theta) from the input x_i</span>
+<span class="k">def</span> <span class="nf">qcl_pred</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">U_out</span><span class="p">:</span> <span class="n">QuantumCircuit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">quantum_state</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">)</span>
 
     <span class="c1"># calculate input state</span>
-    <span class="n">U_in</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-
+    <span class="n">state</span> <span class="o">=</span> <span class="n">apply_circuit</span><span class="p">(</span><span class="n">U_in</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">state</span><span class="p">)</span>
     <span class="c1"># calculate output state</span>
-    <span class="n">U_out</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">apply_circuit</span><span class="p">(</span><span class="n">U_out</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
 
     <span class="c1"># the output of model</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">get_expectation_value</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">res</span>
+    <span class="k">return</span> <span class="n">estimator</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">real</span>
 </pre></div>
 </div>
 </div>
@@ -688,19 +516,19 @@ This is expected to further improve performance beyond that of machine learning 
 <h3>Cost function calculation<a class="headerlink" href="#Cost-function-calculation" title="Link to this heading">¶</a></h3>
 <p>The cost function <span class="math notranslate nohighlight">\(L(\theta)\)</span> is the mean squared error (MSE) between the training data and the prediction data.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculate cost function L</span>
-<span class="k">def</span> <span class="nf">cost_func</span><span class="p">(</span><span class="n">theta</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">cost_func</span><span class="p">(</span><span class="n">theta</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    theta: an array of length c_depth * nqubit * 3</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="c1"># update theta, the parameter of U_out</span>
-    <span class="n">set_U_out</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">bound_U_out</span> <span class="o">=</span> <span class="n">U_out</span><span class="o">.</span><span class="n">bind_parameters</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
 
     <span class="c1"># calculate data of num_x_train</span>
-    <span class="n">y_pred</span> <span class="o">=</span> <span class="p">[</span><span class="n">qcl_pred</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">U_out</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_train</span><span class="p">]</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">qcl_pred</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">bound_U_out</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_train</span><span class="p">])</span>
 
     <span class="c1"># quadratic loss</span>
     <span class="n">L</span> <span class="o">=</span> <span class="p">((</span><span class="n">y_pred</span> <span class="o">-</span> <span class="n">y_train</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
@@ -710,48 +538,41 @@ This is expected to further improve performance beyond that of machine learning 
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># the value of cost function with the initial value of parameter theta</span>
-<span class="n">cost_func</span><span class="p">(</span><span class="n">theta_init</span><span class="p">)</span>
+<span class="n">random_init_param</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">U_out</span><span class="o">.</span><span class="n">parameter_count</span><span class="p">)</span>
+<span class="n">cost_func</span><span class="p">(</span><span class="n">random_init_param</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1.3889259316193516
+0.46804960352303077
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># graph with the initial value of parameter theta</span>
 <span class="n">xlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">)</span>
-<span class="n">y_init</span> <span class="o">=</span> <span class="p">[</span><span class="n">qcl_pred</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">U_out</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xlist</span><span class="p">]</span>
+<span class="n">y_init</span> <span class="o">=</span> <span class="p">[</span><span class="n">qcl_pred</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">U_out</span><span class="o">.</span><span class="n">bind_parameters</span><span class="p">(</span><span class="n">random_init_param</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xlist</span><span class="p">]</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xlist</span><span class="p">,</span> <span class="n">y_init</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-[&lt;matplotlib.lines.Line2D at 0x1a24c6b5320&gt;]
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_5.2_Quantum_Circuit_Learning_38_1.png" src="../_images/notebooks_5.2_Quantum_Circuit_Learning_38_1.png" />
+<img alt="../_images/notebooks_5.2_Quantum_Circuit_Learning_27_0.png" src="../_images/notebooks_5.2_Quantum_Circuit_Learning_27_0.png" />
 </div>
 </div>
 </section>
@@ -759,85 +580,23 @@ This is expected to further improve performance beyond that of machine learning 
 <h3>Learning (optimize with scipy.optimize.minimize)<a class="headerlink" href="#Learning-(optimize-with-scipy.optimize.minimize)" title="Link to this heading">¶</a></h3>
 <p>Finally, the preparation is over, and it’s finally time to study. Here, for simplicity, the optimization is performed using the Nelder-Mead method, which does not require a gradient formula. When using an optimization method that uses gradients (e.g. BFGS method), a convenient formula for calculating gradients is introduced in Reference <a class="reference external" href="https://arxiv.org/abs/1803.00745">[1]</a>.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
-<span class="c1"># Learning (takes about 1-2 minutes on my PC)</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">cost_func</span><span class="p">,</span> <span class="n">theta_init</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;Nelder-Mead&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Wall time: 1min 21s
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># value of cost_function after optimization</span>
-<span class="n">result</span><span class="o">.</span><span class="n">fun</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-0.003987076559624744
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># solution of theta obtained from optimization</span>
-<span class="n">theta_opt</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">x</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">theta_opt</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-[7.17242144 5.4043736  1.27744316 3.09192904 0.13144047 2.13757354
- 4.58470259 2.01924008 2.96107066 2.91843537 1.0609229  1.70351774
- 6.41114609 6.25686828 2.41619471 3.69387805 4.07551328 1.47666316
- 3.4108701  2.28524042 1.75253621 6.47969129 3.18418337 1.58699008
- 1.2831137  4.82903335 5.95931349]
-</pre></div></div>
-</div>
-</section>
-<section id="plotting-the-result">
-<h3>plotting the result<a class="headerlink" href="#plotting-the-result" title="Link to this heading">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assign optimized theta to U_out</span>
-<span class="n">set_U_out</span><span class="p">(</span><span class="n">theta_opt</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">cost_func</span><span class="p">,</span> <span class="n">random_init_param</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;Nelder-Mead&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot</span>
@@ -849,14 +608,14 @@ Wall time: 1min 21s
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Teacher&#39;</span><span class="p">)</span>
 
 <span class="c1"># Graph under initial value of parameter θ</span>
-
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xlist</span><span class="p">,</span> <span class="n">y_init</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Initial Model Prediction&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
 
 <span class="c1"># prediction of model</span>
-<span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">qcl_pred</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">U_out</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xlist</span><span class="p">])</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">qcl_pred</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">U_out</span><span class="o">.</span><span class="n">bind_parameters</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xlist</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xlist</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Final Model Prediction&#39;</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -865,11 +624,297 @@ Wall time: 1min 21s
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_5.2_Quantum_Circuit_Learning_46_0.png" src="../_images/notebooks_5.2_Quantum_Circuit_Learning_46_0.png" />
+<img alt="../_images/notebooks_5.2_Quantum_Circuit_Learning_31_0.png" src="../_images/notebooks_5.2_Quantum_Circuit_Learning_31_0.png" />
 </div>
 </div>
 <p>It can be seen that the approximation of the sin function is indeed successful. Here, we dealt with a very simple task of approximating a function with one-dimensional input and output, but it can be extended to approximation of functions with multi-dimensional inputs and outputs and classification problems. Aspiring readers are encouraged to tackle classification problems of the <a class="reference external" href="https://scikit-learn.org/stable/auto_examples/datasets/plot_iris_dataset.html">Iris dataset</a>, which is one of the
 representative machine learning datasets.</p>
+<section id="Optimization-loop-with-QURI-Parts">
+<h4>Optimization loop with QURI Parts<a class="headerlink" href="#Optimization-loop-with-QURI-Parts" title="Link to this heading">¶</a></h4>
+<p>The minimization procedure can also be done with QURI Parts. You may check out QURI Parts’ lecture on <a class="reference external" href="https://quri-parts.qunasys.com/tutorials/variational">Variational Algorithm</a>. Here, we provide an example on how to do QCL with QURI Parts. To do this we need to implement the gradient function as well as the optimization loop on our own.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">quri_parts.algo.optimizer</span> <span class="kn">import</span> <span class="n">OptimizerStatus</span><span class="p">,</span> <span class="n">OptimizerState</span><span class="p">,</span> <span class="n">Optimizer</span>
+<span class="kn">from</span> <span class="nn">quri_parts.qulacs.estimator</span> <span class="kn">import</span> <span class="n">create_qulacs_vector_concurrent_parametric_estimator</span>
+
+<span class="kn">from</span> <span class="nn">quri_parts.core.state</span> <span class="kn">import</span> <span class="n">ParametricCircuitQuantumState</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.estimator.gradient</span> <span class="kn">import</span> <span class="n">create_numerical_gradient_estimator</span>
+<span class="kn">from</span> <span class="nn">quri_parts.circuit</span> <span class="kn">import</span> <span class="n">UnboundParametricQuantumCircuit</span>
+
+<span class="k">def</span> <span class="nf">grad_func</span><span class="p">(</span><span class="n">theta</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of the cost function with respect to the circuit parameters</span>
+<span class="sd">    theta.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parmam_estimator</span> <span class="o">=</span> <span class="n">create_qulacs_vector_concurrent_parametric_estimator</span><span class="p">()</span>
+    <span class="n">grad_estimator</span> <span class="o">=</span> <span class="n">create_numerical_gradient_estimator</span><span class="p">(</span><span class="n">parmam_estimator</span><span class="p">,</span> <span class="mf">1e-8</span><span class="p">)</span>
+    <span class="n">estimator</span> <span class="o">=</span> <span class="n">create_qulacs_vector_estimator</span><span class="p">()</span>
+
+    <span class="n">grads</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">):</span>
+        <span class="n">param_circuit</span> <span class="o">=</span> <span class="n">UnboundParametricQuantumCircuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">)</span>
+        <span class="n">param_circuit</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">U_in</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">param_circuit</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">U_out</span><span class="p">)</span>
+        <span class="n">param_state</span> <span class="o">=</span> <span class="n">ParametricCircuitQuantumState</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">,</span> <span class="n">param_circuit</span><span class="p">)</span>
+
+        <span class="n">circuit_grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">grad_estimator</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">param_state</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">real</span>
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">estimator</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">param_state</span><span class="o">.</span><span class="n">bind_parameters</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">real</span>
+
+        <span class="n">grads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">*</span> <span class="n">circuit_grad</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">grads</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">x_train</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">quantum_circuit_learning</span><span class="p">(</span>
+    <span class="n">init_params</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">cost_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="nb">float</span><span class="p">],</span>
+    <span class="n">grad_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span>
+    <span class="n">optimizer</span><span class="p">:</span> <span class="n">Optimizer</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OptimizerState</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimization loop for performing quantum circuit learning.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">opt_state</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">get_init_state</span><span class="p">(</span><span class="n">init_params</span><span class="p">)</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">opt_state</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">opt_state</span><span class="p">,</span> <span class="n">cost_fn</span><span class="p">,</span> <span class="n">grad_fn</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">opt_state</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">OptimizerStatus</span><span class="o">.</span><span class="n">FAILED</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Optimizer failed&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="k">if</span> <span class="n">opt_state</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">OptimizerStatus</span><span class="o">.</span><span class="n">CONVERGED</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Optimizer converged&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
+    <span class="k">return</span> <span class="n">opt_state</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.algo.optimizer</span> <span class="kn">import</span> <span class="n">LBFGS</span>
+<span class="n">result_qp</span> <span class="o">=</span> <span class="n">quantum_circuit_learning</span><span class="p">(</span><span class="n">random_init_param</span><span class="p">,</span> <span class="n">cost_func</span><span class="p">,</span> <span class="n">grad_func</span><span class="p">,</span> <span class="n">LBFGS</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Optimizer converged
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="n">xlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">)</span>
+
+<span class="c1"># training data</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Teacher&#39;</span><span class="p">)</span>
+
+<span class="c1"># Graph under initial value of parameter θ</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xlist</span><span class="p">,</span> <span class="n">y_init</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Initial Model Prediction&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+
+<span class="c1"># prediction of model</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">qcl_pred</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">U_out</span><span class="o">.</span><span class="n">bind_parameters</span><span class="p">(</span><span class="n">result_qp</span><span class="o">.</span><span class="n">params</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xlist</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xlist</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Final Model Prediction&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_5.2_Quantum_Circuit_Learning_36_0.png" src="../_images/notebooks_5.2_Quantum_Circuit_Learning_36_0.png" />
+</div>
+</div>
+</section>
+<section id="Perform-Quantum-Circuit-Learning-on-a-real-quantum-computer">
+<h4>Perform Quantum Circuit Learning on a real quantum computer<a class="headerlink" href="#Perform-Quantum-Circuit-Learning-on-a-real-quantum-computer" title="Link to this heading">¶</a></h4>
+<p>Up to this point, we are doing everything with a simulator. However, QURI Parts also allow us to easily submit our algorithm onto real devices by changing the simulator’s estimator to a backend estimator. Please check out the QURI Parts tutorial on <a class="reference external" href="https://quri-parts.qunasys.com/tutorials/sampling_simulation">Sampling Simulation</a> and <a class="reference external" href="https://quri-parts.qunasys.com/tutorials/sampling_backends/">Sampling on Real Devices</a>.</p>
+<p>We first demonstrate how to create a sampler from a real device</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.core.estimator.sampling</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">create_sampling_estimator</span><span class="p">,</span>
+    <span class="n">create_sampling_concurrent_estimator</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.sampling</span> <span class="kn">import</span> <span class="n">create_concurrent_sampler_from_sampling_backend</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.sampling.shots_allocator</span> <span class="kn">import</span> <span class="n">create_proportional_shots_allocator</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.estimator.gradient</span> <span class="kn">import</span> <span class="n">create_parameter_shift_gradient_estimator</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.estimator</span> <span class="kn">import</span> <span class="n">Estimate</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.measurement</span> <span class="kn">import</span> <span class="n">bitwise_commuting_pauli_measurement</span>
+<span class="kn">from</span> <span class="nn">quri_parts.qiskit.backend</span> <span class="kn">import</span> <span class="n">QiskitRuntimeSamplingBackend</span>
+
+<span class="kn">from</span> <span class="nn">qiskit_ibm_runtime</span> <span class="kn">import</span> <span class="n">QiskitRuntimeService</span>
+
+<span class="c1"># Activate IBM Quantum account</span>
+<span class="n">account</span> <span class="o">=</span> <span class="n">QiskitRuntimeService</span><span class="o">.</span><span class="n">saved_accounts</span><span class="p">()[</span><span class="s1">&#39;default-ibm-quantum&#39;</span><span class="p">]</span>
+<span class="n">service</span> <span class="o">=</span> <span class="n">QiskitRuntimeService</span><span class="p">(</span><span class="o">**</span><span class="n">account</span><span class="p">)</span>
+
+<span class="c1"># Create the sampling backend and sampler</span>
+<span class="n">sampling_backend</span> <span class="o">=</span> <span class="n">QiskitRuntimeSamplingBackend</span><span class="p">(</span>
+    <span class="n">backend</span><span class="o">=</span><span class="n">service</span><span class="o">.</span><span class="n">backend</span><span class="p">(</span><span class="s2">&quot;ibmq_qasm_simulator&quot;</span><span class="p">),</span>
+    <span class="n">service</span><span class="o">=</span><span class="n">service</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ibmq_concurrent_sampler</span> <span class="o">=</span> <span class="n">create_concurrent_sampler_from_sampling_backend</span><span class="p">(</span><span class="n">sampling_backend</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Using a real device is often very time consuming. So, we use the qulacs sampling simulator for demonstration. If you wish to run on a real device, you may directly replace <code class="docutils literal notranslate"><span class="pre">qulacs_concurrent_sampler</span></code> below with the <code class="docutils literal notranslate"><span class="pre">ibmq_concurrent_sampler</span></code> created above.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.qulacs.sampler</span> <span class="kn">import</span> <span class="n">create_qulacs_vector_concurrent_sampler</span>
+
+<span class="n">qulacs_concurrent_sampler</span> <span class="o">=</span> <span class="n">create_qulacs_vector_concurrent_sampler</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>We are now ready to construct a sampling estimator that estimates expectation values based on sampling experiments.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the sampling estimators</span>
+<span class="n">n_shots</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e6</span><span class="p">)</span>
+<span class="n">shots_allocator</span> <span class="o">=</span> <span class="n">create_proportional_shots_allocator</span><span class="p">()</span>
+<span class="n">measurement_factory</span> <span class="o">=</span> <span class="n">bitwise_commuting_pauli_measurement</span>
+<span class="n">sampling_estimator</span> <span class="o">=</span> <span class="n">create_sampling_estimator</span><span class="p">(</span>
+    <span class="n">n_shots</span><span class="p">,</span> <span class="n">qulacs_concurrent_sampler</span><span class="p">,</span> <span class="n">measurement_factory</span><span class="p">,</span> <span class="n">shots_allocator</span>
+<span class="p">)</span>
+<span class="n">concurrent_sampling_estimator</span> <span class="o">=</span> <span class="n">create_sampling_concurrent_estimator</span><span class="p">(</span>
+    <span class="n">n_shots</span><span class="p">,</span> <span class="n">qulacs_concurrent_sampler</span><span class="p">,</span> <span class="n">measurement_factory</span><span class="p">,</span> <span class="n">shots_allocator</span>
+<span class="p">)</span>
+
+
+<span class="c1"># Create the sampling gradient estimators</span>
+<span class="k">def</span> <span class="nf">concurrent_param_sampling_estimator</span><span class="p">(</span>
+    <span class="n">estimatable</span><span class="p">:</span> <span class="n">Operator</span><span class="p">,</span>
+    <span class="n">param_state</span><span class="p">:</span> <span class="n">ParametricCircuitQuantumState</span><span class="p">,</span>
+    <span class="n">params</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Estimate</span><span class="p">[</span><span class="nb">complex</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="n">concurrent_sampling_estimator</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">estimatable</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">),</span>
+        <span class="p">[</span><span class="n">param_state</span><span class="o">.</span><span class="n">bind_parameters</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">]</span>
+    <span class="p">)</span>
+
+<span class="n">sampling_grad_estimator</span> <span class="o">=</span> <span class="n">create_parameter_shift_gradient_estimator</span><span class="p">(</span>
+    <span class="n">concurrent_param_sampling_estimator</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>We also need to rewrite our cost function and gradient function in order for us to incorporate the sampling estimators we just created. Note that the codes are almost the same as the simulator codes. Only the estimators are replaced.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sampling_cost_func</span><span class="p">(</span><span class="n">theta</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;cost function evaluated based on sampling estimation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y_preds</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_train</span><span class="p">:</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">quantum_state</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">)</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">apply_circuit</span><span class="p">(</span><span class="n">U_in</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">state</span><span class="p">)</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">apply_circuit</span><span class="p">(</span><span class="n">U_out</span><span class="o">.</span><span class="n">bind_parameters</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="n">state</span><span class="p">)</span>
+        <span class="n">y_preds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sampling_estimator</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="c1"># quadratic loss</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_preds</span><span class="p">)</span> <span class="o">-</span> <span class="n">y_train</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">sampling_grad_func</span><span class="p">(</span><span class="n">theta</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of the cost function with respect to the circuit parameters</span>
+<span class="sd">    theta. Computation done by sampling estimation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">grads</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">):</span>
+        <span class="n">param_circuit</span> <span class="o">=</span> <span class="n">UnboundParametricQuantumCircuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">)</span>
+        <span class="n">param_circuit</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">U_in</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">param_circuit</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">U_out</span><span class="p">)</span>
+        <span class="n">param_state</span> <span class="o">=</span> <span class="n">ParametricCircuitQuantumState</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">,</span> <span class="n">param_circuit</span><span class="p">)</span>
+
+        <span class="n">circuit_grad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sampling_grad_estimator</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">param_state</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">real</span>
+        <span class="n">y_pred</span> <span class="o">=</span> <span class="n">sampling_estimator</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">param_state</span><span class="o">.</span><span class="n">bind_parameters</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">real</span>
+
+        <span class="n">grads</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_pred</span><span class="p">)</span> <span class="o">*</span> <span class="n">circuit_grad</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">grads</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">x_train</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<p>Finally, we are ready to run QCL with sampling estimators.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.algo.optimizer</span> <span class="kn">import</span> <span class="n">LBFGS</span>
+<span class="n">sampling_result_qp</span> <span class="o">=</span> <span class="n">quantum_circuit_learning</span><span class="p">(</span>
+    <span class="n">random_init_param</span><span class="p">,</span>
+    <span class="n">sampling_cost_func</span><span class="p">,</span>
+    <span class="n">sampling_grad_func</span><span class="p">,</span>
+    <span class="n">LBFGS</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Optimizer failed
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="n">xlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">)</span>
+
+<span class="c1"># training data</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Teacher&#39;</span><span class="p">)</span>
+
+<span class="c1"># Graph under initial value of parameter θ</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xlist</span><span class="p">,</span> <span class="n">y_init</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Initial Model Prediction&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+
+<span class="c1"># prediction of model</span>
+<span class="n">exact_y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">qcl_pred</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">U_out</span><span class="o">.</span><span class="n">bind_parameters</span><span class="p">(</span><span class="n">result_qp</span><span class="o">.</span><span class="n">params</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xlist</span><span class="p">])</span>
+<span class="n">sampling_y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">qcl_pred</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">U_out</span><span class="o">.</span><span class="n">bind_parameters</span><span class="p">(</span><span class="n">sampling_result_qp</span><span class="o">.</span><span class="n">params</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xlist</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xlist</span><span class="p">,</span> <span class="n">exact_y_pred</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Final Model Prediction (Simulator)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xlist</span><span class="p">,</span> <span class="n">sampling_y_pred</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Final Model Prediction (Sampling)&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_5.2_Quantum_Circuit_Learning_48_0.png" src="../_images/notebooks_5.2_Quantum_Circuit_Learning_48_0.png" />
+</div>
+</div>
+</section>
 </section>
 </section>
 <section id="Reference">
@@ -896,8 +941,7 @@ representative machine learning datasets.</p>
 <li><a class="reference internal" href="#">5-2. Quantum Circuit learning</a><ul>
 <li><a class="reference internal" href="#Overview-of-QCL">Overview of QCL</a></li>
 <li><a class="reference internal" href="#Learning-Procedure">Learning Procedure</a></li>
-<li><a class="reference internal" href="#Implementation-using-the-quantum-simulator-Qulacs">Implementation using the quantum simulator Qulacs</a><ul>
-<li><a class="reference internal" href="#学習データの準備">学習データの準備</a></li>
+<li><a class="reference internal" href="#Implementation-using-QURI-Parts">Implementation using QURI Parts</a><ul>
 <li><a class="reference internal" href="#Prepare-training-data">Prepare training data</a></li>
 <li><a class="reference internal" href="#Composition-of-input-state">Composition of input state</a></li>
 <li><a class="reference internal" href="#Configuration-of-variational-quantum-circuit-U(\theta)">Configuration of variational quantum circuit <span class="math notranslate nohighlight">\(U(\theta)\)</span></a><ul>
@@ -908,8 +952,11 @@ representative machine learning datasets.</p>
 <li><a class="reference internal" href="#Measurement">Measurement</a></li>
 <li><a class="reference internal" href="#Organize-a-series-of-steps-into-a-function">Organize a series of steps into a function</a></li>
 <li><a class="reference internal" href="#Cost-function-calculation">Cost function calculation</a></li>
-<li><a class="reference internal" href="#Learning-(optimize-with-scipy.optimize.minimize)">Learning (optimize with scipy.optimize.minimize)</a></li>
-<li><a class="reference internal" href="#plotting-the-result">plotting the result</a></li>
+<li><a class="reference internal" href="#Learning-(optimize-with-scipy.optimize.minimize)">Learning (optimize with scipy.optimize.minimize)</a><ul>
+<li><a class="reference internal" href="#Optimization-loop-with-QURI-Parts">Optimization loop with QURI Parts</a></li>
+<li><a class="reference internal" href="#Perform-Quantum-Circuit-Learning-on-a-real-quantum-computer">Perform Quantum Circuit Learning on a real quantum computer</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a class="reference internal" href="#Reference">Reference</a></li>

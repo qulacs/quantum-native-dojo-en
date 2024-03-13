@@ -17,10 +17,10 @@
     <link rel="stylesheet" href="../_static/bootstrap-icons.css" type="text/css" />
           <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
           <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
-          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
           <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
-          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
-          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css" />
           <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
         <link rel="index" title="Index" href="../genindex.html" />
         <link rel="search" title="Search" href="../search.html" />
@@ -201,7 +201,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="6_quantum_chemistry_calculation.html">Chapter 6 Quantum chemistry calculation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="6.1_openfermion_basics.html">6-1. OpenFermion Basics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qp_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using QURI Parts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
 </ul>
 </li>
@@ -251,69 +251,139 @@ stocks of the four GAFA (Google, Apple, Facebook, and Amazon) companies.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install pandas, pandas_datareader required for data acquisition</span>
-<span class="c1"># !pip install pandas pandas_datareader</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
-</pre></div>
-</div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">pandas_datareader.data</span> <span class="k">as</span> <span class="nn">web</span>
-<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">pandas_datareader</span> <span class="kn">import</span> <span class="n">data</span> <span class="k">as</span> <span class="n">pdr</span>
+<span class="kn">import</span> <span class="nn">yfinance</span> <span class="k">as</span> <span class="nn">yf</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Issue Selection</span>
-<span class="n">codes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;GOOG&#39;</span><span class="p">,</span> <span class="s1">&#39;AAPL&#39;</span><span class="p">,</span> <span class="s1">&#39;FB&#39;</span><span class="p">,</span> <span class="s1">&#39;AMZN&#39;</span><span class="p">]</span> <span class="c1"># GAFA</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">yf</span><span class="o">.</span><span class="n">pdr_override</span><span class="p">()</span>
+<span class="n">y_symbols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;GOOG&#39;</span><span class="p">,</span> <span class="s1">&#39;AAPL&#39;</span><span class="p">,</span> <span class="s1">&#39;META&#39;</span><span class="p">,</span> <span class="s1">&#39;AMZN&#39;</span><span class="p">]</span>
 
-<span class="c1"># Using one year of data from 2017</span>
-<span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">end</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>
+<span class="n">startdate</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">enddate</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2022</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">31</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pdr</span><span class="o">.</span><span class="n">get_data_yahoo</span><span class="p">(</span><span class="n">y_symbols</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">startdate</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">enddate</span><span class="p">)</span>
 
-<span class="c1"># Obtain daily stock price data from Yahoo! Finance</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">DataReader</span><span class="p">(</span><span class="n">codes</span><span class="p">,</span> <span class="s1">&#39;yahoo&#39;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
-
-<span class="n">df</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Adj Close&#39;</span><span class="p">]</span>
-
-<span class="c1">## Display of most recent data</span>
-<span class="n">display</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">tail</span><span class="p">())</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Adj Close&#39;</span><span class="p">][</span><span class="n">y_symbols</span><span class="p">]</span>
+<span class="n">df</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[*********************100%%**********************]  4 of 4 completed
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>GOOG</th>
+      <th>AAPL</th>
+      <th>META</th>
+      <th>AMZN</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2022-12-23</th>
+      <td>89.809998</td>
+      <td>131.127060</td>
+      <td>118.040001</td>
+      <td>85.250000</td>
+    </tr>
+    <tr>
+      <th>2022-12-27</th>
+      <td>87.930000</td>
+      <td>129.307236</td>
+      <td>116.879997</td>
+      <td>83.040001</td>
+    </tr>
+    <tr>
+      <th>2022-12-28</th>
+      <td>86.459999</td>
+      <td>125.339409</td>
+      <td>115.620003</td>
+      <td>81.820000</td>
+    </tr>
+    <tr>
+      <th>2022-12-29</th>
+      <td>88.949997</td>
+      <td>128.889572</td>
+      <td>120.260002</td>
+      <td>84.180000</td>
+    </tr>
+    <tr>
+      <th>2022-12-30</th>
+      <td>88.730003</td>
+      <td>129.207779</td>
+      <td>120.339996</td>
+      <td>84.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Plot the stock price</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s1">&#39;AAPL&#39;</span><span class="p">,</span> <span class="s1">&#39;FB&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s1">&#39;AAPL&#39;</span><span class="p">,</span> <span class="s1">&#39;META&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s1">&#39;GOOG&#39;</span><span class="p">,</span> <span class="s1">&#39;AMZN&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x114957850&gt;
+&lt;Axes: xlabel=&#39;Date&#39;&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_7.3_application_of_HHL_algorithm_5_1.png" src="../_images/notebooks_7.3_application_of_HHL_algorithm_5_1.png" />
+<img alt="../_images/notebooks_7.3_application_of_HHL_algorithm_4_1.png" src="../_images/notebooks_7.3_application_of_HHL_algorithm_4_1.png" />
 </div>
 </div>
 <p>*The reason why the four stocks are divided into two groups here is because the stock price values are close to each other and easy to see when plotting, and there is no deeper meaning.</p>
@@ -328,7 +398,7 @@ stocks of the four GAFA (Google, Apple, Facebook, and Amazon) companies.</p>
 \[y_t = \frac{P_t - P_{t-1}}{P_{t-1}}\]</div>
 <p>This is obtained with the <code class="docutils literal notranslate"><span class="pre">pct_change()</span></code> method of the <code class="docutils literal notranslate"><span class="pre">pandas</span> <span class="pre">DataFrame</span></code>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">daily_return</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span>
@@ -357,10 +427,10 @@ stocks of the four GAFA (Google, Apple, Facebook, and Amazon) companies.</p>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
-      <th>Symbols</th>
+      <th></th>
       <th>GOOG</th>
       <th>AAPL</th>
-      <th>FB</th>
+      <th>META</th>
       <th>AMZN</th>
     </tr>
     <tr>
@@ -373,43 +443,66 @@ stocks of the four GAFA (Google, Apple, Facebook, and Amazon) companies.</p>
   </thead>
   <tbody>
     <tr>
-      <th>2017-12-22</th>
-      <td>-0.003300</td>
-      <td>0.000000</td>
-      <td>-0.001409</td>
-      <td>-0.005448</td>
+      <th>2022-12-23</th>
+      <td>0.017562</td>
+      <td>-0.002798</td>
+      <td>0.007855</td>
+      <td>0.017425</td>
     </tr>
     <tr>
-      <th>2017-12-26</th>
-      <td>-0.003188</td>
-      <td>-0.025370</td>
-      <td>-0.006828</td>
-      <td>0.007190</td>
+      <th>2022-12-27</th>
+      <td>-0.020933</td>
+      <td>-0.013878</td>
+      <td>-0.009827</td>
+      <td>-0.025924</td>
     </tr>
     <tr>
-      <th>2017-12-27</th>
-      <td>-0.006974</td>
-      <td>0.000176</td>
-      <td>0.009262</td>
-      <td>0.004674</td>
+      <th>2022-12-28</th>
+      <td>-0.016718</td>
+      <td>-0.030685</td>
+      <td>-0.010780</td>
+      <td>-0.014692</td>
     </tr>
     <tr>
-      <th>2017-12-28</th>
-      <td>-0.001172</td>
-      <td>0.002814</td>
-      <td>0.001689</td>
-      <td>0.003248</td>
+      <th>2022-12-29</th>
+      <td>0.028799</td>
+      <td>0.028324</td>
+      <td>0.040131</td>
+      <td>0.028844</td>
     </tr>
     <tr>
-      <th>2017-12-29</th>
-      <td>-0.001660</td>
-      <td>-0.010814</td>
-      <td>-0.008206</td>
-      <td>-0.014021</td>
+      <th>2022-12-30</th>
+      <td>-0.002473</td>
+      <td>0.002469</td>
+      <td>0.000665</td>
+      <td>-0.002138</td>
     </tr>
   </tbody>
 </table>
 </div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">values</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[145.07449341, 179.95387268, 338.54000854, 170.40449524],
+       [144.41650391, 177.66999817, 336.52999878, 167.52200317],
+       [137.65350342, 172.94400024, 324.17001343, 164.35699463],
+       ...,
+       [ 86.45999908, 125.33940887, 115.62000275,  81.81999969],
+       [ 88.94999695, 128.88957214, 120.26000214,  84.18000031],
+       [ 88.73000336, 129.20777893, 120.33999634,  84.        ]])
+</pre></div></div>
 </div>
 </section>
 <section id="Expected-Returns">
@@ -431,11 +524,10 @@ stocks of the four GAFA (Google, Apple, Facebook, and Amazon) companies.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Symbols
-GOOG    0.300215
-AAPL    0.411192
-FB      0.430156
-AMZN    0.464567
+GOOG   -0.419937
+AAPL   -0.270522
+META   -0.822084
+AMZN   -0.586943
 dtype: float64
 </pre></div></div>
 </div>
@@ -475,48 +567,41 @@ dtype: float64
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
-      <th>Symbols</th>
+      <th></th>
       <th>GOOG</th>
       <th>AAPL</th>
-      <th>FB</th>
+      <th>META</th>
       <th>AMZN</th>
-    </tr>
-    <tr>
-      <th>Symbols</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>GOOG</th>
-      <td>0.023690</td>
-      <td>0.013303</td>
-      <td>0.018382</td>
-      <td>0.021614</td>
+      <td>0.150897</td>
+      <td>0.109549</td>
+      <td>0.170553</td>
+      <td>0.140956</td>
     </tr>
     <tr>
       <th>AAPL</th>
-      <td>0.013303</td>
-      <td>0.031119</td>
-      <td>0.016291</td>
-      <td>0.018877</td>
+      <td>0.109549</td>
+      <td>0.127250</td>
+      <td>0.136161</td>
+      <td>0.124414</td>
     </tr>
     <tr>
-      <th>FB</th>
-      <td>0.018382</td>
-      <td>0.016291</td>
-      <td>0.028855</td>
-      <td>0.023337</td>
+      <th>META</th>
+      <td>0.170553</td>
+      <td>0.136161</td>
+      <td>0.414463</td>
+      <td>0.195457</td>
     </tr>
     <tr>
       <th>AMZN</th>
-      <td>0.021614</td>
-      <td>0.018877</td>
-      <td>0.023337</td>
-      <td>0.044120</td>
+      <td>0.140956</td>
+      <td>0.124414</td>
+      <td>0.195457</td>
+      <td>0.251178</td>
     </tr>
   </tbody>
 </table>
@@ -595,16 +680,37 @@ W =
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[0.         0.         0.30021458 0.41119151 0.43015563 0.46456748]
- [0.         0.         1.         1.         1.         1.        ]
- [0.30021458 1.         0.02369003 0.01330333 0.01838175 0.0216144 ]
- [0.41119151 1.         0.01330333 0.03111917 0.01629131 0.01887668]
- [0.43015563 1.         0.01838175 0.01629131 0.02885482 0.02333747]
- [0.46456748 1.         0.0216144  0.01887668 0.02333747 0.04412049]]
+[[ 0.          0.         -0.41993745 -0.27052205 -0.8220839  -0.58694271]
+ [ 0.          0.          1.          1.          1.          1.        ]
+ [-0.41993745  1.          0.15089651  0.10954939  0.17055346  0.14095575]
+ [-0.27052205  1.          0.10954939  0.12724979  0.13616129  0.12441403]
+ [-0.8220839   1.          0.17055346  0.13616129  0.41446314  0.19545675]
+ [-0.58694271  1.          0.14095575  0.12441403  0.19545675  0.25117849]]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">expected_return</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+GOOG   -0.419937
+AAPL   -0.270522
+META   -0.822084
+AMZN   -0.586943
+dtype: float64
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Check eigenvalue of W -&gt; fits in [-pi, pi]</span>
@@ -617,7 +723,7 @@ W =
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[-2.11207187 -0.10947986  0.01121933  0.01864265  0.11919724  2.20027702]
+[-1.94743143 -0.30935002  0.03004076  0.09772754  0.42730033  2.64550076]
 </pre></div></div>
 </div>
 </section>
@@ -625,7 +731,7 @@ W =
 <h3>Creating the right-hand side vector<a class="headerlink" href="#Creating-the-right-hand-side-vector" title="Link to this heading">¶</a></h3>
 <p>Given the expected return <span class="math notranslate nohighlight">\(\mu\)</span> of the portfolio below, we can calculate the least risky portfolio that will yield such a return. The <span class="math notranslate nohighlight">\(\mu\)</span> can be set freely. In general, the higher the expected return, the greater the risk, but we will use 10% as an example (this is a very bearish one, since it is a time when GAFA stocks are going gangbusters).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mu</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="c1"># Portfolio returns (parameters to be put in hand)</span>
@@ -648,7 +754,7 @@ W =
 <h3>Extend the matrix so that it can be handled by a quantum system<a class="headerlink" href="#Extend-the-matrix-so-that-it-can-be-handled-by-a-quantum-system" title="Link to this heading">¶</a></h3>
 <p>Since <span class="math notranslate nohighlight">\(W\)</span> is 6-dimensional, it is computable in a quantum system with 3 qubits (<span class="math notranslate nohighlight">\(2^3 = 8\)</span>). Therefore, we also make a matrix and a vector with the extended two dimensions filled with zeros.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nbit</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1">## Number of bits used for state</span>
@@ -669,66 +775,24 @@ W =
 <p>Now, let us solve the simultaneous linear equations (1) using the HHL algorithm. First, as a preliminary step, we prepare the following functions.</p>
 <ul class="simple">
 <li><p>A function <code class="docutils literal notranslate"><span class="pre">input_state_gate</span></code> that returns a quantum circuit that converts the quantum state to <span class="math notranslate nohighlight">\(|0\cdots0\rangle \to \sum_i x_i |i \rangle\)</span> according to the classical data <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> This function should be built using the qRAM concept, but since we are using a simulator, we will implement it as a non-unitary gate this time. Also, standardization is ignored.)</p></li>
-<li><p>Function <code class="docutils literal notranslate"><span class="pre">CPhaseGate</span></code> that returns a control phase gate.</p></li>
-<li><p>function <code class="docutils literal notranslate"><span class="pre">QFT_gate</span></code> that returns a gate to perform quantum Fourier transform.</p></li>
+<li><p>Function <code class="docutils literal notranslate"><span class="pre">add_QFT_gate</span></code> adds a gate to perform quantum Fourier transform.</p></li>
+<li><p>Function <code class="docutils literal notranslate"><span class="pre">get_phase_estimate_circuit</span></code> returns a phase estimation gate.</p></li>
 </ul>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install Qulacs</span>
-<span class="c1"># !pip install qulacs</span>
-
-<span class="c1">## Run only if you are in a Google Colaboratory / (Linux or Mac) jupyter notebook environment.</span>
-<span class="c1">## Qulacs errors will be output normally.</span>
-<span class="o">!</span>pip3<span class="w"> </span>install<span class="w"> </span>wurlitzer
-<span class="o">%</span><span class="k">load_ext</span> wurlitzer
-</pre></div>
-</div>
-</div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span><span class="p">,</span> <span class="n">QuantumState</span><span class="p">,</span> <span class="n">gate</span>
-<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">merge</span><span class="p">,</span> <span class="n">Identity</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">SWAP</span>
-
-<span class="k">def</span> <span class="nf">input_state_gate</span><span class="p">(</span><span class="n">start_bit</span><span class="p">,</span> <span class="n">end_bit</span><span class="p">,</span> <span class="n">vec</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Making a quantum gate which transform |0&gt; to \sum_i x[i]|i&gt;m where x[i] is input vector.</span>
-<span class="sd">    !!! this uses 2**n times 2**n matrix, so it is quite memory-cosuming.</span>
-<span class="sd">    !!! this gate is not unitary (we assume that the input state is |0&gt;)</span>
-<span class="sd">    Args:</span>
-<span class="sd">      int start_bit: first index of qubit which the gate applies</span>
-<span class="sd">      int end_bit:   last index of qubit which the gate applies</span>
-<span class="sd">      np.ndarray vec:  input vector.</span>
-<span class="sd">    Returns:</span>
-<span class="sd">      qulacs.QuantumGate</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">nbit</span> <span class="o">=</span> <span class="n">end_bit</span> <span class="o">-</span> <span class="n">start_bit</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="k">assert</span> <span class="n">vec</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">2</span><span class="o">**</span><span class="n">nbit</span>
-    <span class="n">mat_0tox</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">vec</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
-    <span class="n">mat_0tox</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">vec</span>
-    <span class="k">return</span> <span class="n">gate</span><span class="o">.</span><span class="n">DenseMatrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start_bit</span><span class="p">,</span> <span class="n">end_bit</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">mat_0tox</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">NDArray</span>
+<span class="kn">from</span> <span class="nn">quri_parts.circuit</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
 
 
-<span class="k">def</span> <span class="nf">CPhaseGate</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">control</span><span class="p">,</span> <span class="n">angle</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create controlled phase gate diag(1,e^{i*angle}) with controll. (Qulacs.gate is requried)</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">      int target:  index of target qubit.</span>
-<span class="sd">      int control:  index of control qubit.</span>
-<span class="sd">      float64 angle: angle of phase gate.</span>
-<span class="sd">    Returns:</span>
-<span class="sd">      QuantumGateBase.DenseMatrix: diag(1, exp(i*angle)).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">CPhaseGate</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">DenseMatrix</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span><span class="o">+</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)]])</span>  <span class="p">)</span>
-    <span class="n">CPhaseGate</span><span class="o">.</span><span class="n">add_control_qubit</span><span class="p">(</span><span class="n">control</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">CPhaseGate</span>
-
-<span class="k">def</span> <span class="nf">QFT_gate</span><span class="p">(</span><span class="n">start_bit</span><span class="p">,</span> <span class="n">end_bit</span><span class="p">,</span> <span class="n">Inverse</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">add_QFT_gate</span><span class="p">(</span>
+    <span class="n">circuit</span><span class="p">:</span> <span class="n">QuantumCircuit</span><span class="p">,</span>
+    <span class="n">start_bit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">end_bit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">inverse</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Making a gate which performs quantum Fourier transfromation between start_bit to end_bit.</span>
 <span class="sd">    (Definition below is the case when start_bit = 0 and end_bit=n-1)</span>
@@ -746,20 +810,49 @@ W =
 <span class="sd">    Returns:</span>
 <span class="sd">      qulacs.QuantumGate: QFT gate which acts on a region between start_bit and end_bit.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="n">end_bit</span> <span class="o">-</span> <span class="n">start_bit</span> <span class="o">+</span> <span class="mi">1</span>
 
-    <span class="n">gate</span> <span class="o">=</span> <span class="n">Identity</span><span class="p">(</span><span class="n">start_bit</span><span class="p">)</span> <span class="c1">## make empty gate</span>
-    <span class="n">n</span> <span class="o">=</span> <span class="n">end_bit</span> <span class="o">-</span> <span class="n">start_bit</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1">## size of QFT</span>
-
-    <span class="c1">## loop from j_{n-1}</span>
     <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">end_bit</span><span class="p">,</span> <span class="n">start_bit</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">gate</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">H</span><span class="p">(</span><span class="n">target</span><span class="p">))</span> <span class="c1">## 1/sqrt(2)(|0&gt; + exp(i*2pi*0.j_{target})|1&gt;)</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">control</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_bit</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
-            <span class="n">gate</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span> <span class="n">gate</span><span class="p">,</span> <span class="n">CPhaseGate</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">control</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">Inverse</span> <span class="o">*</span> <span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">target</span><span class="o">-</span><span class="n">control</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> <span class="p">)</span>
-    <span class="c1">## perform SWAP between (start_bit + s)-th bit and (end_bit - s)-th bit</span>
-    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">//</span><span class="mi">2</span><span class="p">):</span>  <span class="c1">## s runs 0 to n//2-1</span>
-        <span class="n">gate</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">gate</span><span class="p">,</span> <span class="n">SWAP</span><span class="p">(</span><span class="n">start_bit</span> <span class="o">+</span> <span class="n">s</span><span class="p">,</span> <span class="n">end_bit</span> <span class="o">-</span> <span class="n">s</span><span class="p">))</span>
-    <span class="c1">## return final circuit</span>
-    <span class="k">return</span> <span class="n">gate</span>
+            <span class="n">angle</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="n">inverse</span> <span class="o">*</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">target</span><span class="o">-</span><span class="n">control</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">add_U1_gate</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">controlled_on</span><span class="o">=</span><span class="p">{</span><span class="n">control</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+
+    <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">//</span><span class="mi">2</span><span class="p">):</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">add_SWAP_gate</span><span class="p">(</span><span class="n">start_bit</span><span class="o">+</span><span class="n">s</span><span class="p">,</span> <span class="n">end_bit</span><span class="o">-</span><span class="n">s</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">get_phase_estimate_circuit</span><span class="p">(</span>
+    <span class="n">n_total_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">unitary_matrix</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">],</span>
+    <span class="n">start_qubit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">n_phase_estimate_qubit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QuantumCircuit</span><span class="p">:</span>
+
+    <span class="n">n_s</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">unitary_matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">n_p</span> <span class="o">=</span> <span class="n">n_phase_estimate_qubit</span>
+
+    <span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n_total_qubits</span><span class="p">)</span>
+
+    <span class="c1">## ------- Hadamard gate on register bit -------</span>
+    <span class="k">for</span> <span class="n">register</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_qubit</span><span class="p">,</span> <span class="n">start_qubit</span><span class="o">+</span><span class="n">n_p</span><span class="p">):</span> <span class="c1">## from nbit to nbit+reg_nbit-1</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="n">register</span><span class="p">)</span>
+
+    <span class="c1">## ------- Implement phase estimation -------</span>
+    <span class="c1">## U := e^{i*A*t) and its eigenvalues are diag( {e^{i*2pi*phi_k}}_{k=0, ... N-1)).</span>
+    <span class="c1">## Implement \sum_j |j&gt;&lt;j| exp(i*A*t*j) to register bits</span>
+
+    <span class="k">for</span> <span class="n">register</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_qubit</span><span class="p">,</span> <span class="n">start_qubit</span><span class="o">+</span><span class="n">n_p</span><span class="p">):</span>
+        <span class="c1">## Implement U^{2^{register-nbit}}.</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">add_UnitaryMatrix_gate</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_s</span><span class="p">),</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">matrix_power</span><span class="p">(</span><span class="n">unitary_matrix</span><span class="p">,</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">register</span> <span class="o">-</span> <span class="n">start_qubit</span><span class="p">)),</span>
+            <span class="n">controlled_on</span><span class="o">=</span><span class="p">{</span><span class="n">register</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+        <span class="p">)</span>
+
+    <span class="n">add_QFT_gate</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">start_qubit</span><span class="p">,</span> <span class="n">start_qubit</span><span class="o">+</span><span class="n">n_phase_estimate_qubit</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">circuit</span>
 </pre></div>
 </div>
 </div>
@@ -781,116 +874,137 @@ W =
 </pre></div>
 </div>
 </div>
-<p>The core of the HHL algorithm will be written. In this article, we use the simulator qulacs, so various simplifications have been made. This is an implementation to get a sense of how the HHL algorithm works.</p>
+<p>The core of the HHL algorithm will be written. In this article, we use the <code class="docutils literal notranslate"><span class="pre">quri_parts.qulacs.simulator</span></code>, so various simplifications have been made. This is an implementation to get a sense of how the HHL algorithm works.</p>
 <ul class="simple">
 <li><p>The part of preparing the input state <span class="math notranslate nohighlight">\(|\mathbf{b}\rangle\)</span> is simplified.</p></li>
 <li><p>The part of <span class="math notranslate nohighlight">\(e^{iA}\)</span> used in the quantum phase estimation algorithm is the diagonalization of <span class="math notranslate nohighlight">\(A\)</span> by a classical computer.</p></li>
 <li><p>Control rotation gate that takes inverses is also implemented by a classical computer..</p></li>
 <li><p>Measure the projection to the auxiliary bit <span class="math notranslate nohighlight">\(|0 \rangle{}_{S}\)</span> and treat only the states where the measurement result <code class="docutils literal notranslate"><span class="pre">0</span></code> is obtained. (For convenience of implementation, the definition of the action of the control rotation gate is reversed from <a class="reference internal" href="7.1_quantum_phase_estimation_detailed.html"><span class="doc">section 7-1</span></a>)</p></li>
 </ul>
+<section id="Construct-the-HHL-circuit">
+<h3>Construct the HHL circuit<a class="headerlink" href="#Construct-the-HHL-circuit" title="Link to this heading">¶</a></h3>
+<p>Here, we create an HHL quantum circuit. Starting from the 0th bit, we have the bits in the space where A acts (0th ~ nbit-1th), the register bits (nbit th ~ nbit+reg_nbit-1 th), and the bits for conditional rotation (nbit+reg_nbit th).</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
+<span class="kn">from</span> <span class="nn">quri_parts.qulacs.simulator</span> <span class="kn">import</span> <span class="n">run_circuit</span>
+<span class="kn">from</span> <span class="nn">quri_parts.circuit</span> <span class="kn">import</span> <span class="n">inverse_circuit</span>
 
-<span class="c1">## diagonalization. AP = PD &lt;-&gt; A = P*D*P^dag</span>
-<span class="n">D</span><span class="p">,</span> <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">W_enl_scaled</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get_condition_rotation_gate</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_bit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_reg_bit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QuantumCircuit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;conditional rotation circuit</span>
 
-<span class="c1">#####################################</span>
-<span class="c1">### Create an HHL quantum circuit. Starting from the 0th bit,</span>
-<span class="c1">### we have the bits in the space where A acts (0th ~ nbit-1th),</span>
-<span class="c1">### the register bits (nbit th ~ nbit+reg_nbit-1 th), and</span>
-<span class="c1">### the bits for conditional rotation (nbit+reg_nbit th).</span>
-<span class="c1">#####################################</span>
+<span class="sd">    The eigenvalue of A*t corresponding to the register |phi&gt;</span>
+<span class="sd">    is l = 2pi * 0. phi = 2pi * (phi / 2**reg_nbit).</span>
+<span class="sd">    The definition of conditional rotation is (opposite of the text)</span>
+<span class="sd">    |phi&gt;|0&gt; -&gt; C/(lambda)|phi&gt;|0&gt; + sqrt(1 - C^2/(lambda)^2)|phi&gt;|1&gt;.</span>
+<span class="sd">    Since this is a classical simulation, the gate is made explicitly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">condrot_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">n_reg_bit</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">n_reg_bit</span><span class="o">+</span><span class="mi">1</span><span class="p">))),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">reg_nbit</span><span class="p">):</span>
+        <span class="n">lam</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">n_reg_bit</span><span class="p">)</span> <span class="p">)</span>
+        <span class="n">index_0</span> <span class="o">=</span> <span class="n">index</span> <span class="c1">## integer which represents |index&gt;|0&gt;</span>
+        <span class="n">index_1</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">2</span><span class="o">**</span><span class="n">n_reg_bit</span> <span class="c1">## integer which represents |index&gt;|1&gt;</span>
+        <span class="k">if</span> <span class="n">lam</span> <span class="o">&gt;=</span> <span class="n">C</span><span class="p">:</span>
+            <span class="c1">## Since we have scaled the eigenvalues in [-pi, pi] beforehand,</span>
+            <span class="c1">## [pi, 2pi] corresponds to a negative eigenvalue</span>
+            <span class="k">if</span> <span class="n">lam</span> <span class="o">&gt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">:</span>
+                <span class="n">lam</span> <span class="o">=</span> <span class="n">lam</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
+            <span class="n">condrot_mat</span><span class="p">[</span><span class="n">index_0</span><span class="p">,</span> <span class="n">index_0</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span> <span class="o">/</span> <span class="n">lam</span>
+            <span class="n">condrot_mat</span><span class="p">[</span><span class="n">index_1</span><span class="p">,</span> <span class="n">index_0</span><span class="p">]</span> <span class="o">=</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">C</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">lam</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span>
+            <span class="n">condrot_mat</span><span class="p">[</span><span class="n">index_0</span><span class="p">,</span> <span class="n">index_1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">C</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">lam</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span>
+            <span class="n">condrot_mat</span><span class="p">[</span><span class="n">index_1</span><span class="p">,</span> <span class="n">index_1</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span> <span class="o">/</span> <span class="n">lam</span>
 
-<span class="n">total_qubits</span> <span class="o">=</span> <span class="n">nbit</span> <span class="o">+</span> <span class="n">reg_nbit</span> <span class="o">+</span> <span class="mi">1</span>
-<span class="n">total_circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">total_qubits</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">condrot_mat</span><span class="p">[</span><span class="n">index_0</span><span class="p">,</span> <span class="n">index_0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+            <span class="n">condrot_mat</span><span class="p">[</span><span class="n">index_1</span><span class="p">,</span> <span class="n">index_1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n_qubits</span><span class="p">)</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">add_UnitaryMatrix_gate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_bit</span><span class="p">,</span> <span class="n">n_bit</span><span class="o">+</span><span class="n">n_reg_bit</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">condrot_mat</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">circuit</span>
 
-<span class="c1">## ------ Prepare vector b input to the 0th~(nbit-1)th bit ------</span>
-<span class="c1">## Normally we should use qRAM algorithm, but here we use our own input gate.</span>
-<span class="c1">## In qulacs, you can also implement it with state.load(b_enl).</span>
-<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">total_qubits</span><span class="p">)</span>
-<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
-<span class="n">b_gate</span> <span class="o">=</span> <span class="n">input_state_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nbit</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">mu_xi_0_enl</span><span class="p">)</span>
-<span class="n">total_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">b_gate</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">get_HHL_circuit</span><span class="p">(</span>
+    <span class="n">n_bit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">n_reg_bit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">hermitian_matrix</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QuantumCircuit</span><span class="p">:</span>
 
-<span class="c1">## ------- Hadamard gate on register bit -------</span>
-<span class="k">for</span> <span class="n">register</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbit</span><span class="p">,</span> <span class="n">nbit</span><span class="o">+</span><span class="n">reg_nbit</span><span class="p">):</span> <span class="c1">## from nbit to nbit+reg_nbit-1</span>
-    <span class="n">total_circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="n">register</span><span class="p">)</span>
+    <span class="n">D</span><span class="p">,</span> <span class="n">P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">hermitian_matrix</span><span class="p">)</span>
+    <span class="n">U_mat</span> <span class="o">=</span> <span class="n">P</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span> <span class="mf">1.</span><span class="n">j</span> <span class="o">*</span> <span class="n">D</span> <span class="p">))</span> <span class="o">@</span> <span class="n">P</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">conj</span><span class="p">()</span>
 
-<span class="c1">## ------- Implement phase estimation -------</span>
-<span class="c1">## U := e^{i*A*t) and its eigenvalues are diag( {e^{i*2pi*phi_k}}_{k=0, ... N-1)).</span>
-<span class="c1">## Implement \sum_j |j&gt;&lt;j| exp(i*A*t*j) to register bits</span>
-<span class="k">for</span> <span class="n">register</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbit</span><span class="p">,</span> <span class="n">nbit</span><span class="o">+</span><span class="n">reg_nbit</span><span class="p">):</span>
-    <span class="c1">## Implement U^{2^{register-nbit}}.</span>
-    <span class="c1">## Use diagonalized results.</span>
-    <span class="n">U_mat</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">,</span>  <span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span> <span class="mf">1.</span><span class="n">j</span> <span class="o">*</span> <span class="n">D</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">register</span><span class="o">-</span><span class="n">nbit</span><span class="p">))</span> <span class="p">)),</span> <span class="n">P</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">conj</span><span class="p">()]</span>  <span class="p">)</span>
-    <span class="n">U_gate</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">DenseMatrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbit</span><span class="p">),</span> <span class="n">U_mat</span><span class="p">)</span>
-    <span class="n">U_gate</span><span class="o">.</span><span class="n">add_control_qubit</span><span class="p">(</span><span class="n">register</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">## add control bit</span>
-    <span class="n">total_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">U_gate</span><span class="p">)</span>
+    <span class="n">total_qubits</span> <span class="o">=</span> <span class="n">n_bit</span> <span class="o">+</span> <span class="n">n_reg_bit</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">total_qubits</span><span class="p">)</span>
 
-<span class="c1">## ------- Perform inverse QFT to register bits -------</span>
-<span class="n">total_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">QFT_gate</span><span class="p">(</span><span class="n">nbit</span><span class="p">,</span> <span class="n">nbit</span><span class="o">+</span><span class="n">reg_nbit</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">Inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="n">phase_estimation_circuit</span> <span class="o">=</span> <span class="n">get_phase_estimate_circuit</span><span class="p">(</span>
+        <span class="n">total_qubits</span><span class="p">,</span>
+        <span class="n">U_mat</span><span class="p">,</span>
+        <span class="n">start_qubit</span><span class="o">=</span><span class="n">n_bit</span><span class="p">,</span>
+        <span class="n">n_phase_estimate_qubit</span><span class="o">=</span><span class="n">n_reg_bit</span><span class="p">,</span>
+    <span class="p">)</span>
 
-<span class="c1">## ------- multiply conditional rotation -------</span>
-<span class="c1">## The eigenvalue of A*t corresponding to the register |phi&gt; is l = 2pi * 0. phi = 2pi * (phi / 2**reg_nbit).</span>
-<span class="c1">## The definition of conditional rotation is (opposite of the text)</span>
-<span class="c1">## |phi&gt;|0&gt; -&gt; C/(lambda)|phi&gt;|0&gt; + sqrt(1 - C^2/(lambda)^2)|phi&gt;|1&gt;.</span>
-<span class="c1">## Since this is a classical simulation, the gate is made explicitly.</span>
-<span class="n">condrot_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">reg_nbit</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">reg_nbit</span><span class="o">+</span><span class="mi">1</span><span class="p">))),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">reg_nbit</span><span class="p">):</span>
-    <span class="n">lam</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">reg_nbit</span><span class="p">)</span> <span class="p">)</span>
-    <span class="n">index_0</span> <span class="o">=</span> <span class="n">index</span> <span class="c1">## integer which represents |index&gt;|0&gt;</span>
-    <span class="n">index_1</span> <span class="o">=</span> <span class="n">index</span> <span class="o">+</span> <span class="mi">2</span><span class="o">**</span><span class="n">reg_nbit</span> <span class="c1">## integer which represents |index&gt;|1&gt;</span>
-    <span class="k">if</span> <span class="n">lam</span> <span class="o">&gt;=</span> <span class="n">C</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">lam</span> <span class="o">&gt;=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">:</span> <span class="c1">## Since we have scaled the eigenvalues in [-pi, pi] beforehand, [pi, 2pi] corresponds to a negative eigenvalue</span>
-            <span class="n">lam</span> <span class="o">=</span> <span class="n">lam</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span>
-        <span class="n">condrot_mat</span><span class="p">[</span><span class="n">index_0</span><span class="p">,</span> <span class="n">index_0</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span> <span class="o">/</span> <span class="n">lam</span>
-        <span class="n">condrot_mat</span><span class="p">[</span><span class="n">index_1</span><span class="p">,</span> <span class="n">index_0</span><span class="p">]</span> <span class="o">=</span>   <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">C</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">lam</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span>
-        <span class="n">condrot_mat</span><span class="p">[</span><span class="n">index_0</span><span class="p">,</span> <span class="n">index_1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">C</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="n">lam</span><span class="o">**</span><span class="mi">2</span> <span class="p">)</span>
-        <span class="n">condrot_mat</span><span class="p">[</span><span class="n">index_1</span><span class="p">,</span> <span class="n">index_1</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span> <span class="o">/</span> <span class="n">lam</span>
+    <span class="n">condition_rotation_circuit</span> <span class="o">=</span> <span class="n">get_condition_rotation_gate</span><span class="p">(</span>
+        <span class="n">total_qubits</span><span class="p">,</span> <span class="n">n_bit</span><span class="p">,</span> <span class="n">n_reg_bit</span>
+    <span class="p">)</span>
 
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">condrot_mat</span><span class="p">[</span><span class="n">index_0</span><span class="p">,</span> <span class="n">index_0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
-        <span class="n">condrot_mat</span><span class="p">[</span><span class="n">index_1</span><span class="p">,</span> <span class="n">index_1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
-<span class="c1">## Convert to DenseGate and implement</span>
-<span class="n">condrot_gate</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">DenseMatrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbit</span><span class="p">,</span> <span class="n">nbit</span><span class="o">+</span><span class="n">reg_nbit</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">condrot_mat</span><span class="p">)</span>
-<span class="n">total_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">condrot_gate</span><span class="p">)</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">phase_estimation_circuit</span><span class="p">)</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">condition_rotation_circuit</span><span class="p">)</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">inverse_circuit</span><span class="p">(</span><span class="n">phase_estimation_circuit</span><span class="p">))</span>
 
-<span class="c1">## ------- Perform QFT to register bits -------</span>
-<span class="n">total_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">QFT_gate</span><span class="p">(</span><span class="n">nbit</span><span class="p">,</span> <span class="n">nbit</span><span class="o">+</span><span class="n">reg_nbit</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">Inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
-
-<span class="c1">## ------- Implement the inverse of phase estimation (U^\dagger = e^{-iAt}) -------</span>
-<span class="k">for</span> <span class="n">register</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbit</span><span class="p">,</span> <span class="n">nbit</span><span class="o">+</span><span class="n">reg_nbit</span><span class="p">):</span> <span class="c1">## from nbit to nbit+reg_nbit-1</span>
-    <span class="c1">## implement {U^{\dagger}}^{2^{register-nbit}}</span>
-    <span class="c1">## use diagonalized results.</span>
-    <span class="n">U_mat</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">,</span>  <span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span> <span class="o">-</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span> <span class="n">D</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">register</span><span class="o">-</span><span class="n">nbit</span><span class="p">))</span> <span class="p">)),</span> <span class="n">P</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">conj</span><span class="p">()]</span>  <span class="p">)</span>
-    <span class="n">U_gate</span> <span class="o">=</span> <span class="n">gate</span><span class="o">.</span><span class="n">DenseMatrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbit</span><span class="p">),</span> <span class="n">U_mat</span><span class="p">)</span>
-    <span class="n">U_gate</span><span class="o">.</span><span class="n">add_control_qubit</span><span class="p">(</span><span class="n">register</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">## add a control bit</span>
-    <span class="n">total_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">U_gate</span><span class="p">)</span>
-
-<span class="c1">## ------- act Hadamard gate on register bit -------</span>
-<span class="k">for</span> <span class="n">register</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbit</span><span class="p">,</span> <span class="n">nbit</span><span class="o">+</span><span class="n">reg_nbit</span><span class="p">):</span>
-    <span class="n">total_circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="n">register</span><span class="p">)</span>
-
-<span class="c1">## ------- Project auxiliary bits to 0. Implemented in qulacs as a non-unitary gate -------</span>
-<span class="n">total_circuit</span><span class="o">.</span><span class="n">add_P0_gate</span><span class="p">(</span><span class="n">nbit</span><span class="o">+</span><span class="n">reg_nbit</span><span class="p">)</span>
-
-<span class="c1">#####################################</span>
-<span class="c1">### Run the HHL quantum circuit and retrieve the result</span>
-<span class="c1">#####################################</span>
-<span class="n">total_circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">circuit</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hhl_circuit</span> <span class="o">=</span> <span class="n">get_HHL_circuit</span><span class="p">(</span><span class="n">nbit</span><span class="p">,</span> <span class="n">reg_nbit</span><span class="p">,</span> <span class="n">W_enl_scaled</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Run-the-HHL-quantum-circuit-and-retrieve-the-result">
+<h3>Run the HHL quantum circuit and retrieve the result<a class="headerlink" href="#Run-the-HHL-quantum-circuit-and-retrieve-the-result" title="Link to this heading">¶</a></h3>
+<p>Here, we prepare the state for us to send into the HHL circuit. We use the simulator provided by <code class="docutils literal notranslate"><span class="pre">quri_parts.qulacs.simulator</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## ------ Prepare vector b input to the 0th~(nbit-1)th bit ------</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span>
+    <span class="p">[</span><span class="mi">1</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="n">reg_nbit</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))],</span>
+    <span class="n">mu_xi_0_enl</span>
+<span class="p">)</span>
+<span class="n">updated_state</span> <span class="o">=</span> <span class="n">run_circuit</span><span class="p">(</span><span class="n">hhl_circuit</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>After the acting the circuit on the state, we need to project the state to the <span class="math notranslate nohighlight">\(|0\rangle\)</span> subspace of the auxiliary bit. The 0th to (nbit-1)th bit then corresponds to the calculation result |x&gt;.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">projector</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">hhl_circuit</span><span class="o">.</span><span class="n">qubit_count</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+<span class="n">final_state</span> <span class="o">=</span> <span class="n">projector</span> <span class="o">@</span> <span class="n">updated_state</span>
 
 <span class="c1">## The 0th to (nbit-1)th bit corresponds to the calculation result |x&gt;.</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">()[:</span><span class="mi">2</span><span class="o">**</span><span class="n">nbit</span><span class="p">]</span><span class="o">.</span><span class="n">real</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">final_state</span><span class="p">[:</span><span class="mi">2</span><span class="o">**</span><span class="n">nbit</span><span class="p">]</span><span class="o">.</span><span class="n">real</span>
 <span class="n">x_HHL</span> <span class="o">=</span> <span class="n">result</span><span class="o">/</span><span class="n">C</span> <span class="o">*</span> <span class="n">scale_fac</span>
 </pre></div>
 </div>
 </div>
+</section>
+<section id="Compare-results">
+<h3>Compare results<a class="headerlink" href="#Compare-results" title="Link to this heading">¶</a></h3>
 <p>Comparing the solution <code class="docutils literal notranslate"><span class="pre">x_HHL</span></code> by the HHL algorithm with the solution <code class="docutils literal notranslate"><span class="pre">x_exact</span></code> by diagonalization of the usual classical computation, we can see that they are roughly in agreement. (There are several parameters that determine the accuracy of the HHL algorithm (e.g. <code class="docutils literal notranslate"><span class="pre">reg_nbit</span></code>), so please try changing them and experiment with them).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Exact solution</span>
@@ -908,14 +1022,14 @@ W =
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-HHL:   [ 0.09580738 -0.04980738  2.36660125  0.09900883 -0.47774813 -0.98438791  0.          0.        ]
-exact: [ 0.15426894 -0.07338059  2.29996915  0.17711988 -0.66526695 -0.81182208  0.          0.        ]
-rel_error 0.11097291393510306
+HHL:   [-0.2591962  -0.18557542  0.49450532  1.50115768 -0.54142008 -0.46074174  0.          0.        ]
+exact: [-0.25188165 -0.1853244   0.37818531  1.58529401 -0.51953462 -0.4439447   0.          0.        ]
+rel_error 0.08155603917693245
 </pre></div></div>
 </div>
 <p>If we take out only the actual weighting part</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">w_opt_HHL</span> <span class="o">=</span> <span class="n">x_HHL</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span>
@@ -926,7 +1040,7 @@ rel_error 0.11097291393510306
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -951,39 +1065,34 @@ rel_error 0.11097291393510306
       <th>exact</th>
       <th>HHL</th>
     </tr>
-    <tr>
-      <th>Symbols</th>
-      <th></th>
-      <th></th>
-    </tr>
   </thead>
   <tbody>
     <tr>
       <th>GOOG</th>
-      <td>2.299969</td>
-      <td>2.366601</td>
+      <td>0.378185</td>
+      <td>0.494505</td>
     </tr>
     <tr>
       <th>AAPL</th>
-      <td>0.177120</td>
-      <td>0.099009</td>
+      <td>1.585294</td>
+      <td>1.501158</td>
     </tr>
     <tr>
-      <th>FB</th>
-      <td>-0.665267</td>
-      <td>-0.477748</td>
+      <th>META</th>
+      <td>-0.519535</td>
+      <td>-0.541420</td>
     </tr>
     <tr>
       <th>AMZN</th>
-      <td>-0.811822</td>
-      <td>-0.984388</td>
+      <td>-0.443945</td>
+      <td>-0.460742</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">w_opt</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">()</span>
@@ -991,45 +1100,54 @@ rel_error 0.11097291393510306
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x1147add90&gt;
+&lt;Axes: &gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_7.3_application_of_HHL_algorithm_30_1.png" src="../_images/notebooks_7.3_application_of_HHL_algorithm_30_1.png" />
+<img alt="../_images/notebooks_7.3_application_of_HHL_algorithm_37_1.png" src="../_images/notebooks_7.3_application_of_HHL_algorithm_37_1.png" />
 </div>
 </div>
 <p>*Stocks with negative weights represent “short selling” (borrowing shares and selling them. It is a technique whereby profits can be made during periods of falling stock prices). In this case, the target return was set at 10%, which is quite small for GAFA stocks (expected return of 30-40% alone), so short selling is likely to have lowered the overall expected return.</p>
+</section>
 </section>
 <section id="Appendix:-Back-Testing">
 <h2>Appendix: Back Testing<a class="headerlink" href="#Appendix:-Back-Testing" title="Link to this heading">¶</a></h2>
 <p>The verification of an investment rule derived from historical data using subsequent data is called “back-testing,” and is important for measuring the effectiveness of the investment rule. In this section, we will observe how much asset values change in the following year, 2018, when invested in a portfolio constructed from 2017 data as described above.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Using one year data of 2018</span>
-<span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
-<span class="n">end</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">2018</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">yf</span><span class="o">.</span><span class="n">pdr_override</span><span class="p">()</span>
+<span class="n">y_symbols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;GOOG&#39;</span><span class="p">,</span> <span class="s1">&#39;AAPL&#39;</span><span class="p">,</span> <span class="s1">&#39;META&#39;</span><span class="p">,</span> <span class="s1">&#39;AMZN&#39;</span><span class="p">]</span>
 
-<span class="c1"># Obtain daily stock price data from Yahoo! Finance</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">DataReader</span><span class="p">(</span><span class="n">codes</span><span class="p">,</span> <span class="s1">&#39;yahoo&#39;</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>
+<span class="n">startdate</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">enddate</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2023</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">31</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pdr</span><span class="o">.</span><span class="n">get_data_yahoo</span><span class="p">(</span><span class="n">y_symbols</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">startdate</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">enddate</span><span class="p">)</span>
 
-<span class="n">df2018</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Adj Close&#39;</span><span class="p">]</span>
-
-<span class="n">display</span><span class="p">(</span><span class="n">df2018</span><span class="o">.</span><span class="n">tail</span><span class="p">())</span>
+<span class="n">df2022</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Adj Close&#39;</span><span class="p">][</span><span class="n">y_symbols</span><span class="p">]</span>
+<span class="n">df2022</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[*********************100%%**********************]  4 of 4 completed
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
 <div>
@@ -1049,10 +1167,10 @@ rel_error 0.11097291393510306
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
-      <th>Symbols</th>
+      <th></th>
       <th>GOOG</th>
       <th>AAPL</th>
-      <th>FB</th>
+      <th>META</th>
       <th>AMZN</th>
     </tr>
     <tr>
@@ -1065,83 +1183,83 @@ rel_error 0.11097291393510306
   </thead>
   <tbody>
     <tr>
-      <th>2018-12-24</th>
-      <td>976.219971</td>
-      <td>144.656540</td>
-      <td>124.059998</td>
-      <td>1343.959961</td>
+      <th>2023-12-22</th>
+      <td>142.720001</td>
+      <td>193.600006</td>
+      <td>353.390015</td>
+      <td>153.419998</td>
     </tr>
     <tr>
-      <th>2018-12-26</th>
-      <td>1039.459961</td>
-      <td>154.843475</td>
-      <td>134.179993</td>
-      <td>1470.900024</td>
+      <th>2023-12-26</th>
+      <td>142.820007</td>
+      <td>193.050003</td>
+      <td>354.829987</td>
+      <td>153.410004</td>
     </tr>
     <tr>
-      <th>2018-12-27</th>
-      <td>1043.880005</td>
-      <td>153.838562</td>
-      <td>134.520004</td>
-      <td>1461.640015</td>
+      <th>2023-12-27</th>
+      <td>141.440002</td>
+      <td>193.149994</td>
+      <td>357.829987</td>
+      <td>153.339996</td>
     </tr>
     <tr>
-      <th>2018-12-28</th>
-      <td>1037.079956</td>
-      <td>153.917389</td>
-      <td>133.199997</td>
-      <td>1478.020020</td>
+      <th>2023-12-28</th>
+      <td>141.279999</td>
+      <td>193.580002</td>
+      <td>358.320007</td>
+      <td>153.380005</td>
     </tr>
     <tr>
-      <th>2018-12-31</th>
-      <td>1035.609985</td>
-      <td>155.405045</td>
-      <td>131.089996</td>
-      <td>1501.969971</td>
+      <th>2023-12-29</th>
+      <td>140.929993</td>
+      <td>192.529999</td>
+      <td>353.959991</td>
+      <td>151.940002</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Plot the stock price</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">df2018</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s1">&#39;AAPL&#39;</span><span class="p">,</span> <span class="s1">&#39;FB&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">df2018</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s1">&#39;GOOG&#39;</span><span class="p">,</span> <span class="s1">&#39;AMZN&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">df2022</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s1">&#39;AAPL&#39;</span><span class="p">,</span> <span class="s1">&#39;META&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">df2022</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s1">&#39;GOOG&#39;</span><span class="p">,</span> <span class="s1">&#39;AMZN&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x1173c5cd0&gt;
+&lt;Axes: xlabel=&#39;Date&#39;&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_7.3_application_of_HHL_algorithm_33_1.png" src="../_images/notebooks_7.3_application_of_HHL_algorithm_33_1.png" />
+<img alt="../_images/notebooks_7.3_application_of_HHL_algorithm_40_1.png" src="../_images/notebooks_7.3_application_of_HHL_algorithm_40_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Changes in portfolio asset values</span>
-<span class="n">pf_value</span> <span class="o">=</span> <span class="n">df2018</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w_opt</span><span class="p">)</span>
+<span class="n">pf_value</span> <span class="o">=</span> <span class="n">df2022</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w_opt</span><span class="p">)</span>
 <span class="n">pf_value</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1174,36 +1292,36 @@ rel_error 0.11097291393510306
   </thead>
   <tbody>
     <tr>
-      <th>2017-12-29</th>
-      <td>1368.986737</td>
-      <td>1257.159152</td>
+      <th>2023-01-03</th>
+      <td>128.187768</td>
+      <td>123.985720</td>
     </tr>
     <tr>
-      <th>2018-01-02</th>
-      <td>1393.124262</td>
-      <td>1279.864457</td>
+      <th>2023-01-04</th>
+      <td>128.782543</td>
+      <td>124.311268</td>
     </tr>
     <tr>
-      <th>2018-01-03</th>
-      <td>1418.828873</td>
-      <td>1304.724242</td>
+      <th>2023-01-05</th>
+      <td>127.056521</td>
+      <td>122.515043</td>
     </tr>
     <tr>
-      <th>2018-01-04</th>
-      <td>1423.832841</td>
-      <td>1308.934869</td>
+      <th>2023-01-06</th>
+      <td>131.919778</td>
+      <td>127.037984</td>
     </tr>
     <tr>
-      <th>2018-01-05</th>
-      <td>1443.032292</td>
-      <td>1326.138623</td>
+      <th>2023-01-09</th>
+      <td>132.714873</td>
+      <td>127.853714</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Since the initial amount may differ between exact and HHL, we look at returns normalized by the value at the beginning of the period.</span>
@@ -1220,15 +1338,15 @@ rel_error 0.11097291393510306
 <div class="highlight"><pre>
                exact       HHL
 Date
-2018-12-24  0.801548  0.749625
-2018-12-26  0.828918  0.766234
-2018-12-27  0.841539  0.781597
-2018-12-28  0.821053  0.756478
-2018-12-31  0.805599  0.735876
+2023-12-22  0.851713  0.799935
+2023-12-26  0.839405  0.787424
+2023-12-27  0.824654  0.770290
+2023-12-28  0.827375  0.772570
+2023-12-29  0.836015  0.782851
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf_value</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
@@ -1236,24 +1354,24 @@ Date
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x11475b8d0&gt;
+&lt;Axes: xlabel=&#39;Date&#39;&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/notebooks_7.3_application_of_HHL_algorithm_36_1.png" src="../_images/notebooks_7.3_application_of_HHL_algorithm_36_1.png" />
+<img alt="../_images/notebooks_7.3_application_of_HHL_algorithm_43_1.png" src="../_images/notebooks_7.3_application_of_HHL_algorithm_43_1.png" />
 </div>
 </div>
 <p>The stocks of all GAFA companies except Amazon were soft in 2018, resulting in a loss of roughly -20%. The EXACT solution seems to be somewhat better. Incidentally, since what we originally did was risk minimization, we also calculated the risk for the past year, and the EXACT solution resulted in smaller risk.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pf_value</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">252</span><span class="p">)</span> <span class="c1">## annualized</span>
@@ -1261,13 +1379,13 @@ Date
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-exact    0.402005
-HHL      0.501925
+exact    0.409176
+HHL      0.435979
 dtype: float64
 </pre></div></div>
 </div>
@@ -1304,7 +1422,12 @@ dtype: float64
 <li><a class="reference internal" href="#Extend-the-matrix-so-that-it-can-be-handled-by-a-quantum-system">Extend the matrix so that it can be handled by a quantum system</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#Calculating-the-minimum-variance-portfolio-using-the-HHL-algorithm">Calculating the minimum variance portfolio using the HHL algorithm</a></li>
+<li><a class="reference internal" href="#Calculating-the-minimum-variance-portfolio-using-the-HHL-algorithm">Calculating the minimum variance portfolio using the HHL algorithm</a><ul>
+<li><a class="reference internal" href="#Construct-the-HHL-circuit">Construct the HHL circuit</a></li>
+<li><a class="reference internal" href="#Run-the-HHL-quantum-circuit-and-retrieve-the-result">Run the HHL quantum circuit and retrieve the result</a></li>
+<li><a class="reference internal" href="#Compare-results">Compare results</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#Appendix:-Back-Testing">Appendix: Back Testing</a></li>
 <li><a class="reference internal" href="#Reference">Reference</a></li>
 </ul>

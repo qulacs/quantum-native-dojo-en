@@ -18,7 +18,7 @@
    },
    "source": [
     "- [6-1. OpenFermion Basics](6.1_openfermion_basics.ipynb)\n",
-    "- [6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs](6.2_qulacs_VQE.ipynb)\n",
+    "- [6-2. Variational Quantum Eigensolver (VQE) Implementation using QURI Parts](6.2_qp_VQE.ipynb)\n",
     "- [6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver](6.3_subspace_search_VQE.ipynb)"
    ]
   },

@@ -12,15 +12,15 @@
     <meta name="docsearch:release" content="" />
     <meta name="docsearch:version" content="" />
     
-      <title>9-2. quantum error &mdash; Quantum Native Dojo  documentation</title>
+      <title>9-2. Quantum Error Correction &mdash; Quantum Native Dojo  documentation</title>
     
     <link rel="stylesheet" href="../_static/bootstrap-icons.css" type="text/css" />
           <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
           <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
-          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
           <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
-          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
-          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css" />
           <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
         <link rel="index" title="Index" href="../genindex.html" />
         <link rel="search" title="Search" href="../search.html" />
@@ -200,7 +200,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="6_quantum_chemistry_calculation.html">Chapter 6 Quantum chemistry calculation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="6.1_openfermion_basics.html">6-1. OpenFermion Basics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qp_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using QURI Parts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
 </ul>
 </li>
@@ -234,8 +234,8 @@
           </div>
         </aside>
         <article id="content" class="nftt-content" role="main">
-    <section id="9-2.-quantum-error">
-<h1>9-2. quantum error<a class="headerlink" href="#9-2.-quantum-error" title="Link to this heading">¶</a></h1>
+    <section id="9-2.-Quantum-Error-Correction">
+<h1>9-2. Quantum Error Correction<a class="headerlink" href="#9-2.-Quantum-Error-Correction" title="Link to this heading">¶</a></h1>
 <p>The underlying causes of error in the quantum bit itself are actually not that different from those in the classical bit.</p>
 <p>One is the error caused by the leakage of information to the outside at a certain rate due to the interaction with the outside environment. In particular, when reading and writing information with electromagnetic waves such as light or microwaves as a quantum bit, a path must be secured for injecting electromagnetic waves, and a certain amount of information leaks out from there. In addition, even when experimenting with dilution refrigerators, microwaves are greatly affected by thermal noise
 because their energy scale is close to the ambient temperature, which is another source of noise. On the other hand, in the case of using traps such as ions or neutral atoms, in addition to decoherence, errors that cause materials to fall out of the traps are also a problem. When light is used as a quantum bit, the above decoherence is not a problem due to the difference in temperature scales. However, in order to scale optical quantum bits, it is necessary to secure the path by induction or
@@ -278,58 +278,58 @@ for Nielsen-Chuang, it is <code class="docutils literal notranslate"><span class
 <div class="math notranslate nohighlight">
 \[\begin{split}H_c = \left( \begin{matrix} 1 &amp; 0 \\ 1 &amp; 1 \\ 0 &amp; 1 \end{matrix} \right)\end{split}\]</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[120]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set code info</span>
 <span class="n">repetition</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">ancilla</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="n">n_qubit</span> <span class="o">=</span> <span class="n">repetition</span> <span class="o">+</span> <span class="n">ancilla</span>
+<span class="n">n_cbit</span> <span class="o">=</span> <span class="n">ancilla</span>
+
 <span class="n">error_probability</span> <span class="o">=</span> <span class="mf">0.2</span>
 <span class="n">initial_bit</span> <span class="o">=</span> <span class="mi">1</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[121]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">,</span> <span class="n">round_digit</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
-    <span class="n">vector</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">()</span>
-    <span class="n">state_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-    <span class="n">qubit_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span><span class="o">+</span><span class="n">eps</span><span class="p">))</span>
-    <span class="n">binary_format</span> <span class="o">=</span> <span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="s2">&quot;:0</span><span class="si">{}</span><span class="s2">b&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">qubit_count</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
-    <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vector</span><span class="p">)):</span>
-        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">vector</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">1e-10</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">state_str</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">state_str</span> <span class="o">+=</span> <span class="s2">&quot; + &quot;</span>
-            <span class="n">state_str</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> |&quot;</span> <span class="o">+</span> <span class="n">binary_format</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">vector</span><span class="p">[</span><span class="n">ind</span><span class="p">],</span><span class="n">round_digit</span> <span class="p">),</span><span class="n">ind</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">state_str</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<p>Secure the quantum state and write the initial state to the 0-th bit.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Run only for Google Colaboratory and local environment where Qulacs is not installed</span>
-<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>qulacs
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">NDArray</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="c1">## Run only if you are in a Google Colaboratory / (Linux or Mac) jupyter notebook environment.</span>
-<span class="c1">## Qulacs errors will be output normally.</span>
-<span class="o">!</span>pip3<span class="w"> </span>install<span class="w"> </span>wurlitzer
-<span class="o">%</span><span class="k">load_ext</span> wurlitzer
+<span class="k">def</span> <span class="nf">show_quantum_state</span><span class="p">(</span>
+    <span class="n">state_vector</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">],</span> <span class="n">show_ancilla</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">tol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-10</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+    <span class="n">n_qubit</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">state_vector</span><span class="p">)))</span>
+    <span class="n">subterm</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">state_vector</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tol</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">ket</span> <span class="o">=</span> <span class="nb">bin</span><span class="p">(</span><span class="n">i</span><span class="p">)[</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">show_ancilla</span><span class="p">:</span>
+            <span class="n">ket</span> <span class="o">=</span> <span class="n">ket</span><span class="p">[</span><span class="n">ancilla</span><span class="p">:]</span>
+        <span class="n">subterm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2"> * |</span><span class="si">{</span><span class="n">ket</span><span class="si">}</span><span class="s2">&gt;&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; + &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">subterm</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[122]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
-<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">repetition</span><span class="p">)</span>
-<span class="n">state</span><span class="o">.</span><span class="n">set_computational_basis</span><span class="p">(</span><span class="n">initial_bit</span><span class="p">)</span>
-<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.qulacs.simulator</span> <span class="kn">import</span> <span class="n">evaluate_state_to_vector</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.state</span> <span class="kn">import</span> <span class="n">ComputationalBasisState</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">ComputationalBasisState</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">,</span> <span class="n">bits</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span>
+    <span class="n">evaluate_state_to_vector</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">vector</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -338,20 +338,24 @@ for Nielsen-Chuang, it is <code class="docutils literal notranslate"><span class
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-(1+0j) |001&gt;
+(1+0j) * |001&gt;
 </pre></div></div>
 </div>
-<p>Create a circuit for encoding.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[123]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
-<span class="n">encode_circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">repetition</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">repetition</span><span class="p">):</span>
-    <span class="n">encode_circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ind</span><span class="p">)</span>
-<span class="n">encode_circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.circuit</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
+
+<span class="n">encode_circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">,</span> <span class="n">n_cbit</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">repetition</span><span class="p">):</span>
+    <span class="n">encode_circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+
+<span class="n">encoded_state</span> <span class="o">=</span> <span class="n">evaluate_state_to_vector</span><span class="p">(</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">with_gates_applied</span><span class="p">(</span><span class="n">encode_circuit</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">vector</span>
+
+<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">encoded_state</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -360,35 +364,43 @@ for Nielsen-Chuang, it is <code class="docutils literal notranslate"><span class
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-(1+0j) |111&gt;
+(1+0j) * |111&gt;
 </pre></div></div>
 </div>
 <p>Create a quantum circuit to measure the syndrome values. At the current point, all the syndrome values are 0.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[124]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">Instrument</span>
-<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">DenseMatrix</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.circuit</span> <span class="kn">import</span> <span class="n">DynamicCircuit</span>
+<span class="kn">from</span> <span class="nn">quri_parts.circuit.gates</span> <span class="kn">import</span> <span class="n">X</span><span class="p">,</span> <span class="n">CNOT</span><span class="p">,</span> <span class="n">Measurement</span>
+<span class="kn">from</span> <span class="nn">quri_parts.qulacs.simulator</span> <span class="kn">import</span> <span class="n">run_dynamic_circuit</span>
 
-<span class="k">def</span> <span class="nf">parity_measure_gate</span><span class="p">(</span><span class="n">fst</span><span class="p">,</span><span class="n">scn</span><span class="p">,</span><span class="n">register_pos</span><span class="p">):</span>
-    <span class="n">parity_measure_matrix_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span> <span class="p">)</span>
-    <span class="n">parity_measure_matrix_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span> <span class="p">)</span>
-    <span class="n">parity_measure_matrix_0</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">parity_measure_matrix_0</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">parity_measure_matrix_1</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">parity_measure_matrix_1</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">parity_measure_0</span> <span class="o">=</span> <span class="n">DenseMatrix</span><span class="p">([</span><span class="n">fst</span><span class="p">,</span><span class="n">scn</span><span class="p">],</span><span class="n">parity_measure_matrix_0</span><span class="p">)</span>
-    <span class="n">parity_measure_1</span> <span class="o">=</span> <span class="n">DenseMatrix</span><span class="p">([</span><span class="n">fst</span><span class="p">,</span><span class="n">scn</span><span class="p">],</span><span class="n">parity_measure_matrix_1</span><span class="p">)</span>
-    <span class="n">parity_measure</span> <span class="o">=</span> <span class="n">Instrument</span><span class="p">([</span><span class="n">parity_measure_0</span><span class="p">,</span> <span class="n">parity_measure_1</span><span class="p">],</span><span class="n">register_pos</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">parity_measure</span>
+<span class="k">def</span> <span class="nf">get_parity_measurement_circuit</span><span class="p">():</span>
+    <span class="n">dynamic_circuit</span> <span class="o">=</span> <span class="n">DynamicCircuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">,</span> <span class="n">n_cbit</span><span class="p">)</span>
+    <span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">CNOT</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">CNOT</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">CNOT</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">CNOT</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">Measurement</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+    <span class="k">return</span> <span class="n">dynamic_circuit</span>
 
-<span class="n">parity_measure_circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">repetition</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetition</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-    <span class="n">parity_measure_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">parity_measure_gate</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span><span class="n">ind</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">ind</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">show_parity_of_state</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="n">non_zero_component</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">state</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">parity_01</span> <span class="o">=</span> <span class="p">(</span><span class="n">non_zero_component</span> <span class="o">&gt;&gt;</span> <span class="n">repetition</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">1</span>
+    <span class="n">parity_02</span> <span class="o">=</span> <span class="n">non_zero_component</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">repetition</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;parity(0, 1):&quot;</span><span class="p">,</span> <span class="n">parity_01</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;parity(0, 2):&quot;</span><span class="p">,</span> <span class="n">parity_02</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-<span class="n">parity_measure_circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetition</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;parity(</span><span class="si">{}</span><span class="s2">,</span><span class="si">{}</span><span class="s2">): </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span><span class="n">ind</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">state</span><span class="o">.</span><span class="n">get_classical_value</span><span class="p">(</span><span class="n">ind</span><span class="p">)))</span>
+<span class="n">parity_measurement_circuit</span> <span class="o">=</span> <span class="n">get_parity_measurement_circuit</span><span class="p">()</span>
+
+<span class="n">parity_measured_state</span> <span class="o">=</span> <span class="n">run_dynamic_circuit</span><span class="p">(</span>
+    <span class="n">parity_measurement_circuit</span><span class="p">,</span>
+    <span class="n">encoded_state</span>
+<span class="p">)</span>
+
+<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">parity_measured_state</span><span class="p">)</span>
+<span class="n">show_parity_of_state</span><span class="p">(</span><span class="n">parity_measured_state</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -397,29 +409,37 @@ for Nielsen-Chuang, it is <code class="docutils literal notranslate"><span class
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-(1+0j) |111&gt;
-parity(0,1): 0
-parity(1,2): 0
+(1+0j) * |111&gt;
+parity(0, 1): 0
+parity(0, 2): 0
 </pre></div></div>
 </div>
 <p>One bit error is made on a random data qubit. At this time, a bit error is equivalent to an unintended Pauli-<span class="math notranslate nohighlight">\(X\)</span> operation. The quantum state will be <span class="math notranslate nohighlight">\(|vG+e\rangle\)</span>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[125]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># invoke random error</span>
-<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">Pauli</span>
-<span class="k">def</span> <span class="nf">random_X_error</span><span class="p">(</span><span class="n">num_qubit</span><span class="p">,</span> <span class="n">error_probability</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.circuit.gates</span> <span class="kn">import</span> <span class="n">Pauli</span>
+<span class="kn">from</span> <span class="nn">quri_parts.qulacs.simulator</span> <span class="kn">import</span> <span class="n">run_circuit</span>
+
+<span class="k">def</span> <span class="nf">random_X_error</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">QuantumCircuit</span><span class="p">:</span>
+    <span class="n">error_probability</span> <span class="o">=</span> <span class="mf">0.2</span>
+
     <span class="n">error_array</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qubit</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetition</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">error_probability</span><span class="p">:</span>
             <span class="n">error_array</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">error_array</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">Pauli</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">num_qubit</span><span class="p">),</span> <span class="n">error_array</span><span class="p">)</span>
-<span class="n">error_operator</span> <span class="o">=</span> <span class="n">random_X_error</span><span class="p">(</span><span class="n">repetition</span><span class="p">,</span> <span class="n">error_probability</span><span class="p">)</span>
-<span class="n">error_operator</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">error_array</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">QuantumCircuit</span><span class="p">(</span>
+        <span class="n">n_qubit</span><span class="p">,</span> <span class="n">n_cbit</span><span class="p">,</span>
+        <span class="n">gates</span><span class="o">=</span><span class="p">[</span><span class="n">Pauli</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">),</span> <span class="n">error_array</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])]</span>
+    <span class="p">)</span>
+
+<span class="n">error_applied_state</span> <span class="o">=</span> <span class="n">run_circuit</span><span class="p">(</span><span class="n">random_X_error</span><span class="p">(),</span> <span class="n">encoded_state</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">error_applied_state</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -428,18 +448,18 @@ parity(1,2): 0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-(1+0j) |011&gt;
+error_array = [0, 0, 0]
+(1+0j) * |111&gt;
 </pre></div></div>
 </div>
 <p>Recover the parity measurement again.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[126]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">parity_measure_circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetition</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;parity(</span><span class="si">{}</span><span class="s2">,</span><span class="si">{}</span><span class="s2">): </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span><span class="n">ind</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">state</span><span class="o">.</span><span class="n">get_classical_value</span><span class="p">(</span><span class="n">ind</span><span class="p">)))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">parity_measured_error_state</span> <span class="o">=</span> <span class="n">run_dynamic_circuit</span><span class="p">(</span><span class="n">parity_measurement_circuit</span><span class="p">,</span> <span class="n">error_applied_state</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">parity_measured_error_state</span><span class="p">)</span>
+<span class="n">show_parity_of_state</span><span class="p">(</span><span class="n">parity_measured_error_state</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -448,42 +468,45 @@ parity(1,2): 0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-(1+0j) |011&gt;
-parity(0,1): 0
-parity(1,2): 1
+(1+0j) * |111&gt;
+parity(0, 1): 0
+parity(0, 2): 0
 </pre></div></div>
 </div>
-<p>Decryption.</p>
+<p>Decryption</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[135]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># decoding process</span>
-<span class="k">def</span> <span class="nf">compute_recovery_operation</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">repetition</span><span class="p">):</span>
-    <span class="n">cand1</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">cand2</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">cand1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">cand2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">flag</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetition</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_classical_value</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">flag</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">flag</span>
-        <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
-            <span class="n">cand1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-            <span class="n">cand2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">cand1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">cand2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cand1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cand2</span><span class="p">):</span>
-        <span class="n">cand</span> <span class="o">=</span> <span class="n">cand1</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">cand</span> <span class="o">=</span> <span class="n">cand2</span>
-    <span class="k">return</span> <span class="n">Pauli</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">repetition</span><span class="p">),</span> <span class="n">cand</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">compute_recovery_operation</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">QuantumCircuit</span><span class="p">:</span>
+    <span class="n">non_zero_component</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">state</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">parity_bit</span> <span class="o">=</span> <span class="n">non_zero_component</span> <span class="o">&gt;&gt;</span> <span class="n">repetition</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">parity_bit</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span>
 
-<span class="n">recovery_operation</span> <span class="o">=</span> <span class="n">compute_recovery_operation</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="n">repetition</span><span class="p">)</span>
-<span class="n">recovery_operation</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">parity_bit</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">,</span> <span class="n">n_cbit</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">parity_bit</span> <span class="o">==</span> <span class="mb">0b01</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">,</span> <span class="n">n_cbit</span><span class="p">,</span> <span class="n">gates</span><span class="o">=</span><span class="p">[</span><span class="n">X</span><span class="p">(</span><span class="mi">1</span><span class="p">)])</span>
+
+    <span class="k">elif</span> <span class="n">parity_bit</span> <span class="o">==</span> <span class="mb">0b10</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">,</span> <span class="n">n_cbit</span><span class="p">,</span> <span class="n">gates</span><span class="o">=</span><span class="p">[</span><span class="n">X</span><span class="p">(</span><span class="mi">2</span><span class="p">)])</span>
+
+    <span class="k">elif</span> <span class="n">parity_bit</span> <span class="o">==</span> <span class="mb">0b11</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">,</span> <span class="n">n_cbit</span><span class="p">,</span> <span class="n">gates</span><span class="o">=</span><span class="p">[</span><span class="n">X</span><span class="p">(</span><span class="mi">0</span><span class="p">)])</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="kc">False</span>
+
+<span class="n">parity_measured_state</span> <span class="o">=</span> <span class="n">run_dynamic_circuit</span><span class="p">(</span>
+    <span class="n">parity_measurement_circuit</span><span class="p">,</span>
+    <span class="n">error_applied_state</span>
+<span class="p">)</span>
+<span class="n">recovered_state</span> <span class="o">=</span> <span class="n">run_circuit</span><span class="p">(</span>
+    <span class="n">compute_recovery_operation</span><span class="p">(</span><span class="n">parity_measured_state</span><span class="p">),</span>
+    <span class="n">parity_measured_state</span>
+<span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">recovered_state</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -492,43 +515,128 @@ parity(1,2): 1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-(1+0j) |111&gt;
+(1+0j) * |111&gt;
 </pre></div></div>
 </div>
 <p>A series of operations can be performed even if the first quantum state is not a computational basis.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[146]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set code info</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">quri_parts.circuit</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span><span class="p">,</span> <span class="n">DynamicCircuit</span><span class="p">,</span> <span class="n">ConditionalCircuit</span>
+<span class="kn">from</span> <span class="nn">quri_parts.circuit.gates</span> <span class="kn">import</span> <span class="n">UnitaryMatrix</span><span class="p">,</span> <span class="n">CNOT</span><span class="p">,</span> <span class="n">Pauli</span><span class="p">,</span> <span class="n">Measurement</span><span class="p">,</span> <span class="n">X</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">unitary_group</span>
+<span class="kn">from</span> <span class="nn">quri_parts.qulacs.simulator</span> <span class="kn">import</span> <span class="n">run_dynamic_circuit</span>
+
 <span class="n">repetition</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="n">error_probability</span> <span class="o">=</span> <span class="mf">0.2</span>
-<span class="n">initial_bit</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">ancilla</span> <span class="o">=</span> <span class="mi">2</span>
 
-<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">RandomUnitary</span>
-<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">repetition</span><span class="p">)</span>
-<span class="n">state</span><span class="o">.</span><span class="n">set_computational_basis</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">RandomUnitary</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;initial state&quot;</span><span class="p">)</span>
-<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="n">n_qubit</span> <span class="o">=</span> <span class="n">repetition</span> <span class="o">+</span> <span class="n">ancilla</span>
+<span class="n">n_cbit</span> <span class="o">=</span> <span class="n">ancilla</span>
 
-<span class="n">encode_circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;encode&quot;</span><span class="p">)</span>
-<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">add_encode_circuit</span><span class="p">(</span><span class="n">dynamic_circuit</span><span class="p">:</span> <span class="n">DynamicCircuit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">CNOT</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">CNOT</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 
-<span class="n">error_operator</span> <span class="o">=</span> <span class="n">random_X_error</span><span class="p">(</span><span class="n">repetition</span><span class="p">,</span> <span class="n">error_probability</span><span class="p">)</span>
-<span class="n">error_operator</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
-<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">add_noisy_bit_flip_channel</span><span class="p">(</span><span class="n">dynamic_circuit</span><span class="p">:</span> <span class="n">DynamicCircuit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">error_probability</span> <span class="o">=</span> <span class="mf">0.2</span>
 
-<span class="n">parity_measure_circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;parity measurement&quot;</span><span class="p">)</span>
-<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">error_array</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetition</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">error_probability</span><span class="p">:</span>
+            <span class="n">error_array</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">error_array</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
-<span class="n">recovery_operation</span> <span class="o">=</span> <span class="n">compute_recovery_operation</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="n">repetition</span><span class="p">)</span>
-<span class="n">recovery_operation</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;recovery&quot;</span><span class="p">)</span>
-<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">error_array</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">gate</span> <span class="o">=</span> <span class="n">Pauli</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">),</span> <span class="n">error_array</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">add_parity_measurement_gate</span><span class="p">(</span><span class="n">dynamic_circuit</span><span class="p">:</span> <span class="n">DynamicCircuit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">CNOT</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">CNOT</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">CNOT</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">CNOT</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">Measurement</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+
+<span class="k">def</span> <span class="nf">add_correction_gate</span><span class="p">(</span><span class="n">dynamic_circuit</span><span class="p">:</span> <span class="n">DynamicCircuit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_conditional</span><span class="p">(</span>
+        <span class="n">if_block</span><span class="o">=</span><span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">,</span> <span class="n">n_cbit</span><span class="p">,</span> <span class="p">[</span><span class="n">X</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">X</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">X</span><span class="p">(</span><span class="mi">4</span><span class="p">)]),</span>
+        <span class="n">else_block</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">classical_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="n">patterns</span><span class="o">=</span><span class="p">{</span><span class="mb">0b11</span><span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_conditional</span><span class="p">(</span>
+        <span class="n">if_block</span><span class="o">=</span><span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">,</span> <span class="n">n_cbit</span><span class="p">,</span> <span class="p">[</span><span class="n">X</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">X</span><span class="p">(</span><span class="mi">3</span><span class="p">)]),</span>
+        <span class="n">else_block</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">classical_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="n">patterns</span><span class="o">=</span><span class="p">{</span><span class="mb">0b01</span><span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_conditional</span><span class="p">(</span>
+        <span class="n">if_block</span><span class="o">=</span><span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">,</span> <span class="n">n_cbit</span><span class="p">,</span> <span class="p">[</span><span class="n">X</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">X</span><span class="p">(</span><span class="mi">4</span><span class="p">)]),</span>
+        <span class="n">else_block</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">classical_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="n">patterns</span><span class="o">=</span><span class="p">{</span><span class="mb">0b10</span><span class="p">}</span>
+    <span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">add_decode_gate</span><span class="p">(</span><span class="n">dynamic_circuit</span><span class="p">:</span> <span class="n">DynamicCircuit</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">CNOT</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">CNOT</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="c1"># random unitary</span>
+<span class="n">random_unitary</span> <span class="o">=</span> <span class="n">unitary_group</span><span class="o">.</span><span class="n">rvs</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">inital_state</span> <span class="o">=</span> <span class="n">random_unitary</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="n">dynamic_circuit</span> <span class="o">=</span> <span class="n">DynamicCircuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">,</span> <span class="n">n_cbit</span><span class="p">)</span>
+<span class="n">dynamic_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">UnitaryMatrix</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">random_unitary</span><span class="p">))</span>
+
+<span class="n">inital_state</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">n_qubit</span><span class="p">)]</span>
+<span class="n">current_state</span> <span class="o">=</span> <span class="n">run_dynamic_circuit</span><span class="p">(</span><span class="n">dynamic_circuit</span><span class="p">,</span> <span class="n">inital_state</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;1. initial state:&quot;</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">current_state</span><span class="p">)</span>
+
+<span class="c1"># run QEC algorithm</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;2. encoded state:&quot;</span><span class="p">)</span>
+<span class="n">add_encode_circuit</span><span class="p">(</span><span class="n">dynamic_circuit</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span>
+    <span class="n">run_dynamic_circuit</span><span class="p">(</span><span class="n">dynamic_circuit</span><span class="p">,</span> <span class="n">inital_state</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;3. noise applied state:&quot;</span><span class="p">)</span>
+<span class="n">add_noisy_bit_flip_channel</span><span class="p">(</span><span class="n">dynamic_circuit</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span>
+    <span class="n">run_dynamic_circuit</span><span class="p">(</span><span class="n">dynamic_circuit</span><span class="p">,</span> <span class="n">inital_state</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;4. parity measurement state:&quot;</span><span class="p">)</span>
+<span class="n">add_parity_measurement_gate</span><span class="p">(</span><span class="n">dynamic_circuit</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span>
+    <span class="n">run_dynamic_circuit</span><span class="p">(</span><span class="n">dynamic_circuit</span><span class="p">,</span> <span class="n">inital_state</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">show_parity_of_state</span><span class="p">(</span>
+    <span class="n">run_dynamic_circuit</span><span class="p">(</span><span class="n">dynamic_circuit</span><span class="p">,</span> <span class="n">inital_state</span><span class="p">),</span>
+<span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;5. Apply correction gate:&quot;</span><span class="p">)</span>
+<span class="n">add_correction_gate</span><span class="p">(</span><span class="n">dynamic_circuit</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span>
+    <span class="n">run_dynamic_circuit</span><span class="p">(</span><span class="n">dynamic_circuit</span><span class="p">,</span> <span class="n">inital_state</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;6. Get decoded state:&quot;</span><span class="p">)</span>
+<span class="n">add_decode_gate</span><span class="p">(</span><span class="n">dynamic_circuit</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span>
+    <span class="n">run_dynamic_circuit</span><span class="p">(</span><span class="n">dynamic_circuit</span><span class="p">,</span> <span class="n">inital_state</span><span class="p">)</span>
+<span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>
@@ -537,16 +645,26 @@ parity(1,2): 1
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-initial state
-(-0.111+0.987j) |000&gt; + (0.053-0.101j) |001&gt;
-encode
-(-0.111+0.987j) |000&gt; + (0.053-0.101j) |111&gt;
-error
-(-0.111+0.987j) |010&gt; + (0.053-0.101j) |101&gt;
-parity measurement
-(-0.111+0.987j) |010&gt; + (0.053-0.101j) |101&gt;
-recovery
-(-0.111+0.987j) |000&gt; + (0.053-0.101j) |111&gt;
+1. initial state:
+(0.196-0.618j) * |000&gt; + (0.558-0.518j) * |001&gt;
+
+2. encoded state:
+(0.196-0.618j) * |000&gt; + (0.558-0.518j) * |111&gt;
+
+3. noise applied state:
+error_array = [0, 0, 1]
+(0.558-0.518j) * |011&gt; + (0.196-0.618j) * |100&gt;
+
+4. parity measurement state:
+(0.558-0.518j) * |011&gt; + (0.196-0.618j) * |100&gt;
+parity(0, 1): 0
+parity(0, 2): 1
+
+5. Apply correction gate:
+(0.196-0.618j) * |000&gt; + (0.558-0.518j) * |111&gt;
+
+6. Get decoded state:
+(0.196-0.618j) * |000&gt; + (0.558-0.518j) * |001&gt;
 </pre></div></div>
 </div>
 <p>Quantum error correction is a framework that allows error correction even when a quantum state has not only bit-flip (Pauli-<span class="math notranslate nohighlight">\(X\)</span>) but also phase-flip (Pauli-<span class="math notranslate nohighlight">\(Z\)</span>) errors. Assuming that the errors that occur are probabilistic Pauli operators, the quantum error correction framework is as follows.</p>
@@ -601,7 +719,6 @@ can regard this as a case where both Pauli<span class="math notranslate nohighli
 <li><p>The data qubits to be checked in each syndrome are spatially clustered within a distance of <span class="math notranslate nohighlight">\(O(1)\)</span>. Therefore, even in physical systems where CNOT can only be applied to adjacent qubits, it is possible to efficiently measure the syndrome.</p></li>
 </ul>
 <p>Among topological codes, surface codes, with which measurement qubits can also be embedded on a two-dimensional plane, are the closest to realization.</p>
-<p>Topological codes also inherit the drawbacks of low-density parity checking codes, which generally make decoding NP-hard. In reality, some approximations to the nature of the error are often used to formulate an efficient decoding algorithm that can be solved.</p>
 </section>
 <section id="Computation-on-stabilizer-codes">
 <h2>Computation on stabilizer codes<a class="headerlink" href="#Computation-on-stabilizer-codes" title="Link to this heading">¶</a></h2>
@@ -628,7 +745,7 @@ thereby creating a universal set.</p>
             <div class="collapse nftt-toc-collapse" id="tocContents">
               <nav id="TableOfContents">
                 <ul>
-<li><a class="reference internal" href="#">9-2. quantum error</a><ul>
+<li><a class="reference internal" href="#">9-2. Quantum Error Correction</a><ul>
 <li><a class="reference internal" href="#Quantum-error-correction">Quantum error correction</a></li>
 <li><a class="reference internal" href="#Stabilizer-Codes">Stabilizer Codes</a></li>
 <li><a class="reference internal" href="#Topological-Codes">Topological Codes</a></li>
