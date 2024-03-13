@@ -1,0 +1,1165 @@
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+      <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="docsearch:name" content="Quantum Native Dojo" />
+    <meta name="docsearch:package_type" content="" />
+    <meta name="docsearch:release" content="" />
+    <meta name="docsearch:version" content="" />
+    
+      <title>2-4. Phase Estimation Algorithm (Introduction) &mdash; Quantum Native Dojo  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-icons.css" type="text/css" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+          <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+          <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+        <link rel="index" title="Index" href="../genindex.html" />
+        <link rel="search" title="Search" href="../search.html" />
+        <link rel="top" title="Quantum Native Dojo  documentation" href="#" />
+        <link rel="up" title="Chapter 2: Introduction to Quantum Algorithms" href="2_introduction_to_quantum_algorithms.html" />
+        <link rel="next" title="Chapter 3: Execution Environment for Quantum Algorithms" href="3_execution_environments_of_quantum_algorithms.html" />
+        <link rel="prev" title="2-3. Quantum Fourier Transform" href="2.3_quantum_Fourier_transform.html" />
+    <style>
+      :root {
+        --nftt-body-font-family: "Nunito", var(--nftt-font-sans-serif) !important;
+        --nftt-font-monospace: "Red Hat Mono", var(--nftt-font-family-monospace) !important;
+        --nftt-project-name-font: var(--nftt-body-font-family);
+        --nftt-documentation-font: var(--nftt-body-font-family);
+        --nftt-doc-headers-font: "Georgia", var(--nftt-documentation-font);}
+      h1 *, h2 *, h3 *, h4 *, h5 *, h6 * { font-size: inherit; }
+    </style>
+  </head>
+  <body>
+    <header class="navbar navbar-expand-xl navbar-dark nftt-navbar flex-column fixed-top">
+      <div class="skip-links container-fluid visually-hidden-focusable overflow-hidden justify-content-start">
+        <div class="border-bottom mb-2 pb-2 w-100">
+          <a class="d-none d-md-inline-flex p-2 m-1" href="#sidebar-filter">Skip to docs navigation</a>
+          <a class="d-inline-flex p-2 m-1" href="#content">Skip to main content</a>
+        </div>
+      </div>
+      <nav class="container-xxl nftt-gutter flex-wrap flex-xl-nowrap" aria-label="Main navigation">
+        <div class="nftt-navbar-toggler">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Toggle documentation navigation">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+          <a href="../index.html"
+              
+              class="navbar-brand p-0 me-0 md-lg-2"
+          ><span class="brand-text">Quantum Native Dojo</span></a>
+        
+        <div class="d-flex d-xl-none">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttSearch" aria-controls="nfttSearch" aria-label="Search">
+            <i class="bi bi-search"></i>
+          </button>
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttNavbar" aria-controls="nfttNavbar" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+        </div>
+        
+<div class="offcanvas-xl offcanvas-end flex-grow-1" tabindex="-1" id="nfttSearch" aria-labelledby="nfttSearchOffcanvasLabel" data-bs-scroll="true">
+  <div class="offcanvas-header px-4 pb-0">
+    <h5 class="offcanvas-title fw-bold" id="nfttSearchOffcanvasLabel">Search the documentation</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttSearch"></button>
+  </div>
+  <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+    <hr class="d-xl-none text-white-50">
+    <ul class="navbar-nav flex-row align-items-center flex-wrap ms-md-auto">
+      <li class="nav-item col-12 col-xl-auto">
+        <form id="nftt-search-form" action="../search.html" method="get">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search docs" aria-label="Search" aria-describedby="button-search">
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+            <button class="btn btn-primary" type="submit" id="button-search" aria-label="Search"><i class="bi bi-search"></i></button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+</div>
+
+        <div class="offcanvas-xl offcanvas-end" tabindex="-1" id="nfttNavbar" aria-labelledby="nfttNavbarOffcanvasLabel" data-bs-scroll="true">
+          <div class="offcanvas-header px-4 pb-0">
+            <div class="offcanvas-title navbar-brand" id="nfttNavbarOffcanvasLabel"><span class="brand-text">Nefertiti for Sphinx</span></div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttNavbar"></button>
+          </div>
+          <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+            <hr class="d-xl-none text-white-50">
+            <ul class="navbar-nav flex-row align-items-center flex-wrap ms-lg-auto">
+              
+              <!-- version_dropdown.html -->
+
+              
+              <!-- colorscheme_dropdown.html -->
+<li class="nav-item dropdown">
+  <a class="nav-link d-flex py-2 px-0 px-xl-2 dropdown-toggle align-items-center" id="snftt-luz" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" aria-label="Toggle light/dark">
+    <i class="bi bi-circle-half" data-snftt-luz-icon-active></i>
+    <span id="snftt-luz-text" class="d-xl-none small ms-2">Toggle light/dark</span>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="snftt-luz-text">
+    <li>
+      <h6 class="dropdown-header">Light/dark</h6>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="light" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-sun" data-snftt-luz-icon="light"></i>
+        </span>
+        <span class="small ms-3">Light</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="dark" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-moon-stars" data-snftt-luz-icon="dark"></i>
+        </span>
+        <span class="small ms-3">Dark</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item current d-flex align-items-center" data-snftt-luz="default" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-circle-half" data-snftt-luz-icon="default"></i>
+        </span>
+        <span class="small ms-3">Default</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+  </ul>
+</li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container-fluid">
+      <div class="nftt-gutter nftt-page">
+        <aside class="nftt-sidebar">
+          <div class="nftt-sidebar-content">
+            <div class="title d-none d-xl-block">
+              <i class="bi bi-book"></i>&nbsp;&nbsp;<span>Index</span>
+            </div>
+            <div id="sidebar" tabindex="-1" class="offcanvas-xl offcanvas-start" aria-labelledby="nfttSidebarOffcanvasLabel">
+                <!-- danirus sidebartemplate: "globaltoc.html" --><div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title fw-bold" id="nfttSidebarOffcanvasLabel">
+    Table of contents
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#sidebar"></button>
+</div>
+
+<div class="offcanvas-body">
+  <nav class="toc" aria-label="Main menu">
+    <div class="mb-3 p-1 pt-3 pb-4 border-bottom">
+      <input id="sidebar-filter" type="text" name="filter" class="form-control form-control-sm" placeholder="filter" aria-label="filter">
+    </div>
+    <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="0_prologue.html">Chapter 0: What is a Quantum Computer ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_quantum_information_foundation.html">Chapter 1: Fundamentals of Quantum Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1.1_qubit_representation.html">1-1. Qubit Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.2_qubit_operations.html">1-2. Qubit Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html">1-3. Multiqubit representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html#Column:-What-is-a-universal-gate-set?">Column: What is a universal gate set?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.4_quantum_circuit_diagram.html">1-4. Quantum Circuit Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="2_introduction_to_quantum_algorithms.html">Chapter 2: Introduction to Quantum Algorithms</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="2.1_NISQ_and_long_term.html">2-1. NISQ algorithm and long-term algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.2_Hadamard_test.html">2-2. Hadamard test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.3_quantum_Fourier_transform.html">2-3. Quantum Fourier transform</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2-4. Phase Estimation Algorithm（Introductory）</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3_execution_environments_of_quantum_algorithms.html">Chapter 3: Execution Environment for Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3.1_Qulacs_tutorial.html">3-1. Qulacs_tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.2_Qiskit_IBMQ.html">3-2. Qiskit_IBMQ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4_quantum_dynamics_simulation.html">Chapter4 Quantum dynamics simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4.1_quantum_simulation.html">4-1. Quantum Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4.2_trotter_decomposition.html">4-2. Trotter Decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5_VQC_based_algorithms.html">Chapter 5 Algorithms Based on Variational Quantum Circuits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5.1_variational_quantum_eigensolver.html">5-1. Variational Quantum Eigensolver（VQE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.2_Quantum_Circuit_Learning.html">5-2. Quantum Circuit Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.3_quantum_approximate_optimazation_algorithm.html">5-3. Quantum Approximate Optimazation Algorithm (QAOA)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6_quantum_chemistry_calculation.html">Chapter 6 Quantum chemistry calculation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="6.1_openfermion_basics.html">6-1. OpenFermion Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7_quantum_phase_estimation.html">chapter 7 Quantum phase estimation algorithm and its application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7.1_quantum_phase_estimation_detailed.html">7-1. Quantum Phase Estimation (QPE) Algorithm Detailed：Hydrogen Molecule as Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.2_Harrow-Hassidim-Lloyd_algorithm.html">7-2. Harrow-Hassidim-Lloyd (HHL) Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.3_application_of_HHL_algorithm.html">7-3. Portofolio Optimization by HHL Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="8_quantum_search_algorithm.html">Chapter 8: Quantum Search Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="8.1_oracle.html">8-1. oracle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8.2_Grovers_algorithm.html">8-2. Grover’s algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="9_quantum_error_correction.html">Chapter 9 Quantum Error Correction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="9.1_error_correction.html">9-1. classical error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9.2_quantum_error_correction.html">9-2. quantum error</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav>
+  <template data-toggle-item-template>
+    <button class="btn btn-sm btn-link toctree-expand" type="button">
+      <i class="bi bi-caret-right"></i>
+      <span class="visually-hidden">Toggle menu contents</span>
+    </button>
+  </template>
+</div>
+            </div>
+          </div>
+        </aside>
+        <article id="content" class="nftt-content" role="main">
+    <section id="2-4.-Phase-Estimation-Algorithm-(Introduction)">
+<h1>2-4. Phase Estimation Algorithm (Introduction)<a class="headerlink" href="#2-4.-Phase-Estimation-Algorithm-(Introduction)" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">In this section, you will learn about a quantum algorithm called <strong>“phase estimation algorithm”</strong>, which is very important for future applications of quantum computers. Phase estimation algorithm is used to estimate the eigenvalues of a unitary matrix. The phase estimation algorithm is used as the basis of many quantum algorithms and is one of the most important quantum algorithms.</div>
+<div class="line">(See <code class="docutils literal notranslate"><span class="pre">5.2</span> <span class="pre">Phase</span> <span class="pre">estimation</span></code> in Nielsen-Chuang)</div>
+</div>
+<section id="Introduction:-Improving-the-Hadamard-Test">
+<h2>Introduction: Improving the Hadamard Test<a class="headerlink" href="#Introduction:-Improving-the-Hadamard-Test" title="Link to this heading">¶</a></h2>
+<p>As in <a class="reference internal" href="2.2_Hadamard_test.html"><span class="doc">section 2-2</span></a>, consider the problem of estimating the eigenvalue <span class="math notranslate nohighlight">\(e^{i\lambda}\)</span> of the unitary operation <span class="math notranslate nohighlight">\(U\)</span>. In the Hadamard test, the eigenvalue phase <span class="math notranslate nohighlight">\(\lambda\)</span> was reflected in the probability distribution of the test measurement results, and <span class="math notranslate nohighlight">\(\lambda\)</span> was estimated by sampling many measurement results. Let’s see how we can improve this a little more to extract the phase information more directly from the measurement results.</p>
+<p>As a preliminary step, the binary expansion of <span class="math notranslate nohighlight">\(\lambda/2\pi\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[\frac{\lambda}{2\pi} = \frac{j_1}{2^1} + \frac{j_2}{2^2} +\cdots+ \frac{j_k}{2^k} +\cdots\]</div>
+<p>The <span class="math notranslate nohighlight">\(j_k\)</span> is a (classical) bit that takes the value 0 or 1. Since <span class="math notranslate nohighlight">\(\lambda\)</span> only appears in the form <span class="math notranslate nohighlight">\(e^{i\lambda}\)</span>, we can assume that <span class="math notranslate nohighlight">\(0 \leq \lambda &lt; 2\pi\)</span> without loss of generality. This binary expansion is written as follows, following the usual notation for decimals.</p>
+<div class="math notranslate nohighlight">
+\[\lambda = (2\pi) 0.j_1 j_2 \ldots j_k \ldots\]</div>
+<p>For simplicity, we assume that <span class="math notranslate nohighlight">\(\lambda/2\pi\)</span> can be written to <span class="math notranslate nohighlight">\(n\)</span> decimal places.</p>
+<div class="math notranslate nohighlight">
+\[\lambda = (2\pi) 0.j_1 j_2 \ldots j_n\]</div>
+<p>Now, in the Hadamard test we used <span class="math notranslate nohighlight">\(\Lambda(U)\)</span> as the control unitary operation, but let us change it a bit and use <span class="math notranslate nohighlight">\(\Lambda(U^{2^k})\)</span>. As in the first half of <a class="reference internal" href="2.2_Hadamard_test.html"><span class="doc">section 2-2</span></a>, we assume that <span class="math notranslate nohighlight">\(|\psi\rangle\)</span> is an eigenstate of <span class="math notranslate nohighlight">\(U\)</span>. After performing the control unitary operation, the state is</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{\sqrt{2}}
+\left(
+ |0\rangle +
+ e^{i2^k\lambda} |1\rangle
+\right)
+\otimes |\psi\rangle\]</div>
+<p>Using the binary expansion above, we get</p>
+<div class="math notranslate nohighlight">
+\[2^k \lambda =
+2^k \cdot (2\pi)0.j_1 j_2 \ldots j_r =
+(2\pi)j_1 j_2 \ldots j_k . j_{k+1} \ldots j_n\]</div>
+<p><span class="math notranslate nohighlight">\(e^{i(2\pi)j_1 \ldots j_k} = 1\)</span>. Therefore,</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{\sqrt{2}}
+\left(
+ |0\rangle +
+ e^{i(2\pi)0.j_{k+1} \ldots j_n} |1\rangle  \tag{1}
+\right)\]</div>
+<p>(<span class="math notranslate nohighlight">\(|\psi\rangle\)</span> is omitted.)</p>
+<p>First, consider the case when <span class="math notranslate nohighlight">\(k=n-1\)</span>. In this case,</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{\sqrt{2}} \left( |0\rangle + e^{i(2\pi)0.j_n} |1\rangle \right)\]</div>
+<p>By applying the Hadamard gate, (Let’s check this by substituting <span class="math notranslate nohighlight">\(m=0,1\)</span>)</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{\sqrt{2}} \left( |0\rangle + e^{i(2\pi)0.j_n} |1\rangle \right) \to |j_n\rangle\]</div>
+<div class="line-block">
+<div class="line">and can be converted to the state corresponding to the <span class="math notranslate nohighlight">\(n\)</span>th bit <span class="math notranslate nohighlight">\(j_n=0, 1\)</span> in the binary decimal representation of <span class="math notranslate nohighlight">\(\lambda\)</span>. If we measure this state, we can determine the <span class="math notranslate nohighlight">\(n\)</span>th digit of <span class="math notranslate nohighlight">\(\lambda\)</span> with a single measurement, since <span class="math notranslate nohighlight">\(j_n\)</span> is observed with 100% probability.</div>
+<div class="line">Next, considering the case <span class="math notranslate nohighlight">\(k=n-2\)</span>, the state is</div>
+</div>
+<div class="math notranslate nohighlight">
+\[\frac{1}{\sqrt{2}} \left( |0\rangle + e^{i(2\pi)0.j_{n-1}j_n} |1\rangle \right)\]</div>
+<p>Since <span class="math notranslate nohighlight">\(j_n\)</span> has been checked earlier, we do nothing when <span class="math notranslate nohighlight">\(j_n=0\)</span>, and when <span class="math notranslate nohighlight">\(j_n=1\)</span>, by applying <span class="math notranslate nohighlight">\(R_2^\dagger\)</span>, an example (<span class="math notranslate nohighlight">\(l=2\)</span>) of the general phase gate,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}R_{l}^\dagger = \begin{pmatrix} 1 &amp; 0\\ 0 &amp; e^{-i \frac{2\pi}{2^l} } \end{pmatrix}\end{split}\]</div>
+<p>we have</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{\sqrt{2}} \left( |0\rangle + e^{i(2\pi)0.j_{n-1}j_n} |1\rangle \right) \to \frac{1}{\sqrt{2}} \left( |0\rangle + e^{i(2\pi)0.j_{n-1}} |1\rangle \right)\]</div>
+<p>And if you apply the Hadamard gate,</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{\sqrt{2}} \left( |0\rangle + e^{i(2\pi)0.j_{n-1}} |1\rangle \right) \to |j_{n-1}\rangle\]</div>
+<div class="line-block">
+<div class="line">Therefore, <span class="math notranslate nohighlight">\(j_{n-1}\)</span> can also be determined by just one measurement of this state.</div>
+<div class="line">Hereafter, <span class="math notranslate nohighlight">\(j_{k+1}\)</span> can be determined from the lower digits by similarly setting <span class="math notranslate nohighlight">\(k=n-3, \cdots, 0\)</span>.</div>
+</div>
+<p>Thus, by slightly modifying the Hadamard test, the phase of eigenvalues can be extracted one digit at a time as a (definite) qubit state. The phase estimation algorithm described below performs this procedure all at once in a quantum circuit.</p>
+</section>
+<section id="Phase-Estimation-Algorithm:-Overview">
+<h2>Phase Estimation Algorithm: Overview<a class="headerlink" href="#Phase-Estimation-Algorithm:-Overview" title="Link to this heading">¶</a></h2>
+<p>Equation (1) in the above improved Hadamard test is probably a form that you have seen somewhere before. Yes, it is the same as the intermediate equation of the quantum Fourier transform (<code class="docutils literal notranslate"><span class="pre">circuit</span> <span class="pre">configuration</span></code> section) that you learned in <a class="reference internal" href="2.3_quantum_Fourier_transform.html"><span class="doc">section 2-3</span></a>. In fact, the phase estimation algorithm proposed by Kitaev [1] is a modified version of the above algorithm with more measurement qubits, combined with the quantum Fourier transform. Without going into
+details, let us first introduce what kind of operations the algorithm is capable of.</p>
+<p>Let <span class="math notranslate nohighlight">\(U\)</span> be a general unitary matrix that can be constructed as a quantum circuit. Let <span class="math notranslate nohighlight">\(|{\rm eigen}_l \rangle\)</span> be <span class="math notranslate nohighlight">\(U\)</span>’s eigenvectors and <span class="math notranslate nohighlight">\(e^{i\lambda_l}\)</span> be the corresponding eigenvalues. Suppose we are given some general quantum state <span class="math notranslate nohighlight">\(|\psi\rangle\)</span>. This can always be expanded in terms of eigenvectors.</p>
+<div class="math notranslate nohighlight">
+\[|\psi \rangle = \sum _l c_l |{\rm eigen}_l \rangle\]</div>
+<p>Of course, it is not necessary to know what the specific coefficient <span class="math notranslate nohighlight">\(c_l\)</span> will be. The <strong>phase estimation algorithm transforms the input state</strong></p>
+<div class="math notranslate nohighlight">
+\[|00...0\rangle |\psi\rangle\]</div>
+<p><strong>to the following state by using</strong> <strong>:math:`n`</strong> <strong>auxiliary qubits</strong></p>
+<div class="math notranslate nohighlight">
+\[\sum _l c_l |\lambda_l \rangle | {\rm eigen}_l \rangle\]</div>
+<div class="line-block">
+<div class="line">Here <span class="math notranslate nohighlight">\(|\lambda_l\rangle\)</span> is quantum state <span class="math notranslate nohighlight">\(|j_1^{(l)}\cdots j_n^{(l)}\rangle\)</span> corresponding to the binary fractional representation of the eigenvalue phase <span class="math notranslate nohighlight">\(\lambda_l\)</span>, <span class="math notranslate nohighlight">\(\lambda_l=(2\pi)0.j_1^{(l)}\cdots j_n^{(l)}\)</span>. (Here we assume that the binary decimal representation of <span class="math notranslate nohighlight">\(\lambda_l\)</span> ends at <span class="math notranslate nohighlight">\(n\)</span> digits. See also the description in the next section).</div>
+<div class="line">In other words, the phase estimation algorithm is an algorithm <strong>to extract the eigenvalues corresponding to each eigenvector into</strong> <strong>:math:`n`</strong> <strong>auxiliary qubits</strong> in the superposition of <span class="math notranslate nohighlight">\(|\psi\rangle\)</span>. When we measure the auxiliary qubits for this state, with the probability,</div>
+</div>
+<div class="math notranslate nohighlight">
+\[p_l = |c_l |^2\]</div>
+<p>any one eigenvector <span class="math notranslate nohighlight">\(|{\rm eigen}_l\rangle\)</span> and its eigenvalue <span class="math notranslate nohighlight">\(\lambda_l\)</span> are randomly selected. This algorithm is used as a subroutine in prime factorization, quantum chemical algorithms (energy calculations for molecules, etc.), and many other algorithms, and is <strong>the most important example of how a quantum computer can (and is expected to) solve exponentially faster than a conventional computer.</strong></p>
+</section>
+<section id="Phase-Estimation-Algorithm:-Configuration">
+<h2>Phase Estimation Algorithm: Configuration<a class="headerlink" href="#Phase-Estimation-Algorithm:-Configuration" title="Link to this heading">¶</a></h2>
+<p>In the following, the phase estimation algorithm will be explained. Here, we restrict the input state <span class="math notranslate nohighlight">\(|\psi\rangle\)</span> to the eigenstate <span class="math notranslate nohighlight">\(|{\rm eigen}\rangle\)</span> and its eigenvalue <span class="math notranslate nohighlight">\(\lambda\)</span> (The generality is not lost since the exact same argument can be used in the case of a superposition of eigenstates.) In the Hadamard test, only one qubit was used for measurement, but in phase estimation, <span class="math notranslate nohighlight">\(n\)</span> qubits are reserved as auxiliary qubits for measurement. The circuit for phase
+estimation is shown in the following figure.</p>
+<img alt="PEA" src="../_images/PEA.png" />
+<p>Again, the phase <span class="math notranslate nohighlight">\(\lambda\)</span> of the eigenvalue <span class="math notranslate nohighlight">\(e^{i\lambda}\)</span> of the unitary operation <span class="math notranslate nohighlight">\(U\)</span> using <span class="math notranslate nohighlight">\(n\)</span>-bit binary decimals is</p>
+<div class="math notranslate nohighlight">
+\[\lambda = (2\pi) 0.j_1 j_2...j_n\]</div>
+<p>(we assume that the binary decimal representation of <span class="math notranslate nohighlight">\(\lambda\)</span> ends at <span class="math notranslate nohighlight">\(n\)</span> digits; if it does not, there will be some error in the last measurement, but this error can be overcome if the measurement is repeated. (See the Nielsen-Chuang reference at the beginning for details.)</p>
+<div class="line-block">
+<div class="line">First, each of the <span class="math notranslate nohighlight">\(n\)</span> qubits initialized to <span class="math notranslate nohighlight">\(|0\rangle\)</span> is subjected to the Hadamard gate and control unitary operations as in the Hadamard test. However, the <span class="math notranslate nohighlight">\(k\)</span>-th (<span class="math notranslate nohighlight">\(k=1,.... ,n\)</span>) auxiliary qubits will be subjected to the control <span class="math notranslate nohighlight">\(U^{2^{k-1}}\)</span> operation.</div>
+<div class="line">Since <span class="math notranslate nohighlight">\(U|{\rm eigen}\rangle = e^{i2\pi\lambda}|{\rm eigen}\rangle\)</span>, the <span class="math notranslate nohighlight">\(k\)</span>th auxiliary qubit will acquire a phase of <span class="math notranslate nohighlight">\(e^{i \lambda 2^k}\)</span> (this is called phase kickback) and we get</div>
+</div>
+<div class="math notranslate nohighlight">
+\[\left( \frac{|0\rangle + e^{i (2\pi)0.j_1\cdots j_n} |1\rangle }{\sqrt{2}} \right) \otimes
+\left( \frac{|0\rangle + e^{i (2\pi)0.j_2\cdots j_n} |1\rangle }{\sqrt{2}} \right) \otimes \cdots \otimes
+\left( \frac{|0\rangle + e^{i (2\pi)0.j_n} |1\rangle }{\sqrt{2}} \right) \otimes
+|{\rm eigen} \rangle\]</div>
+<p>In other words, binary decimal representation of the phase of the eigenvalue is stored in the phase of each auxiliary qubit, with digits shift one position repeatedly.</p>
+<ol class="arabic" start="2">
+<li><p>the states of the <span class="math notranslate nohighlight">\(n\)</span> auxiliary qubits have exactly the same form as the expression for the result of the quantum Fourier transform studied in <a class="reference internal" href="2.3_quantum_Fourier_transform.html"><span class="doc">section 2-3</span></a>. Thus, when the inverse quantum Fourier transform (<span class="math notranslate nohighlight">\(QFT^\dagger\)</span> in the figure) is applied to these auxiliary qubits, we obtain</p>
+<div class="math notranslate nohighlight">
+\[\left( \frac{|0\rangle + e^{i (2\pi)0.j_1\cdots j_n} |1\rangle }{\sqrt{2}} \right) \otimes
+\left( \frac{|0\rangle + e^{i (2\pi)0.j_2\cdots j_n} |1\rangle }{\sqrt{2}} \right) \otimes \cdots \otimes
+\left( \frac{|0\rangle + e^{i (2\pi)0.j_n} |1\rangle }{\sqrt{2}} \right) \otimes
+\rangle
+\rightarrow |j_1...j_n\rangle\]</div>
+</li>
+</ol>
+<p>Therefore, if we measure the auxiliary qubits at this stage, we can obtain <span class="math notranslate nohighlight">\(j_1, j_2,\cdots,j_n\)</span> with 100% probability and obtain the phase <span class="math notranslate nohighlight">\(\lambda\)</span> of the eigenvalues of <span class="math notranslate nohighlight">\(U\)</span>.</p>
+<p>In summary, the phase estimation algorithm is to <strong>transfer the information on the phase of eigenvalues to the auxiliary quantum bit</strong> by applying a control <span class="math notranslate nohighlight">\(U^{2^k}\)</span> operation with each quantum bit for measurement as a control bit <strong>and then retrieve the phase value by inverse quantum Fourier transform</strong>.</p>
+</section>
+<section id="SymPy-example">
+<h2>SymPy example<a class="headerlink" href="#SymPy-example" title="Link to this heading">¶</a></h2>
+<p>Let’s look at a concrete example using SymPy. 4x4 matrix <span class="math notranslate nohighlight">\(U\)</span> is constructed using T and S operations, and the eigenvalues of this matrix are calculated.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">sympy.physics.quantum</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">sympy.physics.quantum.qubit</span> <span class="kn">import</span> <span class="n">Qubit</span><span class="p">,</span><span class="n">QubitBra</span>
+<span class="n">init_printing</span><span class="p">()</span> <span class="c1"># to show vectors and matrices nicely</span>
+<span class="kn">from</span> <span class="nn">sympy.physics.quantum.gate</span> <span class="kn">import</span> <span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">H</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">CNOT</span><span class="p">,</span><span class="n">SWAP</span><span class="p">,</span><span class="n">CPHASE</span><span class="p">,</span><span class="n">CGateS</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">represent</span><span class="p">(</span><span class="n">T</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">S</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">nqubits</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$$\left[\begin{matrix}1 &amp; 0 &amp; 0 &amp; 0\\0 &amp; e^{\frac{i \pi}{4}} &amp; 0 &amp; 0\\0 &amp; 0 &amp; i &amp; 0\\0 &amp; 0 &amp; 0 &amp; i e^{\frac{i \pi}{4}}\end{matrix}\right]$$</div></div>
+</div>
+<div class="line-block">
+<div class="line">This matrix is already diagonalized, and the eigenvalue phases <span class="math notranslate nohighlight">\(\lambda\)</span> are <span class="math notranslate nohighlight">\(0, \pi/4, \pi/2, 3\pi/4\)</span>, whose binary decimal representations are <span class="math notranslate nohighlight">\((2\pi)0.0, (2\pi)0.001, (2\pi)0.01, (2\pi)0.011\)</span>. Therefore, three auxiliary qubits are needed to measure these without error.</div>
+<div class="line">Using the <code class="docutils literal notranslate"><span class="pre">CGateS</span></code> function, let us define controlled <span class="math notranslate nohighlight">\(U\)</span>-gate <code class="docutils literal notranslate"><span class="pre">cP_2,3,4</span></code> . (2,3,4 correspond to the three auxiliary qubits. 0,1 are the spaces in which <span class="math notranslate nohighlight">\(U\)</span> acts. In the previous schematic of phase estimation, the bits are named 0,1,2,… from the bottom.</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cP_2</span> <span class="o">=</span> <span class="n">CGateS</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">T</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="o">*</span><span class="n">CGateS</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">S</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">cP_3</span> <span class="o">=</span> <span class="n">CGateS</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">T</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="o">*</span><span class="n">CGateS</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">S</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">cP_4</span> <span class="o">=</span> <span class="n">CGateS</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="n">T</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span><span class="o">*</span><span class="n">CGateS</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="n">S</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="line-block">
+<div class="line">Let us construct a phase estimation algorithm using three auxiliary qubits.</div>
+<div class="line">First, Hadamard gate is applied to all auxiliary qubits.</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">PhaEst</span> <span class="o">=</span> <span class="n">H</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="n">H</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">H</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">PhaEst</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$$H_{4} H_{3} H_{2}$$</div></div>
+</div>
+<p>Next, apply the control unitary once, twice, and four times, respectively.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">PhaEst</span> <span class="o">=</span> <span class="n">cP_2</span><span class="o">*</span><span class="n">cP_3</span><span class="o">*</span><span class="n">cP_3</span><span class="o">*</span><span class="n">cP_4</span><span class="o">*</span><span class="n">cP_4</span><span class="o">*</span><span class="n">cP_4</span><span class="o">*</span><span class="n">cP_4</span><span class="o">*</span><span class="n">PhaEst</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="line-block">
+<div class="line">This completes the first half of the phase estimation algorithm. From here, the inverse quantum Fourier transform is constructed.</div>
+<div class="line">First, for the third decimal place, we apply the <span class="math notranslate nohighlight">\(H\)</span> operation to the auxiliary qubit 4.</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">PhaEst</span> <span class="o">=</span> <span class="n">H</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="n">PhaEst</span>
+</pre></div>
+</div>
+</div>
+<p>The auxiliary qubit 3 is first subjected to the control <span class="math notranslate nohighlight">\(R_2^\dagger=S^{-1}=SZ\)</span> operation with auxiliary qubit 4 as the control.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">PhaEst</span> <span class="o">=</span> <span class="n">CGateS</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="n">S</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="o">*</span><span class="n">PhaEst</span>
+<span class="n">PhaEst</span> <span class="o">=</span> <span class="n">CGateS</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="n">Z</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span><span class="o">*</span><span class="n">PhaEst</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<p>The <span class="math notranslate nohighlight">\(H\)</span> operation is then applied.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">PhaEst</span> <span class="o">=</span> <span class="n">H</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">PhaEst</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<p>The three operations are applied to auxiliary qubit 2</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(R_2^\dagger = S^{-1} = SZ\)</span> operation with auxiliary qubit 3 as control qubit</p></li>
+<li><p><span class="math notranslate nohighlight">\(R_3^\dagger = TS^{-1} = TSZ\)</span> operation with auxiliary qubit 4 as control qubit</p></li>
+<li><p><span class="math notranslate nohighlight">\(H\)</span> operation</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">PhaEst</span> <span class="o">=</span> <span class="n">CGateS</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">S</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">PhaEst</span>
+<span class="n">PhaEst</span> <span class="o">=</span> <span class="n">CGateS</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="n">Z</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">PhaEst</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">PhaEst</span> <span class="o">=</span> <span class="n">CGateS</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="n">T</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">PhaEst</span>
+<span class="n">PhaEst</span> <span class="o">=</span> <span class="n">CGateS</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="n">S</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">PhaEst</span>
+<span class="n">PhaEst</span> <span class="o">=</span> <span class="n">CGateS</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="n">Z</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">*</span><span class="n">PhaEst</span>
+<span class="n">PhaEst</span> <span class="o">=</span> <span class="n">H</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">PhaEst</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<p>Let’s apply the phase estimation algorithm constructed in this way to the eigenvectors. The algorithm itself is very complex.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">PhaEst</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$$H_{2} C_{4}{\left(Z_{2}\right)} C_{4}{\left(S_{2}\right)} C_{4}{\left(T_{2}\right)} C_{3}{\left(Z_{2}\right)} C_{3}{\left(S_{2}\right)} H_{3} C_{4}{\left(Z_{3}\right)} C_{4}{\left(S_{3}\right)} H_{4} C_{2}{\left(T_{0}\right)} C_{2}{\left(S_{1}\right)} C_{3}{\left(T_{0}\right)} C_{3}{\left(S_{1}\right)} C_{3}{\left(T_{0}\right)} C_{3}{\left(S_{1}\right)} C_{4}{\left(T_{0}\right)} C_{4}{\left(S_{1}\right)} C_{4}{\left(T_{0}\right)} C_{4}{\left(S_{1}\right)} C_{4}{\left(T_{0}\right)} C_{4}{\left(S_{1}\right)} C_{4}{\left(T_{0}\right)} C_{4}{\left(S_{1}\right)} H_{4} H_{3} H_{2}$$</div></div>
+</div>
+<p>However, when the algorithm act on the input,</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simplify</span><span class="p">(</span><span class="n">qapply</span><span class="p">(</span><span class="n">PhaEst</span><span class="o">*</span><span class="n">Qubit</span><span class="p">(</span><span class="s2">&quot;00011&quot;</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$${\left|11011\right\rangle }$$</div></div>
+</div>
+<p>The output is simple as designed. The input <span class="math notranslate nohighlight">\(|\psi\rangle\)</span> is <span class="math notranslate nohighlight">\(|11\rangle\)</span>, and the corresponding eigenvalue is <span class="math notranslate nohighlight">\(e^{i3\pi/4}\)</span>. The auxiliary qubits 2,3,4 are 011, yielding the binary fraction representation of eigenvalue phase <span class="math notranslate nohighlight">\(\lambda=3\pi/4\)</span> !</p>
+<p>For the other inputs,</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simplify</span><span class="p">(</span><span class="n">qapply</span><span class="p">(</span><span class="n">PhaEst</span><span class="o">*</span><span class="n">Qubit</span><span class="p">(</span><span class="s2">&quot;00000&quot;</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$${\left|00000\right\rangle }$$</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simplify</span><span class="p">(</span><span class="n">qapply</span><span class="p">(</span><span class="n">PhaEst</span><span class="o">*</span><span class="n">Qubit</span><span class="p">(</span><span class="s2">&quot;00010&quot;</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$${\left|01010\right\rangle }$$</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simplify</span><span class="p">(</span><span class="n">qapply</span><span class="p">(</span><span class="n">PhaEst</span><span class="o">*</span><span class="n">Qubit</span><span class="p">(</span><span class="s2">&quot;00001&quot;</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$${\left|10001\right\rangle }$$</div></div>
+</div>
+<p>and it can be verified that the phase information of the four eigenvalues is obtained in the three auxiliary qubits. Also, if the input state is a superposition state,</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simplify</span><span class="p">(</span><span class="n">qapply</span><span class="p">(</span><span class="n">PhaEst</span><span class="o">*</span><span class="n">H</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">H</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">Qubit</span><span class="p">(</span><span class="s2">&quot;00000&quot;</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$$\frac{{\left|00000\right\rangle } + {\left|01010\right\rangle } + {\left|10001\right\rangle } + {\left|11011\right\rangle }}{2}$$</div></div>
+</div>
+<p>For each eigenvector, the phase of the eigenvalue is taken out into three auxiliary qubits as a superposition. Measuring the auxiliary qubits in this state yields any one eigenvector and eigenvalue probabilistically.</p>
+</section>
+<hr class="docutils" />
+<section id="Column:-Prime-Factorization-and-Phase-Estimation-(somewhat-difficult)">
+<h2>Column: Prime Factorization and Phase Estimation (somewhat difficult)<a class="headerlink" href="#Column:-Prime-Factorization-and-Phase-Estimation-(somewhat-difficult)" title="Link to this heading">¶</a></h2>
+<p>An important application of phase estimation is the prime factorization algorithm. The prime factorization problem is to find a non-1 divisor of <span class="math notranslate nohighlight">\(N\)</span> given an <span class="math notranslate nohighlight">\(n\)</span>-digit integer <span class="math notranslate nohighlight">\(N\)</span>. The problem is to find the divisor of <span class="math notranslate nohighlight">\(N\)</span> that is not 1, given an <span class="math notranslate nohighlight">\(n\)</span>-digit integer <span class="math notranslate nohighlight">\(N\)</span>, and no conventional computer algorithm which can solve this problem in polynomial has been found. The computational cost of the current best algorithm is <span class="math">\begin{eqnarray}
+O\left(\exp \left[\frac{64}{9} n (\log n )^2 \right]^{1/3}\right)
+\end{eqnarray}</span> and takes quasi-exponential computation time. RSA ciphers and other cryptosystems that take advantage of the difficulty of such prime factorization problems are also used in everyday life.</p>
+<p>In 1994, P. Shor proved that the prime factorization problem can be solved in polynomial time for <span class="math notranslate nohighlight">\(n\)</span> digits by using a quantum computer. This is the so-called Shor’s prime factorization algorithm.</p>
+<p>Let <span class="math notranslate nohighlight">\(N\)</span> be an integer to be prime factorized. First, find an integer <span class="math notranslate nohighlight">\(x\)</span> that is prime to <span class="math notranslate nohighlight">\(N\)</span>. (<span class="math notranslate nohighlight">\(x\)</span> can be easily found by Euclid’s reciprocal division method. Take <span class="math notranslate nohighlight">\(x\)</span> at random, and calculate the greatest common divisor of <span class="math notranslate nohighlight">\(N\)</span> and <span class="math notranslate nohighlight">\(x\)</span> by Euclid’s reciprocal division. If it is an integer other than 1, you have found a nontrivial divisor of <span class="math notranslate nohighlight">\(N\)</span> and the (prime) factorization is complete. If it is only 1, then <span class="math notranslate nohighlight">\(x\)</span> is an integer that is prime to
+<span class="math notranslate nohighlight">\(N\)</span>.) In this case, let us consider the rank <span class="math notranslate nohighlight">\(r\)</span> of <span class="math notranslate nohighlight">\(x\)</span> with respect to <span class="math notranslate nohighlight">\(N\)</span>.</p>
+<p>The rank <span class="math notranslate nohighlight">\(r\)</span> is the smallest integer satisfying</p>
+<p><span class="math">\begin{eqnarray}
+x^r \equiv 1 \textrm{ (mod $N$)}
+\end{eqnarray}</span></p>
+<p>, and it is known that <span class="math notranslate nohighlight">\(r\)</span> will be even with high probability if <span class="math notranslate nohighlight">\(x\)</span> is chosen at random. If <span class="math notranslate nohighlight">\(r\)</span> is even, the above equation can be transformed as follows.</p>
+<p><span class="math">\begin{eqnarray}
+(x^{r/2} + 1) (x^{r/2} - 1)  \equiv 0  \textrm{ (mod $N$)}
+\end{eqnarray}</span></p>
+<p>This means that either <span class="math notranslate nohighlight">\(x^{r/2} \pm 1 \equiv 0 \: (\textrm{mod} \: N)\)</span> or <span class="math notranslate nohighlight">\(x^{r/2} + 1\)</span> and <span class="math notranslate nohighlight">\(x^{r/2} - 1\)</span> have nontrivial commutations with <span class="math notranslate nohighlight">\(N\)</span> (<strong>factor</strong> of <span class="math notranslate nohighlight">\(N\)</span>). In fact, we can also show that when <span class="math notranslate nohighlight">\(x\)</span> is chosen at random, the probability of the latter is high enough. Therefore, by using Euclid’s reciprocal division of the common divisor between <span class="math notranslate nohighlight">\(x^{r/2} + 1\)</span> or <span class="math notranslate nohighlight">\(x^{r/2} - 1\)</span> and <span class="math notranslate nohighlight">\(N\)</span>, we can eventually find a nontrivial factor of
+<span class="math notranslate nohighlight">\(N\)</span>. By repeating this process, <span class="math notranslate nohighlight">\(N\)</span> can be decomposed into smaller and smaller factors, and finally prime factorization can be achieved.</p>
+<p>And the key rank <span class="math notranslate nohighlight">\(r\)</span> of the prime factorization can be determined by finding the eigenvalues of the unitary matrix corresponding to the classical calculation of multiplying the input <span class="math notranslate nohighlight">\(Y\)</span> by <span class="math notranslate nohighlight">\(X\)</span> under mod <span class="math notranslate nohighlight">\(N\)</span></p>
+<div class="math notranslate nohighlight">
+\[U_x = \sum _y |yx \: \textrm{mod} \: N)\rangle \langle y|\]</div>
+<p>Indeed, using the eigenstate labels <span class="math notranslate nohighlight">\(0 \leq s \leq r-1\)</span>, the eigenvectors can be written down as</p>
+<div class="math notranslate nohighlight">
+\[|u_s\rangle = \frac{1}{\sqrt{r}}
+\sum _{k=0}^{r-1} e^ {-2 \pi i (s/r) k }|x^k (\textrm{mod} \: N)\rangle.\]</div>
+<p>and satisfies the following.</p>
+<div class="math notranslate nohighlight">
+\[U_x |u_s \rangle =  e^{2 \pi i (s/r)} |u_s \rangle\]</div>
+<p>In other words, from the phase estimate of the eigenvalues of <span class="math notranslate nohighlight">\(U_x\)</span>, <span class="math notranslate nohighlight">\(s/r\)</span> can be obtained ,and <span class="math notranslate nohighlight">\(r\)</span> as its denominator (and from that rank <span class="math notranslate nohighlight">\(r\)</span>, <span class="math notranslate nohighlight">\(N\)</span> can be prime factorized by the above procedure). This is the so-called prime factorization algorithm by Shore (a version using Kitaev’s phase estimate).</p>
+<p>(See <code class="docutils literal notranslate"><span class="pre">5.3</span> <span class="pre">Applicaitons:</span> <span class="pre">order-finding</span> <span class="pre">and</span> <span class="pre">factoring</span></code> by Nielsen-Chuang for details.)</p>
+</section>
+<hr class="docutils" />
+<section id="Summary-of-Chapter-2">
+<h2>Summary of Chapter 2<a class="headerlink" href="#Summary-of-Chapter-2" title="Link to this heading">¶</a></h2>
+<p>In Chapter 2, we learned the following.</p>
+<ul class="simple">
+<li><p>What is a quantum algorithm, what is the NISQ algorithm and what is a long-term algorithm</p></li>
+<li><p>The Hadamard test</p></li>
+<li><p>Quantum Fourier transform</p></li>
+<li><p>The phase estimation algorithm</p></li>
+</ul>
+<p>The algorithms learned in this chapter, especially the phase estimation algorithm, are very important for mastering quantum computers and have various applications.</p>
+<ol class="arabic simple">
+<li><p>prime factorization problem: As we saw in the column above, the phase estimation algorithm can be used to estimate a number called the rank, which can be used to perform prime factorization.</p></li>
+<li><p>energy calculation for quantum systems: In quantum mechanics, energy is given by the eigenvalues of a matrix called the Hamiltonian. The energy of the most stable state is given by the smallest eigenvalue, and the stable state by the corresponding eigenvector. Although the Hamiltonian itself is not a unitary matrix, the energy can be calculated by performing a phase estimate on the unitary matrix <span class="math notranslate nohighlight">\(e^{-i H t}\)</span> defined by the exponential function of the matrix, which corresponds to the
+time evolution (<a class="reference internal" href="7.1_quantum_phase_estimation_detailed.html"><span class="doc">Section 7-1</span></a>) .</p></li>
+<li><p>solving a simultaneous linear equation <span class="math notranslate nohighlight">\(Ax=b\)</span>: Using eigenvalues and eigenvectors obtained by phase estimation, the solution to the simultaneous linear equation can be obtained (<a class="reference internal" href="7.2_Harrow-Hassidim-Lloyd_algorithm.html"><span class="doc">Section 7-2</span></a>). Its application to machine learning has also been studied.</p></li>
+</ol>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+</article>
+        <aside class="nftt-toc">
+          
+          <div class="mt-3 mb-1 my-lg-0 ps-xl-3 text-muted">
+            <button class="btn btn-link link-dark p-lg-0 mb-2 mb-lg-0 text-decoration-none nftt-toc-toggle d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents"
+            >On this page <i class="ms-2 bi bi-chevron-expand"></i></button>
+            <div class="title d-none d-lg-block">
+              <i class="bi bi-file-earmark-text"></i>&nbsp;&nbsp;<span class="small">On this page</span>
+            </div>
+            <div class="collapse nftt-toc-collapse" id="tocContents">
+              <nav id="TableOfContents">
+                <ul>
+<li><a class="reference internal" href="#">2-4. Phase Estimation Algorithm (Introduction)</a><ul>
+<li><a class="reference internal" href="#Introduction:-Improving-the-Hadamard-Test">Introduction: Improving the Hadamard Test</a></li>
+<li><a class="reference internal" href="#Phase-Estimation-Algorithm:-Overview">Phase Estimation Algorithm: Overview</a></li>
+<li><a class="reference internal" href="#Phase-Estimation-Algorithm:-Configuration">Phase Estimation Algorithm: Configuration</a></li>
+<li><a class="reference internal" href="#SymPy-example">SymPy example</a></li>
+<li><a class="reference internal" href="#Column:-Prime-Factorization-and-Phase-Estimation-(somewhat-difficult)">Column: Prime Factorization and Phase Estimation (somewhat difficult)</a></li>
+<li><a class="reference internal" href="#Summary-of-Chapter-2">Summary of Chapter 2</a></li>
+</ul>
+</li>
+</ul>
+
+              </nav>
+            </div>
+          </div>
+          
+        </aside>
+      </div>
+    </div>
+
+    <footer class="nftt-footer">
+      <nav id="paginator" class="py-4" aria-label="Documentation navigation">
+    <div class="container">
+      <ul class="pagination justify-content-between mb-0"><li class="page-item">
+            <a href="2.3_quantum_Fourier_transform.html" class="d-flex px-5 align-items-end" rel="prev" aria-label="Previous page: 2-3. Quantum Fourier Transform">
+              <span class="prev-page"><i class="bi bi-caret-left"></i></span>
+              <div class="d-flex flex-column">
+                <span class="text-small text-start text-muted">Previous</span>
+                <span class="underline">2-3. Quantum Fourier Transform</span>
+              </div>
+            </a>
+          </li>
+        <li class="page-item ms-auto">
+            <a href="3_execution_environments_of_quantum_algorithms.html" class="d-flex px-5 align-items-end" rel="next" aria-label="Next page: Chapter 3: Execution Environment for Quantum Algorithms">
+              <div class="d-flex flex-column">
+                <span class="text-small text-end text-start text-muted">Next</span>
+                <span class="underline">Chapter 3: Execution Environment for Quantum Algorithms</span>
+              </div>
+              <span class="next-page"><i class="bi bi-caret-right"></i></span>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </nav>
+
+      <div class="py-5 px-4 px-md-3">
+  <div class="container">
+    
+
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <a class="brand-text d-inline-flex align-items-center mb-2 text-decoration-none" href="/" aria-label="Nefertiti-for-Sphinx">
+          <span class="fs-6 fw-bold">Quantum Native Dojo</span>
+        </a>
+        
+          <ul class="list-unstyled small text-muted">
+            <li>2023, Quantum Native Dojo Contributors</li>
+          </ul>
+        
+        
+        <div class="built-with pt-2">
+          Built with <a href="http://sphinx-doc.org">Sphinx 7.2.6</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.3.0</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+    </footer>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"CommonHTML": {"undefinedFamily": "\"Source Serif Pro\", \"Yakumono\", \"Noto Serif JP\", \"Hiragino Mincho ProN\", \"STIXGeneral\", \"Arial Unicode MS\", serif"}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
+
+    <script type="text/javascript" src="../_static/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinx-nefertiti.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/doc_versions.js"></script>
+  </body>
+</html>

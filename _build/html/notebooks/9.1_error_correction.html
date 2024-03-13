@@ -1,0 +1,891 @@
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+      <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="docsearch:name" content="Quantum Native Dojo" />
+    <meta name="docsearch:package_type" content="" />
+    <meta name="docsearch:release" content="" />
+    <meta name="docsearch:version" content="" />
+    
+      <title>9-1. Classical Error &mdash; Quantum Native Dojo  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-icons.css" type="text/css" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+          <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+          <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+        <link rel="index" title="Index" href="../genindex.html" />
+        <link rel="search" title="Search" href="../search.html" />
+        <link rel="top" title="Quantum Native Dojo  documentation" href="#" />
+        <link rel="up" title="Chapter 9 Quantum Error Correction" href="9_quantum_error_correction.html" />
+        <link rel="next" title="9-2. quantum error" href="9.2_quantum_error_correction.html" />
+        <link rel="prev" title="Chapter 9 Quantum Error Correction" href="9_quantum_error_correction.html" />
+    <style>
+      :root {
+        --nftt-body-font-family: "Nunito", var(--nftt-font-sans-serif) !important;
+        --nftt-font-monospace: "Red Hat Mono", var(--nftt-font-family-monospace) !important;
+        --nftt-project-name-font: var(--nftt-body-font-family);
+        --nftt-documentation-font: var(--nftt-body-font-family);
+        --nftt-doc-headers-font: "Georgia", var(--nftt-documentation-font);}
+      h1 *, h2 *, h3 *, h4 *, h5 *, h6 * { font-size: inherit; }
+    </style>
+  </head>
+  <body>
+    <header class="navbar navbar-expand-xl navbar-dark nftt-navbar flex-column fixed-top">
+      <div class="skip-links container-fluid visually-hidden-focusable overflow-hidden justify-content-start">
+        <div class="border-bottom mb-2 pb-2 w-100">
+          <a class="d-none d-md-inline-flex p-2 m-1" href="#sidebar-filter">Skip to docs navigation</a>
+          <a class="d-inline-flex p-2 m-1" href="#content">Skip to main content</a>
+        </div>
+      </div>
+      <nav class="container-xxl nftt-gutter flex-wrap flex-xl-nowrap" aria-label="Main navigation">
+        <div class="nftt-navbar-toggler">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Toggle documentation navigation">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+          <a href="../index.html"
+              
+              class="navbar-brand p-0 me-0 md-lg-2"
+          ><span class="brand-text">Quantum Native Dojo</span></a>
+        
+        <div class="d-flex d-xl-none">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttSearch" aria-controls="nfttSearch" aria-label="Search">
+            <i class="bi bi-search"></i>
+          </button>
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttNavbar" aria-controls="nfttNavbar" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+        </div>
+        
+<div class="offcanvas-xl offcanvas-end flex-grow-1" tabindex="-1" id="nfttSearch" aria-labelledby="nfttSearchOffcanvasLabel" data-bs-scroll="true">
+  <div class="offcanvas-header px-4 pb-0">
+    <h5 class="offcanvas-title fw-bold" id="nfttSearchOffcanvasLabel">Search the documentation</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttSearch"></button>
+  </div>
+  <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+    <hr class="d-xl-none text-white-50">
+    <ul class="navbar-nav flex-row align-items-center flex-wrap ms-md-auto">
+      <li class="nav-item col-12 col-xl-auto">
+        <form id="nftt-search-form" action="../search.html" method="get">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search docs" aria-label="Search" aria-describedby="button-search">
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+            <button class="btn btn-primary" type="submit" id="button-search" aria-label="Search"><i class="bi bi-search"></i></button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+</div>
+
+        <div class="offcanvas-xl offcanvas-end" tabindex="-1" id="nfttNavbar" aria-labelledby="nfttNavbarOffcanvasLabel" data-bs-scroll="true">
+          <div class="offcanvas-header px-4 pb-0">
+            <div class="offcanvas-title navbar-brand" id="nfttNavbarOffcanvasLabel"><span class="brand-text">Nefertiti for Sphinx</span></div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttNavbar"></button>
+          </div>
+          <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+            <hr class="d-xl-none text-white-50">
+            <ul class="navbar-nav flex-row align-items-center flex-wrap ms-lg-auto">
+              
+              <!-- version_dropdown.html -->
+
+              
+              <!-- colorscheme_dropdown.html -->
+<li class="nav-item dropdown">
+  <a class="nav-link d-flex py-2 px-0 px-xl-2 dropdown-toggle align-items-center" id="snftt-luz" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" aria-label="Toggle light/dark">
+    <i class="bi bi-circle-half" data-snftt-luz-icon-active></i>
+    <span id="snftt-luz-text" class="d-xl-none small ms-2">Toggle light/dark</span>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="snftt-luz-text">
+    <li>
+      <h6 class="dropdown-header">Light/dark</h6>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="light" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-sun" data-snftt-luz-icon="light"></i>
+        </span>
+        <span class="small ms-3">Light</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="dark" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-moon-stars" data-snftt-luz-icon="dark"></i>
+        </span>
+        <span class="small ms-3">Dark</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item current d-flex align-items-center" data-snftt-luz="default" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-circle-half" data-snftt-luz-icon="default"></i>
+        </span>
+        <span class="small ms-3">Default</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+  </ul>
+</li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container-fluid">
+      <div class="nftt-gutter nftt-page">
+        <aside class="nftt-sidebar">
+          <div class="nftt-sidebar-content">
+            <div class="title d-none d-xl-block">
+              <i class="bi bi-book"></i>&nbsp;&nbsp;<span>Index</span>
+            </div>
+            <div id="sidebar" tabindex="-1" class="offcanvas-xl offcanvas-start" aria-labelledby="nfttSidebarOffcanvasLabel">
+                <!-- danirus sidebartemplate: "globaltoc.html" --><div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title fw-bold" id="nfttSidebarOffcanvasLabel">
+    Table of contents
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#sidebar"></button>
+</div>
+
+<div class="offcanvas-body">
+  <nav class="toc" aria-label="Main menu">
+    <div class="mb-3 p-1 pt-3 pb-4 border-bottom">
+      <input id="sidebar-filter" type="text" name="filter" class="form-control form-control-sm" placeholder="filter" aria-label="filter">
+    </div>
+    <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="0_prologue.html">Chapter 0: What is a Quantum Computer ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_quantum_information_foundation.html">Chapter 1: Fundamentals of Quantum Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1.1_qubit_representation.html">1-1. Qubit Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.2_qubit_operations.html">1-2. Qubit Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html">1-3. Multiqubit representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html#Column:-What-is-a-universal-gate-set?">Column: What is a universal gate set?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.4_quantum_circuit_diagram.html">1-4. Quantum Circuit Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2_introduction_to_quantum_algorithms.html">Chapter 2: Introduction to Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2.1_NISQ_and_long_term.html">2-1. NISQ algorithm and long-term algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.2_Hadamard_test.html">2-2. Hadamard test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.3_quantum_Fourier_transform.html">2-3. Quantum Fourier transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.4_phase_estimation_beginner.html">2-4. Phase Estimation Algorithm（Introductory）</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3_execution_environments_of_quantum_algorithms.html">Chapter 3: Execution Environment for Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3.1_Qulacs_tutorial.html">3-1. Qulacs_tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.2_Qiskit_IBMQ.html">3-2. Qiskit_IBMQ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4_quantum_dynamics_simulation.html">Chapter4 Quantum dynamics simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4.1_quantum_simulation.html">4-1. Quantum Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4.2_trotter_decomposition.html">4-2. Trotter Decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5_VQC_based_algorithms.html">Chapter 5 Algorithms Based on Variational Quantum Circuits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5.1_variational_quantum_eigensolver.html">5-1. Variational Quantum Eigensolver（VQE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.2_Quantum_Circuit_Learning.html">5-2. Quantum Circuit Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.3_quantum_approximate_optimazation_algorithm.html">5-3. Quantum Approximate Optimazation Algorithm (QAOA)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6_quantum_chemistry_calculation.html">Chapter 6 Quantum chemistry calculation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="6.1_openfermion_basics.html">6-1. OpenFermion Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7_quantum_phase_estimation.html">chapter 7 Quantum phase estimation algorithm and its application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7.1_quantum_phase_estimation_detailed.html">7-1. Quantum Phase Estimation (QPE) Algorithm Detailed：Hydrogen Molecule as Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.2_Harrow-Hassidim-Lloyd_algorithm.html">7-2. Harrow-Hassidim-Lloyd (HHL) Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.3_application_of_HHL_algorithm.html">7-3. Portofolio Optimization by HHL Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="8_quantum_search_algorithm.html">Chapter 8: Quantum Search Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="8.1_oracle.html">8-1. oracle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8.2_Grovers_algorithm.html">8-2. Grover’s algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="9_quantum_error_correction.html">Chapter 9 Quantum Error Correction</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">9-1. classical error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9.2_quantum_error_correction.html">9-2. quantum error</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav>
+  <template data-toggle-item-template>
+    <button class="btn btn-sm btn-link toctree-expand" type="button">
+      <i class="bi bi-caret-right"></i>
+      <span class="visually-hidden">Toggle menu contents</span>
+    </button>
+  </template>
+</div>
+            </div>
+          </div>
+        </aside>
+        <article id="content" class="nftt-content" role="main">
+    <section id="9-1.-Classical-Error">
+<h1>9-1. Classical Error<a class="headerlink" href="#9-1.-Classical-Error" title="Link to this heading">¶</a></h1>
+<p>Data storage methods can be categorized as volatile, which is initialized over time, or nonvolatile, which, in principle, is virtually non-degradable. Here we consider the memory cells of a DRAM, a type of volatile memory. Modern calculators express binary information of 0,1 in terms of analog continuous quantities of electrons stored in capacitors. (In telecommunications, it is expressed in terms of the number of photons in a certain frequency band or time interval.) Here, the state in which
+energy is stored is 1, and the state in which energy is completely released is 0.</p>
+<p>These analog quantities are not always at a constant value due to external interactions. Electrons are released at a certain rate over time, e.g., due to leakage currents in transistors. Thus, a state of 1 will change to a state of 0 after a while. This change occurs on a non-negligible scale of approximately less than a second in modern devices. This is “an error that occurs at a constant rate due to changes in time, regardless of the presence or absence of an operation”. In classical devices,
+such errors are corrected by “reading the amount of remaining electrons at regular intervals and recharging the battery according to that number, well before 0 and 1 become undeterminable”. This operation is called refreshing, and is performed periodically even if the user does not intend it. Naturally, when the power is turned off, the refresh is no longer performed. This is why DRAM is called volatile memory. When refresh is performed and leakage effects are negligible, the next important
+error factor is transistor malfunction due to neutron radiation. Neutron rays are a type of cosmic ray and are difficult to protect against because they can penetrate metals and other materials. When these neutron rays pass through a transistor, the electric charge generated can cause the transistor to malfunction. Therefore, a neutron beam error is “an error triggered by some operation that occurs uniquely”. If the transistor operates and the gate is released when it is not the read timing, the
+state of the capacitor changes according to the state of the bit line, which is unintended. The probability of a bit being inverted due to this error is small enough to be negligible to the average user, but for very large calculations, it cannot be ignored. If the probability of a neutron line colliding and malfunctioning in unit time per unit bit is <span class="math notranslate nohighlight">\(p\)</span>, then the probability that an <span class="math notranslate nohighlight">\(n\)</span>-bit memory does not change a single bit for <span class="math notranslate nohighlight">\(t\)</span> seconds is <span class="math notranslate nohighlight">\(q = (1-p)^{nt}\)</span>.
+Assuming <span class="math notranslate nohighlight">\(n=10^{12}, t=10^{3}\)</span> and <span class="math notranslate nohighlight">\(q=0.99\)</span>, the probability must be <span class="math notranslate nohighlight">\(p\sim 10^{-18}\)</span>.</p>
+<p>The major difference between a neutron beam error and a leak is that while a leak can be restored if checked immediately, it is impossible to know what state the neutron beam was originally in after it occurs. For this reason, ECC (Error-correcting code) memory with error correction is used in applications where neutron beam errors are a problem, and ECC memory corrects errors up to 1 bit with a small overhead.</p>
+<section id="Classical-error-correction:-majority-rule">
+<h2>Classical error correction: majority rule<a class="headerlink" href="#Classical-error-correction:-majority-rule" title="Link to this heading">¶</a></h2>
+<p>The simplest code is majority voting. In majority rule, individual bits are copied <span class="math notranslate nohighlight">\(d\)</span> times. In this case, <span class="math notranslate nohighlight">\(k\)</span> bits of information are represented by <span class="math notranslate nohighlight">\(n:=dk\)</span> bits. To prevent a majority vote tie, <span class="math notranslate nohighlight">\(d\)</span> is assumed to be an odd number. The <span class="math notranslate nohighlight">\(n\)</span> bits that exist in reality are called physical bits, and the <span class="math notranslate nohighlight">\(k\)</span> bits that are represented as reality are called logical bits.</p>
+<p>Majority voting detects and corrects errors as follows. For each logical bit, the information on the duplicated <span class="math notranslate nohighlight">\(d\)</span> bits is read, and the number of 0s or 1s that are counted. The value with the highest frequency is then determined to have been the value of that logical bit. Whatever the initial value, the encoded state is the same for all values, so if the values of the <span class="math notranslate nohighlight">\(d\)</span> bits do not match even one, we can be sure that some error has occurred. Therefore, unless <span class="math notranslate nohighlight">\(n\)</span> bits are
+inverted in their entirety, an error can always be detected.</p>
+<p>If we want to correct the error, we can obtain the correct result if more than half of the bits retain their correct values. Assuming that each bit has a probability <span class="math notranslate nohighlight">\(p\)</span> of error that is sufficiently smaller than 1, the probability that more than half of the bits have an error is approximately <span class="math notranslate nohighlight">\(p^{\lfloor d/2 \rfloor+1}\)</span>. Thus, we see that for each $2 increase in <span class="math notranslate nohighlight">\(d\)</span>, the probability of a majority vote failing is <span class="math notranslate nohighlight">\(p\)</span> times smaller in order. The code to simulate the
+simplest case of <span class="math notranslate nohighlight">\(k=1\)</span> can be written as follows.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">d</span> <span class="o">=</span> <span class="mi">31</span>
+<span class="n">p</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;original bit: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+<span class="n">is_flipped</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">&lt;</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+<span class="n">state</span> <span class="o">=</span> <span class="p">(</span><span class="n">state</span> <span class="o">+</span> <span class="n">is_flipped</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>
+<span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">state</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">state</span><span class="o">==</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">majority</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">majority</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;decoded bit: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">majority</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+original bit: 1
+decoded bit: 1
+</pre></div></div>
+</div>
+<p>The above will randomly vary in success or failure, but the probability of success can be known as the cumulative binomial distribution with respect to probability <span class="math notranslate nohighlight">\(p\)</span>. Plotting the horizontal axis as the error probability of each bit and the vertical axis as the success probability of decoding for various odd numbers of <span class="math notranslate nohighlight">\(d\)</span>, we obtain the following.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="mi">31</span>
+<span class="n">fail_prob_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">p_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">21</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">p_list</span><span class="p">:</span>
+    <span class="n">fail_prob</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">binomial</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">d</span><span class="o">+</span><span class="mi">2</span><span class="p">):</span>
+        <span class="n">nbin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">nbin</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">binomial</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">p</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="o">&lt;</span><span class="n">m</span><span class="p">:</span>
+                <span class="n">nbin</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">binomial</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">)</span>
+        <span class="n">binomial</span> <span class="o">=</span> <span class="n">nbin</span>
+        <span class="k">if</span> <span class="n">m</span><span class="o">%</span><span class="k">2</span>==0:
+            <span class="n">fail</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">binomial</span><span class="p">[</span><span class="n">m</span><span class="o">//</span><span class="mi">2</span><span class="p">:])</span>
+            <span class="n">fail_prob</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fail</span><span class="p">)</span>
+    <span class="n">fail_prob_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fail_prob</span><span class="p">)</span>
+<span class="n">fail_prob_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fail_prob_list</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span><span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fail_prob_list</span><span class="p">[:</span><span class="mi">6</span><span class="p">]):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p_list</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;n=</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">index</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Error probability per each bit&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Failure probability&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span><span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fail_prob_list</span><span class="o">.</span><span class="n">T</span><span class="p">[:</span><span class="mi">7</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="n">index</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="n">distance_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">((</span><span class="n">d</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">distance_list</span><span class="p">,</span><span class="n">line</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;p=</span><span class="si">{:.3}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">p_list</span><span class="p">[</span><span class="n">index</span><span class="p">]))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mf">1e-5</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;distance&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Failure probability&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_9.1_error_correction_4_0.png" src="../_images/notebooks_9.1_error_correction_4_0.png" />
+</div>
+</div>
+<p>The left graph shows that if <span class="math notranslate nohighlight">\(p\)</span> is below a certain value (0.5 in this case), the performance improves as <span class="math notranslate nohighlight">\(d\)</span> is increased. On the other hand, if <span class="math notranslate nohighlight">\(p\)</span> is above a certain value, increasing <span class="math notranslate nohighlight">\(d\)</span> does not improve the performance, but rather worsens it. This indicates that, in order to perform error correction by majority voting, it is necessary for each device to have at least an error rate below a certain level.</p>
+<p>This behavior is often observed in scaling codes, including quantum codes, and this threshold error probability is called the error threshold. Classical error correction in general is performed at a value much smaller than the error threshold, but quantum error correction is often mentioned because the current errors are around the threshold.</p>
+<p>The graph on the right shows an exponential plot of how much the probability of decoding failure decreases when <span class="math notranslate nohighlight">\(p\)</span> is fixed at a constant value below the threshold and <span class="math notranslate nohighlight">\(d\)</span> is increased. When <span class="math notranslate nohighlight">\(p\)</span> is sufficiently smaller than the threshold value, the probability of decryption failure generally decreases exponentially as <span class="math notranslate nohighlight">\(d\)</span> is increased.</p>
+</section>
+<section id="Linear-Codes">
+<h2>Linear Codes<a class="headerlink" href="#Linear-Codes" title="Link to this heading">¶</a></h2>
+<p>The above majority voting framework is a type of code called a linear code. In the following, majority voting is explained in the framework of linear codes. The operation of making some <span class="math notranslate nohighlight">\(k\)</span> bits of information <span class="math notranslate nohighlight">\(v\)</span> redundant to <span class="math notranslate nohighlight">\(n=dk\)</span> bits of information <span class="math notranslate nohighlight">\(v'\)</span> can be paraphrased as constructing a <span class="math notranslate nohighlight">\(k \times n\)</span> matrix <span class="math notranslate nohighlight">\(G\)</span> as follows and computing <span class="math notranslate nohighlight">\(v' = vG\)</span>. (See also <code class="docutils literal notranslate"><span class="pre">10.4.1</span> <span class="pre">Classical</span> <span class="pre">linear</span> <span class="pre">codes</span></code> in Nielsen-Chuang.)</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">k</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">m</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">n</span> <span class="o">=</span> <span class="n">k</span><span class="o">*</span><span class="n">m</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;original vector: v</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+
+<span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">k</span><span class="p">,</span><span class="n">n</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+    <span class="n">G</span><span class="p">[</span><span class="n">y</span><span class="p">,</span><span class="n">y</span><span class="o">*</span><span class="n">m</span><span class="p">:(</span><span class="n">y</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">m</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;generator matrix: G</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">G</span><span class="p">))</span>
+
+<span class="n">vd</span> <span class="o">=</span> <span class="p">(</span><span class="n">v</span><span class="nd">@G</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;encoded vector: v&#39; = vG</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vd</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+original vector: v
+[0 1 0 1]
+generator matrix: G
+[[1 1 1 0 0 0 0 0 0 0 0 0]
+ [0 0 0 1 1 1 0 0 0 0 0 0]
+ [0 0 0 0 0 0 1 1 1 0 0 0]
+ [0 0 0 0 0 0 0 0 0 1 1 1]]
+encoded vector: v&#39; = vG
+[0 0 0 1 1 1 0 0 0 1 1 1]
+</pre></div></div>
+</div>
+<p>This matrix <span class="math notranslate nohighlight">\(G\)</span> is called the generator matrix.</p>
+<p>Of the <span class="math notranslate nohighlight">\(2^n\)</span> patterns of <span class="math notranslate nohighlight">\(n\)</span> bit sequences to be generated, at most <span class="math notranslate nohighlight">\(2^k\)</span> <span class="math notranslate nohighlight">\(n\)</span> bit sequences created in the form of <span class="math notranslate nohighlight">\(vG\)</span> are called code words. When the set of code words is <span class="math notranslate nohighlight">\(W\)</span>, the minimum Hamming distance between two code words that are <span class="math notranslate nohighlight">\(w \neq w'\)</span> is called the distance of the code (distance). In the current majority rule configuration, the distance of a code is the number <span class="math notranslate nohighlight">\(d\)</span> , how many times individual logical bits to be replicated. If a
+number of bits greater than the distance <span class="math notranslate nohighlight">\(d\)</span> are inverted all at once, they change from one code word to another. Therefore, it becomes difficult to distinguish whether the current code was generated correctly or whether the error occurred on another code. This shows that the condition under which an error can be detected is that the number of bits where the error occurs is less than the distance <span class="math notranslate nohighlight">\(d\)</span>.</p>
+<p>Next, consider an <span class="math notranslate nohighlight">\(n \times (n-k)\)</span> matrix <span class="math notranslate nohighlight">\(H_c\)</span> such that <span class="math notranslate nohighlight">\(GH_c = 0\)</span> under mod 2 and each row vector is independent. In this case, the following <span class="math notranslate nohighlight">\(H_c\)</span> that looks at two adjacent parities every 3 bits satisfies the conditions.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Hc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="o">-</span><span class="n">k</span><span class="p">),</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="n">k</span><span class="p">):</span>
+    <span class="n">Hc</span><span class="p">[</span><span class="n">x</span><span class="o">//</span><span class="mi">2</span><span class="o">*</span><span class="n">m</span><span class="o">+</span><span class="n">x</span><span class="o">%</span><span class="k">2</span>:x//2*m+x%2+2,x]=1
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;check matrix: H</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Hc</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;G Hc = </span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span> <span class="p">(</span><span class="n">G</span><span class="nd">@Hc</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>))
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+check matrix: H
+[[1 0 0 0 0 0 0 0]
+ [1 1 0 0 0 0 0 0]
+ [0 1 0 0 0 0 0 0]
+ [0 0 1 0 0 0 0 0]
+ [0 0 1 1 0 0 0 0]
+ [0 0 0 1 0 0 0 0]
+ [0 0 0 0 1 0 0 0]
+ [0 0 0 0 1 1 0 0]
+ [0 0 0 0 0 1 0 0]
+ [0 0 0 0 0 0 1 0]
+ [0 0 0 0 0 0 1 1]
+ [0 0 0 0 0 0 0 1]]
+G Hc =
+[[0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0]]
+</pre></div></div>
+</div>
+<p>Since the column vectors of <span class="math notranslate nohighlight">\(H_c\)</span> are independent, there are <span class="math notranslate nohighlight">\(2^n / 2^{n-k} = 2^k\)</span> patterns out of <span class="math notranslate nohighlight">\(n\)</span> bit strings <span class="math notranslate nohighlight">\(w\)</span> of <span class="math notranslate nohighlight">\(2^n\)</span> patterns that satisfy <span class="math notranslate nohighlight">\(w H_c = 0\)</span>. Also, the code word <span class="math notranslate nohighlight">\(w\)</span> belonging to the set <span class="math notranslate nohighlight">\(W\)</span> of code words is <span class="math notranslate nohighlight">\(w H_c = v G H_c = 0\)</span>. Therefore, the set <span class="math notranslate nohighlight">\(W\)</span> of code words can be said to be the set of bit strings satisfying <span class="math notranslate nohighlight">\(w H_c = 0\)</span>. At the same time <span class="math notranslate nohighlight">\(n\)</span> bit strings <span class="math notranslate nohighlight">\(w\)</span> are not code words
+<span class="math notranslate nohighlight">\((w \neq W)\)</span>, if <span class="math notranslate nohighlight">\(w H_c \neq 0\)</span>. If <span class="math notranslate nohighlight">\(w \in W\)</span>, and if the vector <span class="math notranslate nohighlight">\(s = w H_c\)</span> is <span class="math notranslate nohighlight">\(0\)</span> only when <span class="math notranslate nohighlight">\(w \in W\)</span>, the vector <span class="math notranslate nohighlight">\(s = w H_c\)</span> is called the <strong>syndrome</strong> of <span class="math notranslate nohighlight">\(w\)</span></p>
+<p>In summary, the set of code words <span class="math notranslate nohighlight">\(W\)</span> can be characterized by any of the two matrices <span class="math notranslate nohighlight">\(G,H_c\)</span> and</p>
+<p><span class="math">\begin{align}
+W &= \left\{w \in \{0,1\}^n \mathrel{}\middle|\mathrel{} \exists v \in \{0,1\}^k , w = vG \right\} \\
+W &= \left\{w \in \{0,1\}^n \mathrel{}\middle|\mathrel{} w H_c = 0 \right\}
+\end{align}</span></p>
+<p>If an error <span class="math notranslate nohighlight">\(e\)</span> occurs after encoding, the state of the code after the error is <span class="math notranslate nohighlight">\(v'+e\)</span>. At this time, the error can be detected by checking whether the syndrome value <span class="math notranslate nohighlight">\(s = (v'+e)H_c\)</span> of <span class="math notranslate nohighlight">\(v'+e\)</span> is all 0. If even one of the syndrome values is not 0, some error has occurred. If the syndrome values are all 0, either no error has occurred or an undetectable <span class="math notranslate nohighlight">\(d\)</span>-bit or greater error has occurred.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;encoded vector: v&#39;</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vd</span><span class="p">))</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">vd</span><span class="p">),</span><span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;error vector: e</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+<span class="n">vde</span> <span class="o">=</span> <span class="p">(</span><span class="n">vd</span><span class="o">+</span><span class="n">e</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;encoded vector with noise: v&#39;+e</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vde</span><span class="p">))</span>
+<span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="n">vde</span><span class="nd">@Hc</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;syndrome values: s = (v&#39;+e)Hc</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+encoded vector: v&#39;
+[0 0 0 1 1 1 0 0 0 1 1 1]
+error vector: e
+[0 0 0 0 0 0 0 0 0 0 0 0]
+encoded vector with noise: v&#39;+e
+[0 0 0 1 1 1 0 0 0 1 1 1]
+syndrome values: s = (v&#39;+e)Hc
+[0 0 0 0 0 0 0 0]
+</pre></div></div>
+</div>
+<p>Because <span class="math notranslate nohighlight">\(GH_c=0\)</span>, <span class="math notranslate nohighlight">\(s =(v'+e)H_c = vGH_c + eH_c = eH_c\)</span>. This means that the syndrome value is independent of the initial state vector <span class="math notranslate nohighlight">\(v\)</span>.</p>
+<p>In making an <span class="math notranslate nohighlight">\(n\)</span>-bit majority decision, we can look at <span class="math notranslate nohighlight">\(v'+e\)</span> from left to right, <span class="math notranslate nohighlight">\(m\)</span> by <span class="math notranslate nohighlight">\(m\)</span>, and make a majority decision.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;encoded vector: v&#39;</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vd</span><span class="p">))</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">vd</span><span class="p">),</span><span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">,</span><span class="n">p</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;error vector: e</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+<span class="n">vde</span> <span class="o">=</span> <span class="p">(</span><span class="n">vd</span><span class="o">+</span><span class="n">e</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;encoded vector with noise: v&#39;+e</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vde</span><span class="p">))</span>
+<span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="n">vde</span><span class="nd">@Hc</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;syndrome values: s = (v&#39;+e)Hc</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+<span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="n">vde</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">m</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+        <span class="n">subset</span> <span class="o">=</span> <span class="n">vde</span><span class="p">[</span><span class="n">x</span><span class="o">*</span><span class="n">m</span><span class="p">:(</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">m</span><span class="p">]</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">subset</span><span class="p">))</span>
+        <span class="n">vde</span><span class="p">[</span><span class="n">x</span><span class="o">*</span><span class="n">m</span><span class="p">:(</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+    <span class="k">return</span> <span class="n">vde</span>
+<span class="n">vde_recovery</span> <span class="o">=</span> <span class="n">decode</span><span class="p">(</span><span class="n">vde</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">m</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;recovered vector: </span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vde_recovery</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+encoded vector: v&#39;
+[0 0 0 1 1 1 0 0 0 1 1 1]
+error vector: e
+[0 0 0 0 0 0 0 0 0 0 0 1]
+encoded vector with noise: v&#39;+e
+[0 0 0 1 1 1 0 0 0 1 1 0]
+syndrome values: s = (v&#39;+e)Hc
+[0 0 0 0 0 0 0 1]
+recovered vector:
+[0 0 0 1 1 1 0 0 0 1 1 1]
+</pre></div></div>
+</div>
+<p>The decoding above can fail as the error is increased, and more than half of the <span class="math notranslate nohighlight">\(M\)</span> is wrong.</p>
+<p>If a vector <span class="math notranslate nohighlight">\(e\)</span> that is not <span class="math notranslate nohighlight">\(0\)</span> with <span class="math notranslate nohighlight">\(e H_c=0\)</span> is generated, such an error cannot be corrected. In other words, when the parity check matrix is <span class="math notranslate nohighlight">\(H_c\)</span>, the distance <span class="math notranslate nohighlight">\(d\)</span> of the sign is</p>
+<div class="math notranslate nohighlight">
+\[d := \min w(e) \, \text{s.t.} \, H_e e = 0\]</div>
+<p><span class="math notranslate nohighlight">\(w(x)\)</span> is the weight of the bitstring <span class="math notranslate nohighlight">\(x\)</span>, i.e., the Hamming distance to <span class="math notranslate nohighlight">\(0\cdots0\)</span>)</p>
+</section>
+<section id="Horizontal-and-Vertical-Parity-Check-Codes">
+<h2>Horizontal and Vertical Parity Check Codes<a class="headerlink" href="#Horizontal-and-Vertical-Parity-Check-Codes" title="Link to this heading">¶</a></h2>
+<p>In real-world error correction, the majority voting method is not used very often due to its poor performance. In this section, we will study the framework of horizontal and vertical parity checking codes as an example of parity checking codes often used in real-world error correction.</p>
+<p>Parity is the remainder of the sum of a given number of bits divided by two, i.e., whether the number of 1’s is even or odd. The parity of (1,1,1) is 1 and the parity of (0,1,1) is 0. Parity checking codes enable error detection and correction by retaining some parity about the data of the original information. If an error occurs in the original information or parity, the error can be detected because the parity values are no longer consistent with the original information.</p>
+<p>The simplest parity checking code is the checksum. When using checksum, for each small block <span class="math notranslate nohighlight">\((x_1,\ldots, x_b)\)</span>, the parity <span class="math notranslate nohighlight">\(p= \sum_i x_i \bmod 2\)</span> of the bit sequence contained in the block is recorded as a checksum. If the bits in the block or the checksum bits are incorrectly recorded by 1 bit during transmission, the parity of the bit sequence contained in the block will be inconsistent with the parity <span class="math notranslate nohighlight">\(p\)</span> to be retained if the parity is recalculated. Thus, we know that a
+bit error occurred somewhere in the block or parity. However, this method cannot tell where the error occurred, nor can it detect an error if a 2-bit error occurred.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">length</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">p</span> <span class="o">=</span> <span class="mf">0.05</span>
+
+<span class="c1"># set random bitarray</span>
+<span class="n">bitstring</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">size</span> <span class="o">=</span> <span class="n">length</span><span class="p">)</span>
+<span class="n">checksum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">bitstring</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;original bitarray: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span> <span class="nb">format</span><span class="p">(</span><span class="n">bitstring</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;checksum: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">checksum</span><span class="p">))</span>
+
+<span class="c1"># error occurs</span>
+<span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">size</span> <span class="o">=</span> <span class="n">length</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">,</span> <span class="n">p</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;error:             </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span> <span class="nb">format</span><span class="p">(</span><span class="n">error</span><span class="p">))</span>
+
+<span class="n">bitstring</span> <span class="o">=</span> <span class="p">(</span><span class="n">bitstring</span> <span class="o">+</span> <span class="n">error</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;noisy bitarray:    </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span> <span class="nb">format</span><span class="p">(</span><span class="n">bitstring</span><span class="p">))</span>
+<span class="n">new_checksum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">bitstring</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;checksum: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">new_checksum</span><span class="p">))</span>
+
+<span class="c1"># verify checksum</span>
+<span class="k">if</span> <span class="n">checksum</span> <span class="o">==</span> <span class="n">new_checksum</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No error detected&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error detected!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+original bitarray: [0 1 0 1 1 1 1 1 0 1 1 1 0 0 0 0]
+checksum: 1
+error:             [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1]
+noisy bitarray:    [0 1 0 1 1 1 1 1 0 1 1 1 0 0 0 1]
+checksum: 0
+Error detected!
+</pre></div></div>
+</div>
+<p>In order to correct as well as detect a single bit error, it must be possible to tell where the error occurred. A naive method to achieve this is a technique called horizontal and vertical parity checking. The target to be protected is a vector of <span class="math notranslate nohighlight">\(k=16\)</span> bits, which is placed in a <span class="math notranslate nohighlight">\(4*4\)</span> matrix. Here, we use <span class="math notranslate nohighlight">\(8\)</span> bits of parity for row vector and column vector. In this case, if an error occurs in <span class="math notranslate nohighlight">\(k\)</span> bits, the parities of one column and row will not match. In this case, the
+data bits matching the unaligned column and row are determined to be inverted. If an error occurs in the row parity bits, the column parities should all match. Thus, if only one parity has an error, we conclude that the parity has been inverted. The same is true for errors in the columns. This way, if a bit error occurs at any location, we can determine the cause if it is a single bit. The distance of this code is 3 bits and <span class="math notranslate nohighlight">\([n,k,d] = [24,16,3]\)</span>. In general, <span class="math notranslate nohighlight">\([w^2+2w,w^2,3]\)</span>. (where
+<span class="math notranslate nohighlight">\([n,k,d]\)</span> is a triplet of numbers that characterize the code, where <span class="math notranslate nohighlight">\(n\)</span> is the number of bits used, <span class="math notranslate nohighlight">\(k\)</span> is the number of bits that can be encoded, and <span class="math notranslate nohighlight">\(d\)</span> is the distance of the code)</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">width</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">height</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">size</span> <span class="o">=</span> <span class="n">width</span><span class="o">*</span><span class="n">height</span>
+<span class="n">p</span> <span class="o">=</span> <span class="mf">0.03</span>
+
+<span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="n">bitmatrix</span><span class="p">,</span> <span class="n">vertical_parity</span><span class="p">,</span> <span class="n">horizontal_parity</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">height</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> | </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bitmatrix</span><span class="p">[</span><span class="n">y</span><span class="p">,:],</span> <span class="n">horizontal_parity</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="o">*</span><span class="n">width</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">vertical_parity</span> <span class="p">))</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># set random bitarray</span>
+<span class="n">bitstring</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;original bitarray: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span> <span class="nb">format</span><span class="p">(</span><span class="n">bitstring</span><span class="p">))</span>
+
+<span class="c1"># check horizontal and vertical parity</span>
+<span class="n">bitmatrix</span> <span class="o">=</span> <span class="n">bitstring</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span> <span class="p">(</span><span class="n">height</span><span class="p">,</span><span class="n">width</span><span class="p">)</span> <span class="p">)</span>
+<span class="n">vertical_parity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">bitmatrix</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>
+<span class="n">horizontal_parity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">bitmatrix</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;stored as : &quot;</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">bitmatrix</span><span class="p">,</span><span class="n">vertical_parity</span><span class="p">,</span> <span class="n">horizontal_parity</span><span class="p">)</span>
+
+<span class="c1"># error occurs</span>
+<span class="n">encoded_size</span> <span class="o">=</span> <span class="n">size</span> <span class="o">+</span> <span class="n">width</span> <span class="o">+</span> <span class="n">height</span>
+<span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">size</span> <span class="o">=</span> <span class="n">encoded_size</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="o">-</span><span class="n">p</span><span class="p">,</span> <span class="n">p</span><span class="p">])</span>
+<span class="n">bitmatrix</span> <span class="o">=</span> <span class="p">(</span><span class="n">bitmatrix</span> <span class="o">+</span> <span class="n">error</span><span class="p">[:</span><span class="n">size</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">height</span><span class="p">,</span><span class="n">width</span><span class="p">)))</span><span class="o">%</span><span class="k">2</span>
+<span class="n">vertical_parity</span> <span class="o">=</span> <span class="p">(</span><span class="n">vertical_parity</span> <span class="o">+</span> <span class="n">error</span><span class="p">[</span><span class="n">size</span><span class="p">:</span><span class="n">size</span><span class="o">+</span><span class="n">width</span><span class="p">])</span><span class="o">%</span><span class="k">2</span>
+<span class="n">horziontal_parity</span> <span class="o">=</span> <span class="p">(</span><span class="n">vertical_parity</span> <span class="o">+</span> <span class="n">error</span><span class="p">[</span><span class="n">size</span><span class="o">+</span><span class="n">width</span><span class="p">:])</span><span class="o">%</span><span class="k">2</span>
+
+<span class="c1"># result</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;result is : &quot;</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">bitmatrix</span><span class="p">,</span><span class="n">vertical_parity</span><span class="p">,</span> <span class="n">horizontal_parity</span><span class="p">)</span>
+
+<span class="c1"># verify checksum</span>
+<span class="n">result_vertical_parity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">bitmatrix</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>
+<span class="n">result_horizontal_parity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">bitmatrix</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>
+<span class="n">vertical_flip_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">result_vertical_parity</span> <span class="o">+</span> <span class="n">vertical_parity</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>)
+<span class="n">horizontal_flip_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">result_horizontal_parity</span> <span class="o">+</span> <span class="n">horizontal_parity</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>)
+
+<span class="k">if</span> <span class="n">vertical_flip_count</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">horizontal_flip_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No error detected&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;decoded bitarray: &quot;</span><span class="p">)</span>
+    <span class="n">show</span><span class="p">(</span><span class="n">bitmatrix</span><span class="p">,</span> <span class="n">result_vertical_parity</span><span class="p">,</span> <span class="n">result_horizontal_parity</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">vertical_flip_count</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">horizontal_flip_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error occurs on vertical parity&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;decoded bitarray: &quot;</span><span class="p">)</span>
+    <span class="n">show</span><span class="p">(</span><span class="n">bitmatrix</span><span class="p">,</span> <span class="n">result_vertical_parity</span><span class="p">,</span> <span class="n">result_horizontal_parity</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">vertical_flip_count</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">horizontal_flip_count</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error occurs on horizontal parity&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;decoded bitarray: &quot;</span><span class="p">)</span>
+    <span class="n">show</span><span class="p">(</span><span class="n">bitmatrix</span><span class="p">,</span> <span class="n">result_vertical_parity</span><span class="p">,</span> <span class="n">result_horizontal_parity</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">vertical_flip_count</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">horizontal_flip_count</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error occurs on data bit&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;decoded bitarray: &quot;</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">((</span><span class="n">result_vertical_parity</span> <span class="o">+</span> <span class="n">vertical_parity</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>)
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">((</span><span class="n">result_horizontal_parity</span> <span class="o">+</span> <span class="n">horizontal_parity</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>)
+    <span class="n">bitmatrix</span><span class="p">[</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">bitmatrix</span><span class="p">[</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="k">2</span>
+    <span class="n">show</span><span class="p">(</span><span class="n">bitmatrix</span><span class="p">,</span> <span class="n">vertical_parity</span><span class="p">,</span> <span class="n">horizontal_parity</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Too many error occurs&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+original bitarray: [1 0 0 1 0 0 0 1 0 0 1 1 1 0 0 0]
+stored as :
+[1 0 0 1] | 0
+[0 0 0 1] | 1
+[0 0 1 1] | 0
+[1 0 0 0] | 1
+--------
+[0 0 1 1]
+
+result is :
+[1 1 0 1] | 0
+[0 0 0 1] | 1
+[0 1 1 1] | 0
+[1 0 0 0] | 1
+--------
+[0 0 1 1]
+
+Too many error occurs
+</pre></div></div>
+</div>
+<p>Similar to majority vote, a generator matrix and an parity check matrix can be considered for horizontal and vertical parity checking codes. For simplicity, consider the case of horizontal and vertical parity checking for 6 (<span class="math notranslate nohighlight">\(2 \times 3\)</span> )bits. Let <span class="math notranslate nohighlight">\(v\)</span> be the horizontal vector of bits to be encoded by horizontal and vertical parity checking. The calculation to observe the <span class="math notranslate nohighlight">\((1,2,3)\)</span>-th parity is equivalent to preparing a vector <span class="math notranslate nohighlight">\(w = (1,1,1,0,0,0,0)\)</span> where only the
+<span class="math notranslate nohighlight">\(1,2,3\)</span>-th is 1 and the others are 0 and calculating the inner product between the vectors <span class="math notranslate nohighlight">\(v w^{\rm T} \bmod 2\)</span>. Thus, the parity bits added to the original data can be generated by applying the matrix <span class="math notranslate nohighlight">\(A\)</span> under mod 2 as follows. Note that mod 2 is omitted in subsequent operations between binary bits unless otherwise noted.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">1</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mi">1</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">1</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mi">1</span> <span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">1</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span> <span class="p">,</span> <span class="mi">1</span> <span class="p">,</span> <span class="mi">1</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span> <span class="p">,</span> <span class="mi">1</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mi">1</span> <span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span> <span class="p">,</span> <span class="mi">1</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mi">0</span> <span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[1 0 1 0 0]
+ [1 0 0 1 0]
+ [1 0 0 0 1]
+ [0 1 1 0 0]
+ [0 1 0 1 0]
+ [0 1 0 0 1]]
+</pre></div></div>
+</div>
+<p>At this time, the vector <span class="math notranslate nohighlight">\(p\)</span> of parity values is <span class="math notranslate nohighlight">\(p = vA\)</span>, and the binary vector after encoding is <span class="math notranslate nohighlight">\(v' = (v, p)\)</span>. Therefore, if we put the <span class="math notranslate nohighlight">\(k \times n\)</span> matrix <span class="math notranslate nohighlight">\(G = (I, A)\)</span> as the generating matrix, then <span class="math notranslate nohighlight">\(v' = v G\)</span>.</p>
+<p>The encoded binary vector has an error <span class="math notranslate nohighlight">\(e\)</span>. Let <span class="math notranslate nohighlight">\(e_v\)</span> be the error in the data part of <span class="math notranslate nohighlight">\(e\)</span> and <span class="math notranslate nohighlight">\(e_p\)</span> be the error in the parity part. The binary vector after the error is <span class="math notranslate nohighlight">\(v'+e = (v+e_v, p+e_p)\)</span>. Horizontal and vertical parity checking determines whether an error has occurred, based on whether the parity values match after the error has occurred.</p>
+<div class="math notranslate nohighlight">
+\[(v + e_v)A = p + e_p\]</div>
+<p>whether this holds or not is equal to whether an error is detected.</p>
+<p>Reorganizing the above formula using <span class="math notranslate nohighlight">\(p=vA\)</span>, the condition under which no error is detected is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}e_v A + e_p = (e_v, e_p) \left(\begin{matrix} A \\ I \end{matrix}\right) = 0\end{split}\]</div>
+<p>Putting the matrix <span class="math notranslate nohighlight">\(H_c\)</span> as <span class="math notranslate nohighlight">\(H_c = \left( \begin{matrix} A \\ I \end{matrix} \right)\)</span>, we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}G H_c = (I, A) \left(\begin{matrix} A \\ I \end{matrix}\right) = A + A = 0\end{split}\]</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">A</span><span class="p">)</span> <span class="p">)</span>
+<span class="n">Hc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span> <span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">A</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;generator matrix: G</span><span class="se">\n</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">G</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;check matrix: Hc </span><span class="se">\n</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Hc</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;GHc = </span><span class="se">\n</span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span> <span class="p">(</span><span class="n">G</span><span class="nd">@Hc</span><span class="p">)</span><span class="o">%</span><span class="k">2</span> ))
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+generator matrix: G
+[[1. 0. 0. 0. 0. 0. 1. 0. 1. 0. 0.]
+ [0. 1. 0. 0. 0. 0. 1. 0. 0. 1. 0.]
+ [0. 0. 1. 0. 0. 0. 1. 0. 0. 0. 1.]
+ [0. 0. 0. 1. 0. 0. 0. 1. 1. 0. 0.]
+ [0. 0. 0. 0. 1. 0. 0. 1. 0. 1. 0.]
+ [0. 0. 0. 0. 0. 1. 0. 1. 0. 0. 1.]]
+
+check matrix: Hc
+[[1. 0. 1. 0. 0.]
+ [1. 0. 0. 1. 0.]
+ [1. 0. 0. 0. 1.]
+ [0. 1. 1. 0. 0.]
+ [0. 1. 0. 1. 0.]
+ [0. 1. 0. 0. 1.]
+ [1. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0.]
+ [0. 0. 1. 0. 0.]
+ [0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 1.]]
+
+GHc =
+[[0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0.]]
+
+</pre></div></div>
+</div>
+<p>Numerically, we can see that <span class="math notranslate nohighlight">\(GH_c = 0\)</span> indeed. Since <span class="math notranslate nohighlight">\(H_c\)</span> is an <span class="math notranslate nohighlight">\(n \times (n-k)\)</span> matrix and the column vectors have submatrices of the identity matrix, they are clearly independent column by column and certainly satisfy the property of parity check matrix.</p>
+<p>In this case, the syndrome value <span class="math notranslate nohighlight">\(s\)</span> is <span class="math notranslate nohighlight">\(s = e H_c\)</span>. When all the syndrome values are 0, the sign determines that no error has occurred. Of course, if a large error has occurred, <span class="math notranslate nohighlight">\(s=0\)</span> and the sign is determined to be error-free even though an error has occurred.</p>
+<p>If <span class="math notranslate nohighlight">\(s \neq 0\)</span>, we know that some error has occurred. To correct the error in this situation, we have to guess <span class="math notranslate nohighlight">\(v\)</span> from the value of <span class="math notranslate nohighlight">\((v'+e)\)</span>. In this case, if there is up to one error, we can identify where the error is with <span class="math notranslate nohighlight">\(O(1)\)</span> by the method shown in the code at the beginning.</p>
+<p>The framework of a parity check code can be summarized as follows.</p>
+<ul class="simple">
+<li><p>Codes: characterized by the generator matrix <span class="math notranslate nohighlight">\(G\)</span> and the parity check matrix <span class="math notranslate nohighlight">\(H_c\)</span>. They satisfy <span class="math notranslate nohighlight">\(GH_c = 0\)</span>.</p></li>
+<li><p>Before coding: <span class="math notranslate nohighlight">\(k\)</span>-bit transversal vector data <span class="math notranslate nohighlight">\(V\)</span>.</p></li>
+<li><p>Encoding: Using the generating matrix <span class="math notranslate nohighlight">\(G\)</span> of <span class="math notranslate nohighlight">\(k \times n\)</span>, the encoded state <span class="math notranslate nohighlight">\(v'\)</span> is <span class="math notranslate nohighlight">\(v'=vG\)</span>.</p></li>
+<li><p>Error: <span class="math notranslate nohighlight">\(n\)</span>-bit sequence <span class="math notranslate nohighlight">\(e\)</span> is randomly added to <span class="math notranslate nohighlight">\(v'\)</span> .</p></li>
+<li><p>Error checking: <span class="math notranslate nohighlight">\(n \times (n-k)\)</span> parity check matrix <span class="math notranslate nohighlight">\(H_c\)</span> is used to obtain the syndrome <span class="math notranslate nohighlight">\(s = e H_c\)</span>. If <span class="math notranslate nohighlight">\(s \neq 0\)</span>, an error can be detected. If <span class="math notranslate nohighlight">\(s=0\)</span>, either no error has occurred or the error is above the limit that can be checked.</p></li>
+<li><p>Error correction: Guess <span class="math notranslate nohighlight">\(k\)</span>-bit transverse vector data <span class="math notranslate nohighlight">\(v\)</span> according to the value of <span class="math notranslate nohighlight">\((v'+e)\)</span>. The algorithm to find <span class="math notranslate nohighlight">\(v\)</span> from <span class="math notranslate nohighlight">\(v'+e\)</span> is called the decoding algorithm.</p></li>
+<li><p>Distance: The minimum weight of <span class="math notranslate nohighlight">\(e\)</span> such that <span class="math notranslate nohighlight">\(e H_c = 0\)</span> is the distance <span class="math notranslate nohighlight">\(d\)</span> of the code.</p></li>
+</ul>
+<p>Parity checking code is a very broad framework. For example, a type of parity checking matrix called a Hamming code is used in ECC memory.</p>
+</section>
+<section id="The-Case-of-General-Linear-Codes">
+<h2>The Case of General Linear Codes<a class="headerlink" href="#The-Case-of-General-Linear-Codes" title="Link to this heading">¶</a></h2>
+<p>In the above, we have given specific examples of majority rule, checksum, and horizontal and vertical parity check, but in actual use, we want the best-performing code for our purposes. However, in general, finding the optimal linear code <span class="math notranslate nohighlight">\(G,H_c\)</span> for a given <span class="math notranslate nohighlight">\((n,k,d)\)</span> is a combinatorial problem and is generally difficult.</p>
+<p>Moreover, even if the optimal code <span class="math notranslate nohighlight">\((G,H_c)\)</span> is given, there are problems with decoding. An example of a naive decoding algorithm is minimum distance decoding. That is, when observing the syndrome <span class="math notranslate nohighlight">\(s\)</span>, consider <span class="math notranslate nohighlight">\(e'\)</span> that satisfies <span class="math notranslate nohighlight">\(s = e'H_c\)</span> and causes an error in the least number of bits. Consider this as the error that occurred. We then attempt to recover <span class="math notranslate nohighlight">\((v' + e + e')\)</span> expecting it to be the correct code word. The above optimization is the following
+<span class="math notranslate nohighlight">\(n\)</span>-bit 0,1 programming problem.</p>
+<div class="math notranslate nohighlight">
+\[\min_{e \in \{0,1\}^n} w(e') \, \text{s.t.} \, s = e' H_c\]</div>
+<p>Minimum distance decoding is generally NP-hard for the size of the code. Moreover, this decoding is not always consistent with optimal decoding in practice. On the other hand, if the type of codes and errors that occur are limited, minimum-distance decoding can be performed efficiently, and in many cases this decoding method is close to optimal decoding. For example, majority voting always allows minimum-distance decoding, and horizontal and vertical parity check codes allow minimum-distance
+decoding with <span class="math notranslate nohighlight">\(O(1)\)</span> if the errors that occur are limited to <span class="math notranslate nohighlight">\(w(e)=1\)</span>.</p>
+</section>
+<section id="Operations-on-linear-codes">
+<h2>Operations on linear codes<a class="headerlink" href="#Operations-on-linear-codes" title="Link to this heading">¶</a></h2>
+<p>When information is passed through noisy communication paths, information encoded with parity check codes should be transferred. However, if the computer itself is noisy, computation must be performed with the information encoded with a parity check code. For example, if the CPU itself is noisy and wants to perform calculations in the encoded state, there is no point in encoding if it has to be decoded for each calculation.</p>
+<p>When using the horizontal and vertical parity checking described above, if we perform a bit-flip operation on the <span class="math notranslate nohighlight">\((i,j)\)</span> elements of a matrix, the associated parity values must also be updated to prevent this operation from being detected as an error. In other words, to update <span class="math notranslate nohighlight">\(1\)</span> bits, a <span class="math notranslate nohighlight">\(3\)</span> bit operation is required on the encoded bit sequence.</p>
+<p>Considering the cost of the operation, the fewer the number of bits that must actually be manipulated when manipulating a logical bit, the better. The number of bits that must actually be inverted to invert a logical bit is at most <span class="math notranslate nohighlight">\(\max_i w(G_i)\)</span>. <span class="math notranslate nohighlight">\(G_i\)</span> is the <span class="math notranslate nohighlight">\(i\)</span>-row vector of <span class="math notranslate nohighlight">\(G\)</span>. At the horizontal and vertical parity check, all <span class="math notranslate nohighlight">\(G\)</span> rows have weight of 3.</p>
+</section>
+<section id="Low-density-parity-check-codes">
+<h2>Low-density parity check codes<a class="headerlink" href="#Low-density-parity-check-codes" title="Link to this heading">¶</a></h2>
+<p>When the time available for communication is limited, such as communication with outer space, or when the communication channel must be poor, we want to send a large amount of data at a rate as close to the limit as possible. This motivates us to create codes with the lowest logical error rate per bit to be encoded, even if the computational cost of encoding and decoding can be large.</p>
+<p>If the noise in the communication channel is known, the rate limit of the amount of information that can be transmitted over a noisy communication channel can be calculated as the Shannon limit. This rate implies the performance limit of the code that can be constructed. Low-density parity checking codes are codes that achieve performance close to the Shannon limit.</p>
+<p>Low-density parity checking code is a generic term for parity checking codes in which the <span class="math notranslate nohighlight">\(H_c\)</span> checking matrix is a sparse matrix. A sparse matrix here means that the number of <span class="math notranslate nohighlight">\(1\)</span> in each column is at most <span class="math notranslate nohighlight">\(O(k)\)</span>. This means that each syndrome value can be represented by a parity of <span class="math notranslate nohighlight">\(O(k)\)</span> bits of errors.</p>
+<p>The advantage of low-density parity checking codes is that their performance is close to the Shannon limit. On the other hand, the disadvantage of low-density parity checking codes is the computational difficulty of decoding. To circumvent this difficulty, approximate algorithms such as the trust propagation method are often used for decoding.</p>
+<p>In the trust propagation method, the following graph is considered. Consider a bit after encoding as a node. When a parity value contains the error of a certain data bit as part of the parity, an undirected edge is stretched from the node of the corresponding parity bit to the node of the data bit. Thus, an undirected graph <span class="math notranslate nohighlight">\(G(V,E)\)</span> of <span class="math notranslate nohighlight">\(n\)</span> vertices connected by <span class="math notranslate nohighlight">\(nO(k)\)</span> edges is completed. The confidence propagation method repeats sequential optimization on this graph until the
+state becomes post-signed. It is known that the performance of the confidence propagation method is better the larger the minimum loop in the graph <span class="math notranslate nohighlight">\(G\)</span> is. Therefore, various methods of constructing low-density parity checking codes have been proposed to construct such graphs.</p>
+</section>
+</section>
+
+</article>
+        <aside class="nftt-toc">
+          
+          <div class="mt-3 mb-1 my-lg-0 ps-xl-3 text-muted">
+            <button class="btn btn-link link-dark p-lg-0 mb-2 mb-lg-0 text-decoration-none nftt-toc-toggle d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents"
+            >On this page <i class="ms-2 bi bi-chevron-expand"></i></button>
+            <div class="title d-none d-lg-block">
+              <i class="bi bi-file-earmark-text"></i>&nbsp;&nbsp;<span class="small">On this page</span>
+            </div>
+            <div class="collapse nftt-toc-collapse" id="tocContents">
+              <nav id="TableOfContents">
+                <ul>
+<li><a class="reference internal" href="#">9-1. Classical Error</a><ul>
+<li><a class="reference internal" href="#Classical-error-correction:-majority-rule">Classical error correction: majority rule</a></li>
+<li><a class="reference internal" href="#Linear-Codes">Linear Codes</a></li>
+<li><a class="reference internal" href="#Horizontal-and-Vertical-Parity-Check-Codes">Horizontal and Vertical Parity Check Codes</a></li>
+<li><a class="reference internal" href="#The-Case-of-General-Linear-Codes">The Case of General Linear Codes</a></li>
+<li><a class="reference internal" href="#Operations-on-linear-codes">Operations on linear codes</a></li>
+<li><a class="reference internal" href="#Low-density-parity-check-codes">Low-density parity check codes</a></li>
+</ul>
+</li>
+</ul>
+
+              </nav>
+            </div>
+          </div>
+          
+        </aside>
+      </div>
+    </div>
+
+    <footer class="nftt-footer">
+      <nav id="paginator" class="py-4" aria-label="Documentation navigation">
+    <div class="container">
+      <ul class="pagination justify-content-between mb-0"><li class="page-item">
+            <a href="9_quantum_error_correction.html" class="d-flex px-5 align-items-end" rel="prev" aria-label="Previous page: Chapter 9 Quantum Error Correction">
+              <span class="prev-page"><i class="bi bi-caret-left"></i></span>
+              <div class="d-flex flex-column">
+                <span class="text-small text-start text-muted">Previous</span>
+                <span class="underline">Chapter 9 Quantum Error Correction</span>
+              </div>
+            </a>
+          </li>
+        <li class="page-item ms-auto">
+            <a href="9.2_quantum_error_correction.html" class="d-flex px-5 align-items-end" rel="next" aria-label="Next page: 9-2. quantum error">
+              <div class="d-flex flex-column">
+                <span class="text-small text-end text-start text-muted">Next</span>
+                <span class="underline">9-2. quantum error</span>
+              </div>
+              <span class="next-page"><i class="bi bi-caret-right"></i></span>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </nav>
+
+      <div class="py-5 px-4 px-md-3">
+  <div class="container">
+    
+
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <a class="brand-text d-inline-flex align-items-center mb-2 text-decoration-none" href="/" aria-label="Nefertiti-for-Sphinx">
+          <span class="fs-6 fw-bold">Quantum Native Dojo</span>
+        </a>
+        
+          <ul class="list-unstyled small text-muted">
+            <li>2023, Quantum Native Dojo Contributors</li>
+          </ul>
+        
+        
+        <div class="built-with pt-2">
+          Built with <a href="http://sphinx-doc.org">Sphinx 7.2.6</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.3.0</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+    </footer>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"CommonHTML": {"undefinedFamily": "\"Source Serif Pro\", \"Yakumono\", \"Noto Serif JP\", \"Hiragino Mincho ProN\", \"STIXGeneral\", \"Arial Unicode MS\", serif"}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
+
+    <script type="text/javascript" src="../_static/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinx-nefertiti.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/doc_versions.js"></script>
+  </body>
+</html>

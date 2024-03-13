@@ -1,0 +1,1327 @@
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+      <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="docsearch:name" content="Quantum Native Dojo" />
+    <meta name="docsearch:package_type" content="" />
+    <meta name="docsearch:release" content="" />
+    <meta name="docsearch:version" content="" />
+    
+      <title>1-3. Multiqubit representation &mdash; Quantum Native Dojo  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-icons.css" type="text/css" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+          <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+          <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+        <link rel="index" title="Index" href="../genindex.html" />
+        <link rel="search" title="Search" href="../search.html" />
+        <link rel="top" title="Quantum Native Dojo  documentation" href="#" />
+        <link rel="up" title="Chapter 1: Fundamentals of Quantum Information" href="1_quantum_information_foundation.html" />
+        <link rel="next" title="1-4. Quantum circuit diagram" href="1.4_quantum_circuit_diagram.html" />
+        <link rel="prev" title="1-2. Basic operations on qubits" href="1.2_qubit_operations.html" />
+    <style>
+      :root {
+        --nftt-body-font-family: "Nunito", var(--nftt-font-sans-serif) !important;
+        --nftt-font-monospace: "Red Hat Mono", var(--nftt-font-family-monospace) !important;
+        --nftt-project-name-font: var(--nftt-body-font-family);
+        --nftt-documentation-font: var(--nftt-body-font-family);
+        --nftt-doc-headers-font: "Georgia", var(--nftt-documentation-font);}
+      h1 *, h2 *, h3 *, h4 *, h5 *, h6 * { font-size: inherit; }
+    </style>
+  </head>
+  <body>
+    <header class="navbar navbar-expand-xl navbar-dark nftt-navbar flex-column fixed-top">
+      <div class="skip-links container-fluid visually-hidden-focusable overflow-hidden justify-content-start">
+        <div class="border-bottom mb-2 pb-2 w-100">
+          <a class="d-none d-md-inline-flex p-2 m-1" href="#sidebar-filter">Skip to docs navigation</a>
+          <a class="d-inline-flex p-2 m-1" href="#content">Skip to main content</a>
+        </div>
+      </div>
+      <nav class="container-xxl nftt-gutter flex-wrap flex-xl-nowrap" aria-label="Main navigation">
+        <div class="nftt-navbar-toggler">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Toggle documentation navigation">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+          <a href="../index.html"
+              
+              class="navbar-brand p-0 me-0 md-lg-2"
+          ><span class="brand-text">Quantum Native Dojo</span></a>
+        
+        <div class="d-flex d-xl-none">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttSearch" aria-controls="nfttSearch" aria-label="Search">
+            <i class="bi bi-search"></i>
+          </button>
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttNavbar" aria-controls="nfttNavbar" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+        </div>
+        
+<div class="offcanvas-xl offcanvas-end flex-grow-1" tabindex="-1" id="nfttSearch" aria-labelledby="nfttSearchOffcanvasLabel" data-bs-scroll="true">
+  <div class="offcanvas-header px-4 pb-0">
+    <h5 class="offcanvas-title fw-bold" id="nfttSearchOffcanvasLabel">Search the documentation</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttSearch"></button>
+  </div>
+  <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+    <hr class="d-xl-none text-white-50">
+    <ul class="navbar-nav flex-row align-items-center flex-wrap ms-md-auto">
+      <li class="nav-item col-12 col-xl-auto">
+        <form id="nftt-search-form" action="../search.html" method="get">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search docs" aria-label="Search" aria-describedby="button-search">
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+            <button class="btn btn-primary" type="submit" id="button-search" aria-label="Search"><i class="bi bi-search"></i></button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+</div>
+
+        <div class="offcanvas-xl offcanvas-end" tabindex="-1" id="nfttNavbar" aria-labelledby="nfttNavbarOffcanvasLabel" data-bs-scroll="true">
+          <div class="offcanvas-header px-4 pb-0">
+            <div class="offcanvas-title navbar-brand" id="nfttNavbarOffcanvasLabel"><span class="brand-text">Nefertiti for Sphinx</span></div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttNavbar"></button>
+          </div>
+          <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+            <hr class="d-xl-none text-white-50">
+            <ul class="navbar-nav flex-row align-items-center flex-wrap ms-lg-auto">
+              
+              <!-- version_dropdown.html -->
+
+              
+              <!-- colorscheme_dropdown.html -->
+<li class="nav-item dropdown">
+  <a class="nav-link d-flex py-2 px-0 px-xl-2 dropdown-toggle align-items-center" id="snftt-luz" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" aria-label="Toggle light/dark">
+    <i class="bi bi-circle-half" data-snftt-luz-icon-active></i>
+    <span id="snftt-luz-text" class="d-xl-none small ms-2">Toggle light/dark</span>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="snftt-luz-text">
+    <li>
+      <h6 class="dropdown-header">Light/dark</h6>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="light" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-sun" data-snftt-luz-icon="light"></i>
+        </span>
+        <span class="small ms-3">Light</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="dark" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-moon-stars" data-snftt-luz-icon="dark"></i>
+        </span>
+        <span class="small ms-3">Dark</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item current d-flex align-items-center" data-snftt-luz="default" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-circle-half" data-snftt-luz-icon="default"></i>
+        </span>
+        <span class="small ms-3">Default</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+  </ul>
+</li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container-fluid">
+      <div class="nftt-gutter nftt-page">
+        <aside class="nftt-sidebar">
+          <div class="nftt-sidebar-content">
+            <div class="title d-none d-xl-block">
+              <i class="bi bi-book"></i>&nbsp;&nbsp;<span>Index</span>
+            </div>
+            <div id="sidebar" tabindex="-1" class="offcanvas-xl offcanvas-start" aria-labelledby="nfttSidebarOffcanvasLabel">
+                <!-- danirus sidebartemplate: "globaltoc.html" --><div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title fw-bold" id="nfttSidebarOffcanvasLabel">
+    Table of contents
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#sidebar"></button>
+</div>
+
+<div class="offcanvas-body">
+  <nav class="toc" aria-label="Main menu">
+    <div class="mb-3 p-1 pt-3 pb-4 border-bottom">
+      <input id="sidebar-filter" type="text" name="filter" class="form-control form-control-sm" placeholder="filter" aria-label="filter">
+    </div>
+    <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="0_prologue.html">Chapter 0: What is a Quantum Computer ?</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="1_quantum_information_foundation.html">Chapter 1: Fundamentals of Quantum Information</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="1.1_qubit_representation.html">1-1. Qubit Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.2_qubit_operations.html">1-2. Qubit Operations</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">1-3. Multiqubit representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Column:-What-is-a-universal-gate-set?">Column: What is a universal gate set?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.4_quantum_circuit_diagram.html">1-4. Quantum Circuit Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2_introduction_to_quantum_algorithms.html">Chapter 2: Introduction to Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2.1_NISQ_and_long_term.html">2-1. NISQ algorithm and long-term algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.2_Hadamard_test.html">2-2. Hadamard test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.3_quantum_Fourier_transform.html">2-3. Quantum Fourier transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.4_phase_estimation_beginner.html">2-4. Phase Estimation Algorithm（Introductory）</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3_execution_environments_of_quantum_algorithms.html">Chapter 3: Execution Environment for Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3.1_Qulacs_tutorial.html">3-1. Qulacs_tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.2_Qiskit_IBMQ.html">3-2. Qiskit_IBMQ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4_quantum_dynamics_simulation.html">Chapter4 Quantum dynamics simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4.1_quantum_simulation.html">4-1. Quantum Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4.2_trotter_decomposition.html">4-2. Trotter Decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5_VQC_based_algorithms.html">Chapter 5 Algorithms Based on Variational Quantum Circuits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5.1_variational_quantum_eigensolver.html">5-1. Variational Quantum Eigensolver（VQE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.2_Quantum_Circuit_Learning.html">5-2. Quantum Circuit Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.3_quantum_approximate_optimazation_algorithm.html">5-3. Quantum Approximate Optimazation Algorithm (QAOA)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6_quantum_chemistry_calculation.html">Chapter 6 Quantum chemistry calculation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="6.1_openfermion_basics.html">6-1. OpenFermion Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7_quantum_phase_estimation.html">chapter 7 Quantum phase estimation algorithm and its application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7.1_quantum_phase_estimation_detailed.html">7-1. Quantum Phase Estimation (QPE) Algorithm Detailed：Hydrogen Molecule as Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.2_Harrow-Hassidim-Lloyd_algorithm.html">7-2. Harrow-Hassidim-Lloyd (HHL) Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.3_application_of_HHL_algorithm.html">7-3. Portofolio Optimization by HHL Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="8_quantum_search_algorithm.html">Chapter 8: Quantum Search Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="8.1_oracle.html">8-1. oracle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8.2_Grovers_algorithm.html">8-2. Grover’s algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="9_quantum_error_correction.html">Chapter 9 Quantum Error Correction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="9.1_error_correction.html">9-1. classical error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9.2_quantum_error_correction.html">9-2. quantum error</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav>
+  <template data-toggle-item-template>
+    <button class="btn btn-sm btn-link toctree-expand" type="button">
+      <i class="bi bi-caret-right"></i>
+      <span class="visually-hidden">Toggle menu contents</span>
+    </button>
+  </template>
+</div>
+            </div>
+          </div>
+        </aside>
+        <article id="content" class="nftt-content" role="main">
+    <section id="1-3.-Multiqubit-representation">
+<h1>1-3. Multiqubit representation<a class="headerlink" href="#1-3.-Multiqubit-representation" title="Link to this heading">¶</a></h1>
+<p>So far we have studied the description of the state of a single qubit and its operations (arithmetic operations). To conclude this chapter, let’s learn about the description of the state when there are <span class="math notranslate nohighlight">\(n\)</span> qubits. It is complicated because of many tensor products, but you can learn it while playing around with the code.</p>
+<p>The state of <span class="math notranslate nohighlight">\(n\)</span> <strong>classical</strong> bits is represented by <span class="math notranslate nohighlight">\(n\)</span> <span class="math notranslate nohighlight">\(0,1\)</span> numbers, and the total number of patterns is <span class="math notranslate nohighlight">\(2^n\)</span>. Since quantum mechanics allows superposition states of all these patterns, the state of <span class="math notranslate nohighlight">\(n\)</span> <strong>quantum</strong> bits <span class="math notranslate nohighlight">\(|\psi \rangle\)</span> is described by <span class="math notranslate nohighlight">\(2^n\)</span> complex probability amplitudes like <span class="math notranslate nohighlight">\(c_{00...0}\)</span>, <span class="math notranslate nohighlight">\(c_{00...1}\)</span> , and so on.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{eqnarray}
+|\psi \rangle &amp;= &amp;
+c_{00...0} |00...0\rangle +
+c_{00...1} |00...1\rangle + \cdots +
+c_{11...1} |11...1\rangle =
+\left(
+\begin{array}{c}
+c_{00...0}
+\\
+c_{00...1}
+\\
+\vdots
+\\
+c_{11...1}
+\end{array}
+\right).
+\end{eqnarray}\end{split}\]</div>
+<p>Please note that the Complex probability amplitudes are normalized.</p>
+<div class="math notranslate nohighlight">
+\[\sum _{i_1,..., i_n} |c_{i_1...i_n}|^2=1\]</div>
+<p>When the quantum state of <span class="math notranslate nohighlight">\(n\)</span> quantum bits are measured, we get bit array <span class="math notranslate nohighlight">\(i_1 ... i_n\)</span> randomly with the following probability.</p>
+<div class="math notranslate nohighlight">
+\[\begin{eqnarray}
+p_{i_1 ... i_n} &amp;=&amp;|c_{i_1 ... i_n}|^2
+\label{eq02}
+\end{eqnarray}\]</div>
+<p>and the post measure state is <span class="math notranslate nohighlight">\(|i_1 \dotsc i_n\rangle\)</span>.</p>
+<div class="line-block">
+<div class="line"><strong>Thus, the state of an :math:`n` qubit must be described by a :math:`2^n` dimensional complex vector that is exponentially large with respect to :math:`n`, and here the difference between a classical bit and a qubit is strikingly apparent</strong>. And operations on <span class="math notranslate nohighlight">\(n\)</span> qubit systems are represented as unitary matrices of <span class="math notranslate nohighlight">\(2^n \times 2^n\)</span> dimensions.</div>
+<div class="line">In other words, a quantum computer is a computer that unitarily transforms a complex vector of exponential size with respect to the number of qubits according to the laws of physics.</div>
+</div>
+<p>*Note here the relationship between the order and notation of multiple qubits. When describing states in kets, the 0s and 1s corresponding to the states of the “first” qubit, the “second” qubit, and so on …… were notated in order from left to right. For example, if you write <span class="math notranslate nohighlight">\(|011\rangle\)</span>, it represents a state where the first qubit is 0, the second qubit is 1, and the third qubit is 1. On the other hand, if we look at the number 011 as a binary number, the upper bits are on the left
+and the lower bits are on the right. That is, the leftmost 0 corresponds to the most significant bit, the <span class="math notranslate nohighlight">\(2^2\)</span>, the middle 1 to the <span class="math notranslate nohighlight">\(2^1\)</span>, and the rightmost 1 to the least significant bit, the <span class="math notranslate nohighlight">\(2^0=1\)</span>. In other words, the “<span class="math notranslate nohighlight">\(i\)</span>th” qubit corresponds to the <span class="math notranslate nohighlight">\(n-i+1\)</span>th digit of the <span class="math notranslate nohighlight">\(n\)</span>-digit binary notation. This should be taken care of when dealing with multiple qubits in packages such as SymPy (see also “Tensor Products of Operators Using SymPy” below).</p>
+<p>(See <code class="docutils literal notranslate"><span class="pre">1.2.1</span> <span class="pre">Multiple</span> <span class="pre">qbits</span></code> in Nielsen-Chuang for details.)</p>
+<section id="Example：2-quantum-bits-case">
+<h2>Example：2 quantum bits case<a class="headerlink" href="#Example：2-quantum-bits-case" title="Link to this heading">¶</a></h2>
+<p>In the case of a two-qubit, there are four possible superpositions of the states 00, 01, 10, and 11, so the states can be written</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}c_{00} |00\rangle + c_{01} |01\rangle + c_{10}|10\rangle + c_{11} |11\rangle  =
+\left(
+\begin{array}{c}
+c_{00}
+\\
+c_{01}
+\\
+c_{10}
+\\
+c_{11}
+\end{array}
+\right)\end{split}\]</div>
+<div class="line-block">
+<div class="line">On the other hand, operations on 2 qubits can be written in <span class="math notranslate nohighlight">\(4 \times 4\)</span> matrices, where each column and each row corresponds to <span class="math notranslate nohighlight">\(\langle00|,\langle01|,\langle10|,\langle11|, |00\rangle,|01\rangle,|10\rangle,\)</span> <span class="math notranslate nohighlight">\(|11\rangle\)</span> .</div>
+<div class="line">The most important operation acting on such two-qubit is the <strong>controlled NOT operation (CNOT operation)</strong> . The matrix representation is below.</div>
+</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{eqnarray}
+\Lambda(X) =
+\left(
+\begin{array}{cccc}
+1 &amp; 0 &amp; 0&amp; 0
+\\
+0 &amp; 1 &amp; 0&amp; 0
+\\
+0 &amp; 0 &amp; 0 &amp; 1
+\\
+0 &amp; 0 &amp; 1&amp; 0
+\end{array}
+\right)
+\end{eqnarray}\end{split}\]</div>
+<p>Let’s see how the CNOT operation works on two qubits. First, if the first qubit is <span class="math notranslate nohighlight">\(|0\rangle\)</span>, the possibility that the first qubit is <span class="math notranslate nohighlight">\(|1\rangle\)</span> is 0 . Therefore, <span class="math notranslate nohighlight">\(c_{10} = c_{11} = 0\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\Lambda(X)
+\left(
+\begin{array}{c}
+c_{00}\\
+c_{01}\\
+0\\
+0
+\end{array}
+\right) =
+\left(
+\begin{array}{c}
+c_{00}\\
+c_{01}\\
+0\\
+0
+\end{array}
+\right)\end{split}\]</div>
+<p>Also, the state do not change when <span class="math notranslate nohighlight">\(\Lambda(X)\)</span> is applied . On the other hand, if the first qubit is <span class="math notranslate nohighlight">\(|1\rangle\)</span>, then <span class="math notranslate nohighlight">\(c_{00} = c_{01} = 0\)</span> .</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\Lambda(X)
+\left(
+\begin{array}{c}
+0\\
+0\\
+c_{10}\\
+c_{11}
+\end{array}
+\right) =
+\left(
+\begin{array}{c}
+0\\
+0\\
+c_{11}\\
+c_{10}
+\end{array}
+\right)\end{split}\]</div>
+<p>The probability amplitudes of the <span class="math notranslate nohighlight">\(|10\rangle\)</span> and <span class="math notranslate nohighlight">\(|11\rangle\)</span> are swapped. In other words, the second qubit is inverted.</p>
+<p>In other words, the CNOT operation keeps the first qubit intact.</p>
+<ul class="simple">
+<li><p>If the first qubit is <span class="math notranslate nohighlight">\(|0\rangle\)</span>, nothing is done to the second qubit (the identity operation <span class="math notranslate nohighlight">\(I\)</span> acts).</p></li>
+<li><p>If the first qubit is <span class="math notranslate nohighlight">\(|1\rangle\)</span>, the second qubit is flipped (<span class="math notranslate nohighlight">\(X\)</span> acts)</p></li>
+</ul>
+<p>Therefore, the first qubit is called the <strong>control qubit</strong> and the second qubit is called the <strong>target qubit</strong>.</p>
+<p>When <span class="math notranslate nohighlight">\(\oplus\)</span> is the addition of mod 2, i.e., the exclusive OR (XOR) in classical computation, the action of this CNOT operation is given by</p>
+<div class="math notranslate nohighlight">
+\[\begin{eqnarray}
+\Lambda(X) |ij \rangle = |i \;\; (i\oplus j)\rangle \:\:\: (i,j=0,1)
+\end{eqnarray}\]</div>
+<p>Conversely, if the second qubit is the control qubit and the first qubit is the target qubit, we can write</p>
+<div class="math notranslate nohighlight">
+\[\begin{eqnarray}
+\color{red}{\Lambda(X) |ij \rangle = |(i\oplus j) \;\;  j\rangle \:\:\: (i,j=0,1)}
+\end{eqnarray}\]</div>
+<p>Thus, the CNOT operation can be regarded as an invertible version of XOR in classical computation (Note that the unitary matrix is invertible by definition <span class="math notranslate nohighlight">\(U^\dagger U = U U^\dagger = I\)</span>). For example, let the first qubit is superposition of <span class="math notranslate nohighlight">\(|0\rangle\)</span> and <span class="math notranslate nohighlight">\(|1\rangle\)</span>, and the second qubit is <span class="math notranslate nohighlight">\(|0\rangle\)</span>. Then</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{eqnarray}
+\frac{1}{\sqrt{2}}(|0\rangle + |1\rangle )\otimes |0\rangle =
+\frac{1}{\sqrt{2}}
+\left(
+\begin{array}{c}
+1
+\\
+0
+\\
+1
+\\
+0
+\end{array}
+\right)
+\end{eqnarray}\end{split}\]</div>
+<p>When CNOT is applied,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{eqnarray}
+\frac{1}{\sqrt{2}}( |00\rangle + |11\rangle ) =
+\frac{1}{\sqrt{2}}
+\left(
+\begin{array}{c}
+1
+\\
+0
+\\
+0
+\\
+1
+\end{array}
+\right)
+\end{eqnarray}\end{split}\]</div>
+<p>we get a superposition of <span class="math notranslate nohighlight">\(|00\rangle\)</span> and <span class="math notranslate nohighlight">\(|11\rangle\)</span>. At $ |00:nbsphinx-math:<cite>rangle`$, the second qubit is intact, while at $ |11:nbsphinx-math:</cite>rangle`$, the second qubit is inverted from $ |0:nbsphinx-math:<cite>rangle`$ to $ |1:nbsphinx-math:</cite>rangle`$. (See next section for the symbol <span class="math notranslate nohighlight">\(\otimes\)</span>.)</p>
+<p>Furthermore, the CNOT gate can be combined to create an important two-qubit gate, the <strong>SWAP gate</strong>.</p>
+<p>A CNOT gate with the <span class="math notranslate nohighlight">\(i\)</span>-th qubit as the control and the <span class="math notranslate nohighlight">\(j\)</span>-th qubit as the target can be written as follows.</p>
+<div class="math notranslate nohighlight">
+\[\Lambda(X)_{i,j}\]</div>
+<p>By using this, SWAP gate can be written as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\mathrm{SWAP} &amp;= \Lambda(X)_{1,2} \Lambda(X)_{2,1} \Lambda(X)_{1,2}\\
+&amp;=
+\left(
+\begin{array}{cccc}
+1 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 1 \\
+0 &amp; 0 &amp; 1 &amp; 0
+\end{array}
+\right)
+\left(
+\begin{array}{cccc}
+1 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 1 \\
+0 &amp; 0 &amp; 1 &amp; 0 \\
+0 &amp; 1 &amp; 0 &amp; 0
+\end{array}
+\right)
+\left(
+\begin{array}{cccc}
+1 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 1 \\
+0 &amp; 0 &amp; 1 &amp; 0
+\end{array}
+\right)\\
+&amp;=
+\left(
+\begin{array}{cccc}
+1 &amp; 0 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 1 &amp; 0 \\
+0 &amp; 1 &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 1
+\end{array}
+\right)
+\end{align}\end{split}\]</div>
+<p>We see that this is the gate which exchanges the first qubit with the second qubit.</p>
+<p>This can be easily verified by the notation above using the addition <span class="math notranslate nohighlight">\(\oplus\)</span> of mod 2. The action of the three CNOT gates <span class="math notranslate nohighlight">\(\Lambda(X)_{1,2} \Lambda(X)_{2,1} \Lambda(X)_{1,2}\)</span> on the <span class="math notranslate nohighlight">\(|ij\rangle\)</span> can be written down step by step, using <span class="math notranslate nohighlight">\(i \oplus (i \oplus j) = (i \oplus i) \oplus j = 0 \oplus j = j\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+|ij\rangle &amp;\longrightarrow
+|i \;\; (i\oplus j)\rangle\\
+&amp;\longrightarrow
+|(i\oplus (i\oplus j)) \;\; (i\oplus j)\rangle =
+|j \;\; (i\oplus j)\rangle\\
+&amp;\longrightarrow
+|j \;\; (j\oplus (i\oplus j))\rangle =
+|ji\rangle
+\end{align}\end{split}\]</div>
+<p>We see that this is the gate which swaps two qubits.</p>
+<p>(See Nielsen-Chuang <code class="docutils literal notranslate"><span class="pre">1.3.2</span> <span class="pre">Multiple</span> <span class="pre">qbit</span> <span class="pre">gates</span></code> for detail)</p>
+</section>
+<section id="Calculating-Tensor-Products">
+<h2>Calculating Tensor Products<a class="headerlink" href="#Calculating-Tensor-Products" title="Link to this heading">¶</a></h2>
+<p>In hand and analytical calculations, the <strong>tensor product</strong> (<span class="math notranslate nohighlight">\(\otimes\)</span>) is a powerful tool. This gives us the rules for the calculation of how, given multiple qubits, to transform them into a large single vector we saw above.</p>
+<p>In quantum mechanics, when you have two quantum systems, each in the states <span class="math notranslate nohighlight">\(|\psi \rangle\)</span> and <span class="math notranslate nohighlight">\(|\phi \rangle\)</span>, we express this as follows.</p>
+<div class="math notranslate nohighlight">
+\[|\psi \rangle \otimes |\phi\rangle\]</div>
+<p>The tensor product <span class="math notranslate nohighlight">\(\otimes\)</span> is used to express the state. Such a system consisting of multiple quantum systems is called a <strong>composite system</strong>. For example, a two-qubit system is a composite system.</p>
+<p>Basically, tensor products may be computed by the same rules of computation as <strong>polynomials</strong>.</p>
+<p>For example, calculation can be done this way.</p>
+<div class="math notranslate nohighlight">
+\[(\alpha |0\rangle + \beta |1\rangle )\otimes (\gamma |0\rangle + \delta |1\rangle )
+= \alpha \gamma |0\rangle |0\rangle + \alpha \delta |0\rangle |1\rangle + \beta \gamma |1 \rangle | 0\rangle + \beta \delta |1\rangle |1\rangle\]</div>
+<p>In column vector representation, we get the 4-dimensional vectors corresponding to <span class="math notranslate nohighlight">\(|00\rangle\)</span>, <span class="math notranslate nohighlight">\(|01\rangle\)</span>, <span class="math notranslate nohighlight">\(|10\rangle\)</span>, <span class="math notranslate nohighlight">\(|11\rangle\)</span> .</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(
+\begin{array}{c}
+\alpha
+\\
+\beta
+\end{array}
+\right)
+\otimes
+\left(
+\begin{array}{c}
+\gamma
+\\
+\delta
+\end{array}
+\right) =
+\left(
+\begin{array}{c}
+\alpha \gamma
+\\
+\alpha \delta
+\\
+\beta \gamma
+\\
+\beta \delta
+\end{array}
+\right)\end{split}\]</div>
+</section>
+<section id="Tensor-product-calculation-using-SymPy">
+<h2>Tensor product calculation using SymPy<a class="headerlink" href="#Tensor-product-calculation-using-SymPy" title="Link to this heading">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">display_png</span>
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">sympy.physics.quantum</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">sympy.physics.quantum.qubit</span> <span class="kn">import</span> <span class="n">Qubit</span><span class="p">,</span><span class="n">QubitBra</span>
+<span class="kn">from</span> <span class="nn">sympy.physics.quantum.gate</span> <span class="kn">import</span> <span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">H</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">CNOT</span><span class="p">,</span><span class="n">SWAP</span><span class="p">,</span> <span class="n">CPHASE</span>
+<span class="n">init_printing</span><span class="p">()</span> <span class="c1"># to show vectors and matrices nicely</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">d</span> <span class="o">=</span> <span class="n">symbols</span><span class="p">(</span><span class="s1">&#39;alpha,beta,gamma,delta&#39;</span><span class="p">)</span>
+<span class="n">psi</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">Qubit</span><span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="p">)</span><span class="o">+</span><span class="n">b</span><span class="o">*</span><span class="n">Qubit</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
+<span class="n">phi</span> <span class="o">=</span> <span class="n">c</span><span class="o">*</span><span class="n">Qubit</span><span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="p">)</span><span class="o">+</span><span class="n">d</span><span class="o">*</span><span class="n">Qubit</span><span class="p">(</span><span class="s1">&#39;1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">TensorProduct</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">phi</span><span class="p">)</span> <span class="c1">#tensor product</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$$\left({\alpha {\left|0\right\rangle } + \beta {\left|1\right\rangle }}\right)\otimes \left({\delta {\left|1\right\rangle } + \gamma {\left|0\right\rangle }}\right)$$</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">represent</span><span class="p">(</span><span class="n">TensorProduct</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">phi</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$$\left[\begin{matrix}\alpha \gamma\\\alpha \delta\\\beta \gamma\\\beta \delta\end{matrix}\right]$$</div></div>
+</div>
+<p>Furthermore, calculating the tensor product of this vector and <span class="math notranslate nohighlight">\(|\psi\rangle\)</span>, we get an 8-dimensional vector</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">represent</span><span class="p">(</span><span class="n">TensorProduct</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span><span class="n">TensorProduct</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="n">phi</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$$\left[\begin{matrix}\alpha^{2} \gamma\\\alpha^{2} \delta\\\alpha \beta \gamma\\\alpha \beta \delta\\\alpha \beta \gamma\\\alpha \beta \delta\\\beta^{2} \gamma\\\beta^{2} \delta\end{matrix}\right]$$</div></div>
+</div>
+</section>
+<section id="Tensor-product-of-operators">
+<h2>Tensor product of operators<a class="headerlink" href="#Tensor-product-of-operators" title="Link to this heading">¶</a></h2>
+<p>The tensor product can be used to express which qubit an operator acts on. For example, if we want to apply the operator <span class="math notranslate nohighlight">\(A\)</span> to the first qubit and the operator <span class="math notranslate nohighlight">\(B\)</span> to the second qubit, then tensor product operator is given as follows</p>
+<div class="math notranslate nohighlight">
+\[A \otimes B\]</div>
+<p>Let <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> be 2×2 matrices, respectively, then <span class="math notranslate nohighlight">\(A\otimes B\)</span> is a 4×4 matrix.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(
+\begin{array}{cc}
+a_{11} &amp; a_{12}
+\\
+a_{21} &amp; a_{22}
+\end{array}
+\right)
+\otimes
+\left(
+\begin{array}{cc}
+b_{11} &amp; b_{12}
+\\
+b_{21} &amp; b_{22}
+\end{array}
+\right) =
+\left(
+\begin{array}{cccc}
+a_{11} b_{11} &amp; a_{11} b_{12} &amp; a_{12} b_{11} &amp; a_{12} b_{12}
+\\
+a_{11} b_{21} &amp; a_{11} b_{22} &amp; a_{12} b_{21} &amp; a_{12} b_{22}
+\\
+a_{21} b_{11} &amp; a_{21} b_{12} &amp; a_{22} b_{11} &amp; a_{22} b_{12}
+\\
+a_{21} b_{21} &amp; a_{21} b_{22} &amp; a_{22} b_{21} &amp; a_{22} b_{22}
+\end{array}
+\right)\end{split}\]</div>
+<p>When $ A :nbsphinx-math:<a href="#id1"><span class="problematic" id="id2">`</span></a>otimes <a href="#id3"><span class="problematic" id="id4">`</span></a>B$ transforms the following Tensor product,</p>
+<div class="math notranslate nohighlight">
+\[|\psi \rangle \otimes | \phi \rangle\]</div>
+<p>we get</p>
+<div class="math notranslate nohighlight">
+\[(A|\psi \rangle ) \otimes (B |\phi \rangle )\]</div>
+<p><span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> act on each of the subsystems <span class="math notranslate nohighlight">\(|\psi \rangle\)</span> and <span class="math notranslate nohighlight">\(|\phi\rangle\)</span>, respectively. For addition, we can expand it like a polynomial.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}(A+C)\otimes (B+D) |\psi \rangle \otimes | \phi \rangle =
+(A \otimes B +A \otimes D + C \otimes B + C \otimes D) |\psi \rangle \otimes | \phi \rangle\\ =
+(A|\psi \rangle) \otimes (B| \phi \rangle)
++(A|\psi \rangle) \otimes (D| \phi \rangle)
++(C|\psi \rangle) \otimes (B| \phi \rangle)
++(C|\psi \rangle) \otimes (D| \phi \rangle)\end{split}\]</div>
+<p>Tensor products and tensor product operators are written horizontally on the left and right, but it may actually be easier to understand how they work if they are arranged vertically.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(
+\begin{array}{c}
+A
+\\
+\otimes
+\\
+B
+\end{array}
+\right)
+\begin{array}{c}
+|\psi \rangle
+\\
+\otimes
+\\
+|\phi\rangle
+\end{array}\end{split}\]</div>
+<p>For example, the entangle state created using the CNOT operation is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(
+\begin{array}{c}
+|0\rangle \langle 0|
+\\
+\otimes
+\\
+I
+\end{array}
++
+\begin{array}{c}
+|1\rangle \langle 1|
+\\
+\otimes
+\\
+X
+\end{array}
+\right)
+\left(
+\begin{array}{c}
+\frac{1}{\sqrt{2}}(|0\rangle + |1\rangle)
+\\
+\otimes
+\\
+|0\rangle
+\end{array}
+\right) =
+\frac{1}{\sqrt{2}}\left(
+\begin{array}{c}
+|0 \rangle
+\\
+\otimes
+\\
+|0\rangle
+\end{array}
++
+\begin{array}{c}
+|1 \rangle
+\\
+\otimes
+\\
+|1\rangle
+\end{array}
+\right)\end{split}\]</div>
+</section>
+<section id="Tensor-product-of-operators-using-SymPy">
+<h2>Tensor product of operators using SymPy<a class="headerlink" href="#Tensor-product-of-operators-using-SymPy" title="Link to this heading">¶</a></h2>
+<p>When using an operator in SymPy, always specify which digit the operator affects. Note that it is not “the <strong>th</strong>” but “the <strong>digit</strong>” in binary notation. When specifying the <span class="math notranslate nohighlight">\(i\)</span>th qubit from the left of the <span class="math notranslate nohighlight">\(n\)</span> qubits with SymPy code, you should specify index <code class="docutils literal notranslate"><span class="pre">n-i</span></code> (Sympy index based on 0).</p>
+<p><code class="docutils literal notranslate"><span class="pre">H(0)</span></code> can be written as follows in one-qubit space</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">represent</span><span class="p">(</span><span class="n">H</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">nqubits</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$$\left[\begin{matrix}\frac{1}{\sqrt{2}} &amp; \frac{1}{\sqrt{2}}\\\frac{1}{\sqrt{2}} &amp; - \frac{\sqrt{2}}{2}\end{matrix}\right]$$</div></div>
+</div>
+<p>In two-qubit space, it corresponds to <span class="math notranslate nohighlight">\(H \otimes I\)</span>, and its matrix representation is</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">represent</span><span class="p">(</span><span class="n">H</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">nqubits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$$\left[\begin{matrix}\frac{1}{\sqrt{2}} &amp; 0 &amp; \frac{1}{\sqrt{2}} &amp; 0\\0 &amp; \frac{1}{\sqrt{2}} &amp; 0 &amp; \frac{1}{\sqrt{2}}\\\frac{1}{\sqrt{2}} &amp; 0 &amp; - \frac{\sqrt{2}}{2} &amp; 0\\0 &amp; \frac{1}{\sqrt{2}} &amp; 0 &amp; - \frac{\sqrt{2}}{2}\end{matrix}\right]$$</div></div>
+</div>
+<p>CNOT operator is</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">represent</span><span class="p">(</span><span class="n">CNOT</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">nqubits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$$\left[\begin{matrix}1 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 1 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 1\\0 &amp; 0 &amp; 1 &amp; 0\end{matrix}\right]$$</div></div>
+</div>
+<p>The tensor product of the Pauli operators <span class="math notranslate nohighlight">\(X \otimes Y \otimes Z\)</span> is</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">represent</span><span class="p">(</span><span class="n">X</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">Y</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">Z</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">nqubits</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$$\left[\begin{matrix}0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; - i &amp; 0\\0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; i\\0 &amp; 0 &amp; 0 &amp; 0 &amp; i &amp; 0 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; - i &amp; 0 &amp; 0\\0 &amp; 0 &amp; - i &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; i &amp; 0 &amp; 0 &amp; 0 &amp; 0\\i &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0\\0 &amp; - i &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0\end{matrix}\right]$$</div></div>
+</div>
+<p>In this way, the above tensor product rules can be tested.</p>
+</section>
+<section id="When-only-a-part-of-multiple-qubits-are-measured">
+<h2>When only a part of multiple qubits are measured<a class="headerlink" href="#When-only-a-part-of-multiple-qubits-are-measured" title="Link to this heading">¶</a></h2>
+<p>The probability of the measurement result when all of the multiple qubits are measured has already been explained. It is also possible to measure only a part of the multiple qubits. In that case, the probability of the measurement result is the square of the length of the vector projected by the (subsystem) basis corresponding to the measurement result, and the state after the measurement is the normalized version of the projected vector.</p>
+<p>Let’s look at this in detail. Consider the following <span class="math notranslate nohighlight">\(n\)</span>-qubit states.</p>
+<p><span class="math">\begin{align}
+|\psi\rangle &=
+c_{00...0} |00...0\rangle +
+c_{00...1} |00...1\rangle + \cdots +
+c_{11...1} |11...1\rangle\\
+&= \sum_{i_1 \dotsc i_n} c_{i_1 \dotsc i_n} |i_1 \dotsc i_n\rangle =
+\sum_{i_1 \dotsc i_n} c_{i_1 \dotsc i_n} |i_1\rangle \otimes \cdots \otimes |i_n\rangle
+\end{align}</span></p>
+<p>Suppose we measure the first qubit, the projection operator on the orthonormal basis <span class="math notranslate nohighlight">\(|0\rangle\)</span> and <span class="math notranslate nohighlight">\(|1\rangle\)</span> of the state space of the first qubit can be written as <span class="math notranslate nohighlight">\(|0\rangle\langle0|\)</span> and <span class="math notranslate nohighlight">\(|1\rangle\langle1|\)</span> respectively. Operator that projects the first qubit onto the <span class="math notranslate nohighlight">\(|0\rangle\)</span> and does nothing to the other qubits is</p>
+<div class="math notranslate nohighlight">
+\[|0\rangle\langle0| \otimes I \otimes \cdots \otimes I\]</div>
+<p>With this operator, the probability of obtaining the measurement value 0 is</p>
+<div class="math notranslate nohighlight">
+\[\bigl\Vert \bigl(|0\rangle\langle0| \otimes I \otimes \cdots \otimes I\bigr) |\psi\rangle \bigr\Vert^2 =
+\langle \psi | \bigl(|0\rangle\langle0| \otimes I \otimes \cdots \otimes I\bigr) | \psi \rangle\]</div>
+<p>Since</p>
+<div class="math notranslate nohighlight">
+\[\bigl(|0\rangle\langle0| \otimes I \otimes \cdots \otimes I\bigr) | \psi \rangle =
+\sum_{i_2 \dotsc i_n} c_{0 i_2 \dotsc i_n} |0\rangle \otimes |i_2\rangle \otimes \cdots \otimes |i_n\rangle\]</div>
+<p>the probability of obtaining 0 is</p>
+<div class="math notranslate nohighlight">
+\[p_0 = \sum_{i_2 \dotsc i_n} |c_{0 i_2 \dotsc i_n}|^2\]</div>
+<p>and the post-measurement state is</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{\sqrt{p_0}}\sum_{i_2 \dotsc i_n} c_{0 i_2 \dotsc i_n} |0\rangle \otimes |i_2\rangle \otimes \cdots \otimes |i_n\rangle\]</div>
+<p>By interchanging 0 and 1, the probability of obtaining the measurement value 1 and the state after the measurement are obtained.</p>
+<p>Let us note that the expressions for <span class="math notranslate nohighlight">\(p_0\)</span> and <span class="math notranslate nohighlight">\(p_1\)</span> obtained here coincide with the peripheral probability distribution of <span class="math notranslate nohighlight">\(i_1\)</span> calculated from the simultaneous probability distribution <span class="math notranslate nohighlight">\(p_{i_1, \dotsc, i_n}\)</span> of the measurement <span class="math notranslate nohighlight">\(i_1, \dotsc, i_n\)</span>. In fact,</p>
+<div class="math notranslate nohighlight">
+\[\sum_{i_2, \dotsc, i_n} p_{i_1, \dotsc, i_n} = \sum_{i_2, \dotsc, i_n} |c_{i_1, \dotsc, i_n}|^2 = p_{i_1}\]</div>
+<p>The same calculation can be done for measuring more qubits, for example, the first <span class="math notranslate nohighlight">\(k\)</span> qubits. The probability of obtaining the measurement result <span class="math notranslate nohighlight">\(i_1, \dotsc, i_k\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[p_{i_1, \dotsc, i_k} = \sum_{i_{k+1}, \dotsc, i_n} |c_{i_1, \dotsc, i_n}|^2\]</div>
+<p>and the post-measurement state is</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{\sqrt{p_{i_1, \dotsc, i_k}}}\sum_{i_{k+1} \dotsc i_n} c_{i_1 \dotsc i_n} |i_1 \rangle \otimes \cdots \otimes |i_n\rangle\]</div>
+<p>(Note that only <span class="math notranslate nohighlight">\(i_{k+1},\cdots,i_n\)</span> are summed up.)</p>
+<p>Let’s look at another example using SymPy. Here, we consider the following state created by combining the H and CNOT operations.</p>
+<div class="math notranslate nohighlight">
+\[|\psi\rangle = \Lambda(X) (H \otimes H) |0\rangle \otimes |0\rangle = \frac{|00\rangle + |10\rangle + |01\rangle + |11\rangle}{2}\]</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">psi</span> <span class="o">=</span> <span class="n">qapply</span><span class="p">(</span><span class="n">CNOT</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">H</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">H</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">Qubit</span><span class="p">(</span><span class="s1">&#39;00&#39;</span><span class="p">))</span>
+<span class="n">psi</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$$\frac{{\left|00\right\rangle }}{2} + \frac{{\left|01\right\rangle }}{2} + \frac{{\left|10\right\rangle }}{2} + \frac{{\left|11\right\rangle }}{2}$$</div></div>
+</div>
+<p>The probability of measuring the first qubit of this state and obtaining zero is</p>
+<div class="math notranslate nohighlight">
+\[p_0 = \langle \psi | \bigl( |0\rangle\langle0| \otimes I \bigr) | \psi \rangle =
+\left(\frac{\langle 00 | + \langle 10 | + \langle 01 | + \langle 11 |}{2}\right)
+\left(\frac{| 00 \rangle + | 01 \rangle}{2}\right) =
+\frac{1}{2}\]</div>
+<p>and the post-measurement state is</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{\sqrt{p_0}} \bigl( |0\rangle\langle0| \otimes I \bigr) | \psi \rangle =
+\frac{| 00 \rangle + | 01 \rangle}{\sqrt{2}}\]</div>
+<p>Let’s calculate this result with SymPy as well. SymPy has several functions for measurements, and we can use <code class="docutils literal notranslate"><span class="pre">measure_partial</span></code> to calculate the probability of measuring some qubits and the state after the measurement. If you pass the state to be measured and the index of the qubit to be measured as arguments, the pairs of the state after the measurement and the probability of the measurement are output as a list. For the post-measurement state and probability when the first qubit is 0, just
+refer to the <code class="docutils literal notranslate"><span class="pre">[0]</span></code> element.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sympy.physics.quantum.qubit</span> <span class="kn">import</span> <span class="n">measure_all</span><span class="p">,</span> <span class="n">measure_partial</span>
+<span class="n">measured_state_and_probability</span> <span class="o">=</span> <span class="n">measure_partial</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">measured_state_and_probability</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<p>It can be seen that the result is consistent with the result calculated manually above. If we do the same calculation for the case when the measurement result is 1, we have</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">measured_state_and_probability</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<script>
+    if (!window.MathJax && window.google && window.google.colab) {
+        window.MathJax = {
+            'tex2jax': {
+                'inlineMath': [['$', '$'], ['\(', '\)']],
+                'displayMath': [['$$', '$$'], ['\[', '\]']],
+                'processEscapes': true,
+                'processEnvironments': true,
+                'skipTags': ['script', 'noscript', 'style', 'textarea', 'code'],
+                'displayAlign': 'center',
+            },
+            'HTML-CSS': {
+                'styles': {'.MathJax_Display': {'margin': 0}},
+                'linebreaks': {'automatic': true},
+                // Disable to prevent OTF font loading, which aren't part of our
+                // distribution.
+                'imageFont': null,
+            },
+           'messageStyle': 'none'
+        };
+        var script = document.createElement("script");
+        script.src = "https://colab.research.google.com/static/mathjax/MathJax.js?config=TeX-AMS_HTML-full,Safe";
+        document.head.appendChild(script);
+    }
+</script></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$$\left ( \frac{\sqrt{2} {\left|10\right\rangle }}{2} + \frac{\sqrt{2} {\left|11\right\rangle }}{2}, \quad \frac{1}{2}\right )$$</div></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="Column:-What-is-a-universal-gate-set?">
+<h1>Column: What is a universal gate set?<a class="headerlink" href="#Column:-What-is-a-universal-gate-set?" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">It is known that in a classical computer, arbitrary logic operations can be performed by combining several NAND gates (the inverted output of a logical product AND).</div>
+<div class="line">What, then, is the counterpart in quantum computation, i.e., what is the minimum quantum gate required to perform an arbitrary quantum computation?</div>
+<div class="line">In fact, the following ones we have learned in this section</div>
+</div>
+<div class="math notranslate nohighlight">
+\[\{H, T, {\rm CNOT} \}\]</div>
+<div class="line-block">
+<div class="line">is known to be the so-called <strong>universal gate set</strong> .</div>
+<div class="line">By combining them well, arbitrary quantum computation can be performed, i.e., “<strong>universal quantum computation</strong>” is possible.</div>
+</div>
+<section id="【Note-for-those-who-want-to-know-more-details】">
+<h2>【Note for those who want to know more details】<a class="headerlink" href="#【Note-for-those-who-want-to-know-more-details】" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">In the following, we will explain step by step how the three types of gates <span class="math notranslate nohighlight">\(\{H, T, {\rm CNOT} \}\)</span> constitute a universal gate set.</div>
+<div class="line">We will start with the general <span class="math notranslate nohighlight">\(N\)</span> qubit unitary operation and break it down into finer components, and see how we finally arrive at the above three types of gates.</div>
+</div>
+<section id="◆-Decomposition-of-n-qubit-unitary-operations">
+<h3>◆ Decomposition of <span class="math notranslate nohighlight">\(n\)</span>-qubit unitary operations<a class="headerlink" href="#◆-Decomposition-of-n-qubit-unitary-operations" title="Link to this heading">¶</a></h3>
+<p>First, any <span class="math notranslate nohighlight">\(n\)</span>-qubit unitary operation can be decomposed into several <strong>1-qubit unitary operations</strong> and <strong>CNOT gates</strong> via the following steps.</p>
+<ol class="arabic simple">
+<li><p>Any <span class="math notranslate nohighlight">\(n\)</span>-qubit unitary operation can be decomposed into a product of several <strong>2-level unitary operations</strong>. Here, a 2-level unitary operation is a unitary operation that acts only on a 2-dimensional subspace of a <span class="math notranslate nohighlight">\(2^3=8\)</span> dimensional space stretched over two bases (e.g., <span class="math notranslate nohighlight">\(\{|000\rangle, |111\rangle \}\)</span>) in the case of 3 qubits, as an example.</p></li>
+<li><p>any two-level unitary operation can be composed of a <strong>control</strong><span class="math notranslate nohighlight">\(U\)</span><strong>gate</strong> (the NOT part of the CNOT gate is replaced by an arbitrary one-qubit unitary operation <span class="math notranslate nohighlight">\(U\)</span>) and a <strong>Toffoli gate</strong> (a generalized version of CNOT gate with two control qubits)</p></li>
+<li><p>both the control <span class="math notranslate nohighlight">\(U\)</span> gate and the Toffoli gate can be constructed from <strong>one qubit unitary operation</strong> and <strong>CNOT gate</strong>.</p></li>
+</ol>
+</section>
+<section id="◆-Composition-of-1-qubit-unitary-operations">
+<h3>◆ Composition of 1-qubit unitary operations<a class="headerlink" href="#◆-Composition-of-1-qubit-unitary-operations" title="Link to this heading">¶</a></h3>
+<p>Furthermore, any 1-qubit unitary operation can be composed of <span class="math notranslate nohighlight">\(\{H, T\}\)</span>.</p>
+<ol class="arabic simple">
+<li><p>Arbitrary 1-qubit unitary operation can be realized (strictly) by a rotation gate <span class="math notranslate nohighlight">\(\{R_X(\theta), R_Z(\theta)\}\)</span> from Euler’s rotation angle law</p></li>
+<li><p>In fact, any rotation on the Bloch sphere can be realized by using only <span class="math notranslate nohighlight">\(\{H, T\}\)</span> (Note 1). This is due to the fact that rotation of an irrational multiple of <span class="math notranslate nohighlight">\(\pi\)</span> about an axis can be realized from only <span class="math notranslate nohighlight">\(\{H, T\}\)</span> (<strong>Solovay-Kitaev algorithm</strong>).</p></li>
+</ol>
+<p>(Note 1) Some readers may wonder how a continuous rotation on the Bloch sphere can be realized by a discrete operation <span class="math notranslate nohighlight">\(\{H, T\}\)</span>. In fact, if one were to realize a strictly one-qubit unitary operation with discrete gate operations, an infinite number of gates would be required. In reality, however, it is not necessary to realize strict unitary operations, and it is sufficient to approximate arbitrary unitary operations with the required computational accuracy <span class="math notranslate nohighlight">\(\epsilon\)</span>. Here, the
+<strong>Solovay-Kitaev theorem</strong> [3] guarantees that by using polynomial number of <span class="math notranslate nohighlight">\(\{H, T\}\)</span>, arbitrary one-qubit unitary operations can be <strong>approximately constructed with good enough accuracy</strong>.</p>
+<p>The above discussion shows that with three types of gates <span class="math notranslate nohighlight">\(\{H, T, {\rm CNOT} \}\)</span>, arbitrary <span class="math notranslate nohighlight">\(n\)</span>-qubit unitary operations can be realized.</p>
+<div class="line-block">
+<div class="line">For more details on universal gate sets and universal quantum computation, see:</div>
+<div class="line">[1] Nielsen-Chuang’s <code class="docutils literal notranslate"><span class="pre">4.5</span> <span class="pre">universal</span> <span class="pre">quantum</span> <span class="pre">gates</span></code>.</div>
+<div class="line">[2] Keisuke Fujii, “Fundamentals of quantum computers and their interface with physics” (Lecture at the 62nd Summer School for Young Physicists) DOI: 10.14989/229039 <a class="reference external" href="http://mercury.yukawa.kyoto-u.ac.jp/~bussei.kenkyu/archives/1274.html">http://mercury.yukawa.kyoto-u.ac.jp/~bussei.kenkyu/archives/1274.html</a></div>
+<div class="line">[3] For review, C. M. Dawson and M. A. Nielsen, “The Solovay-Kitaev algorithm”, <a class="reference external" href="https://arxiv.org/abs/quant-ph/0505030">https://arxiv.org/abs/quant-ph/0505030</a></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+</article>
+        <aside class="nftt-toc">
+          
+          <div class="mt-3 mb-1 my-lg-0 ps-xl-3 text-muted">
+            <button class="btn btn-link link-dark p-lg-0 mb-2 mb-lg-0 text-decoration-none nftt-toc-toggle d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents"
+            >On this page <i class="ms-2 bi bi-chevron-expand"></i></button>
+            <div class="title d-none d-lg-block">
+              <i class="bi bi-file-earmark-text"></i>&nbsp;&nbsp;<span class="small">On this page</span>
+            </div>
+            <div class="collapse nftt-toc-collapse" id="tocContents">
+              <nav id="TableOfContents">
+                <ul>
+<li><a class="reference internal" href="#">1-3. Multiqubit representation</a><ul>
+<li><a class="reference internal" href="#Example：2-quantum-bits-case">Example：2 quantum bits case</a></li>
+<li><a class="reference internal" href="#Calculating-Tensor-Products">Calculating Tensor Products</a></li>
+<li><a class="reference internal" href="#Tensor-product-calculation-using-SymPy">Tensor product calculation using SymPy</a></li>
+<li><a class="reference internal" href="#Tensor-product-of-operators">Tensor product of operators</a></li>
+<li><a class="reference internal" href="#Tensor-product-of-operators-using-SymPy">Tensor product of operators using SymPy</a></li>
+<li><a class="reference internal" href="#When-only-a-part-of-multiple-qubits-are-measured">When only a part of multiple qubits are measured</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Column:-What-is-a-universal-gate-set?">Column: What is a universal gate set?</a><ul>
+<li><a class="reference internal" href="#【Note-for-those-who-want-to-know-more-details】">【Note for those who want to know more details】</a><ul>
+<li><a class="reference internal" href="#◆-Decomposition-of-n-qubit-unitary-operations">◆ Decomposition of <span class="math notranslate nohighlight">\(n\)</span>-qubit unitary operations</a></li>
+<li><a class="reference internal" href="#◆-Composition-of-1-qubit-unitary-operations">◆ Composition of 1-qubit unitary operations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </nav>
+            </div>
+          </div>
+          
+        </aside>
+      </div>
+    </div>
+
+    <footer class="nftt-footer">
+      <nav id="paginator" class="py-4" aria-label="Documentation navigation">
+    <div class="container">
+      <ul class="pagination justify-content-between mb-0"><li class="page-item">
+            <a href="1.2_qubit_operations.html" class="d-flex px-5 align-items-end" rel="prev" aria-label="Previous page: 1-2. Basic operations on qubits">
+              <span class="prev-page"><i class="bi bi-caret-left"></i></span>
+              <div class="d-flex flex-column">
+                <span class="text-small text-start text-muted">Previous</span>
+                <span class="underline">1-2. Basic operations on qubits</span>
+              </div>
+            </a>
+          </li>
+        <li class="page-item ms-auto">
+            <a href="1.4_quantum_circuit_diagram.html" class="d-flex px-5 align-items-end" rel="next" aria-label="Next page: 1-4. Quantum circuit diagram">
+              <div class="d-flex flex-column">
+                <span class="text-small text-end text-start text-muted">Next</span>
+                <span class="underline">1-4. Quantum circuit diagram</span>
+              </div>
+              <span class="next-page"><i class="bi bi-caret-right"></i></span>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </nav>
+
+      <div class="py-5 px-4 px-md-3">
+  <div class="container">
+    
+
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <a class="brand-text d-inline-flex align-items-center mb-2 text-decoration-none" href="/" aria-label="Nefertiti-for-Sphinx">
+          <span class="fs-6 fw-bold">Quantum Native Dojo</span>
+        </a>
+        
+          <ul class="list-unstyled small text-muted">
+            <li>2023, Quantum Native Dojo Contributors</li>
+          </ul>
+        
+        
+        <div class="built-with pt-2">
+          Built with <a href="http://sphinx-doc.org">Sphinx 7.2.6</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.3.0</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+    </footer>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"CommonHTML": {"undefinedFamily": "\"Source Serif Pro\", \"Yakumono\", \"Noto Serif JP\", \"Hiragino Mincho ProN\", \"STIXGeneral\", \"Arial Unicode MS\", serif"}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
+
+    <script type="text/javascript" src="../_static/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinx-nefertiti.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/doc_versions.js"></script>
+  </body>
+</html>

@@ -1,0 +1,701 @@
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+      <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="docsearch:name" content="Quantum Native Dojo" />
+    <meta name="docsearch:package_type" content="" />
+    <meta name="docsearch:release" content="" />
+    <meta name="docsearch:version" content="" />
+    
+      <title>9-2. quantum error &mdash; Quantum Native Dojo  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-icons.css" type="text/css" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+          <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+          <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+        <link rel="index" title="Index" href="../genindex.html" />
+        <link rel="search" title="Search" href="../search.html" />
+        <link rel="top" title="Quantum Native Dojo  documentation" href="#" />
+        <link rel="up" title="Chapter 9 Quantum Error Correction" href="9_quantum_error_correction.html" />
+        <link rel="prev" title="9-1. Classical Error" href="9.1_error_correction.html" />
+    <style>
+      :root {
+        --nftt-body-font-family: "Nunito", var(--nftt-font-sans-serif) !important;
+        --nftt-font-monospace: "Red Hat Mono", var(--nftt-font-family-monospace) !important;
+        --nftt-project-name-font: var(--nftt-body-font-family);
+        --nftt-documentation-font: var(--nftt-body-font-family);
+        --nftt-doc-headers-font: "Georgia", var(--nftt-documentation-font);}
+      h1 *, h2 *, h3 *, h4 *, h5 *, h6 * { font-size: inherit; }
+    </style>
+  </head>
+  <body>
+    <header class="navbar navbar-expand-xl navbar-dark nftt-navbar flex-column fixed-top">
+      <div class="skip-links container-fluid visually-hidden-focusable overflow-hidden justify-content-start">
+        <div class="border-bottom mb-2 pb-2 w-100">
+          <a class="d-none d-md-inline-flex p-2 m-1" href="#sidebar-filter">Skip to docs navigation</a>
+          <a class="d-inline-flex p-2 m-1" href="#content">Skip to main content</a>
+        </div>
+      </div>
+      <nav class="container-xxl nftt-gutter flex-wrap flex-xl-nowrap" aria-label="Main navigation">
+        <div class="nftt-navbar-toggler">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Toggle documentation navigation">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+          <a href="../index.html"
+              
+              class="navbar-brand p-0 me-0 md-lg-2"
+          ><span class="brand-text">Quantum Native Dojo</span></a>
+        
+        <div class="d-flex d-xl-none">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttSearch" aria-controls="nfttSearch" aria-label="Search">
+            <i class="bi bi-search"></i>
+          </button>
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttNavbar" aria-controls="nfttNavbar" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+        </div>
+        
+<div class="offcanvas-xl offcanvas-end flex-grow-1" tabindex="-1" id="nfttSearch" aria-labelledby="nfttSearchOffcanvasLabel" data-bs-scroll="true">
+  <div class="offcanvas-header px-4 pb-0">
+    <h5 class="offcanvas-title fw-bold" id="nfttSearchOffcanvasLabel">Search the documentation</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttSearch"></button>
+  </div>
+  <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+    <hr class="d-xl-none text-white-50">
+    <ul class="navbar-nav flex-row align-items-center flex-wrap ms-md-auto">
+      <li class="nav-item col-12 col-xl-auto">
+        <form id="nftt-search-form" action="../search.html" method="get">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search docs" aria-label="Search" aria-describedby="button-search">
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+            <button class="btn btn-primary" type="submit" id="button-search" aria-label="Search"><i class="bi bi-search"></i></button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+</div>
+
+        <div class="offcanvas-xl offcanvas-end" tabindex="-1" id="nfttNavbar" aria-labelledby="nfttNavbarOffcanvasLabel" data-bs-scroll="true">
+          <div class="offcanvas-header px-4 pb-0">
+            <div class="offcanvas-title navbar-brand" id="nfttNavbarOffcanvasLabel"><span class="brand-text">Nefertiti for Sphinx</span></div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttNavbar"></button>
+          </div>
+          <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+            <hr class="d-xl-none text-white-50">
+            <ul class="navbar-nav flex-row align-items-center flex-wrap ms-lg-auto">
+              
+              <!-- version_dropdown.html -->
+
+              
+              <!-- colorscheme_dropdown.html -->
+<li class="nav-item dropdown">
+  <a class="nav-link d-flex py-2 px-0 px-xl-2 dropdown-toggle align-items-center" id="snftt-luz" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" aria-label="Toggle light/dark">
+    <i class="bi bi-circle-half" data-snftt-luz-icon-active></i>
+    <span id="snftt-luz-text" class="d-xl-none small ms-2">Toggle light/dark</span>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="snftt-luz-text">
+    <li>
+      <h6 class="dropdown-header">Light/dark</h6>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="light" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-sun" data-snftt-luz-icon="light"></i>
+        </span>
+        <span class="small ms-3">Light</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="dark" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-moon-stars" data-snftt-luz-icon="dark"></i>
+        </span>
+        <span class="small ms-3">Dark</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item current d-flex align-items-center" data-snftt-luz="default" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-circle-half" data-snftt-luz-icon="default"></i>
+        </span>
+        <span class="small ms-3">Default</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+  </ul>
+</li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container-fluid">
+      <div class="nftt-gutter nftt-page">
+        <aside class="nftt-sidebar">
+          <div class="nftt-sidebar-content">
+            <div class="title d-none d-xl-block">
+              <i class="bi bi-book"></i>&nbsp;&nbsp;<span>Index</span>
+            </div>
+            <div id="sidebar" tabindex="-1" class="offcanvas-xl offcanvas-start" aria-labelledby="nfttSidebarOffcanvasLabel">
+                <!-- danirus sidebartemplate: "globaltoc.html" --><div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title fw-bold" id="nfttSidebarOffcanvasLabel">
+    Table of contents
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#sidebar"></button>
+</div>
+
+<div class="offcanvas-body">
+  <nav class="toc" aria-label="Main menu">
+    <div class="mb-3 p-1 pt-3 pb-4 border-bottom">
+      <input id="sidebar-filter" type="text" name="filter" class="form-control form-control-sm" placeholder="filter" aria-label="filter">
+    </div>
+    <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="0_prologue.html">Chapter 0: What is a Quantum Computer ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_quantum_information_foundation.html">Chapter 1: Fundamentals of Quantum Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1.1_qubit_representation.html">1-1. Qubit Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.2_qubit_operations.html">1-2. Qubit Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html">1-3. Multiqubit representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html#Column:-What-is-a-universal-gate-set?">Column: What is a universal gate set?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.4_quantum_circuit_diagram.html">1-4. Quantum Circuit Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2_introduction_to_quantum_algorithms.html">Chapter 2: Introduction to Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2.1_NISQ_and_long_term.html">2-1. NISQ algorithm and long-term algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.2_Hadamard_test.html">2-2. Hadamard test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.3_quantum_Fourier_transform.html">2-3. Quantum Fourier transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.4_phase_estimation_beginner.html">2-4. Phase Estimation Algorithm（Introductory）</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3_execution_environments_of_quantum_algorithms.html">Chapter 3: Execution Environment for Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3.1_Qulacs_tutorial.html">3-1. Qulacs_tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.2_Qiskit_IBMQ.html">3-2. Qiskit_IBMQ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4_quantum_dynamics_simulation.html">Chapter4 Quantum dynamics simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4.1_quantum_simulation.html">4-1. Quantum Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4.2_trotter_decomposition.html">4-2. Trotter Decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5_VQC_based_algorithms.html">Chapter 5 Algorithms Based on Variational Quantum Circuits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5.1_variational_quantum_eigensolver.html">5-1. Variational Quantum Eigensolver（VQE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.2_Quantum_Circuit_Learning.html">5-2. Quantum Circuit Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.3_quantum_approximate_optimazation_algorithm.html">5-3. Quantum Approximate Optimazation Algorithm (QAOA)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6_quantum_chemistry_calculation.html">Chapter 6 Quantum chemistry calculation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="6.1_openfermion_basics.html">6-1. OpenFermion Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7_quantum_phase_estimation.html">chapter 7 Quantum phase estimation algorithm and its application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7.1_quantum_phase_estimation_detailed.html">7-1. Quantum Phase Estimation (QPE) Algorithm Detailed：Hydrogen Molecule as Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.2_Harrow-Hassidim-Lloyd_algorithm.html">7-2. Harrow-Hassidim-Lloyd (HHL) Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.3_application_of_HHL_algorithm.html">7-3. Portofolio Optimization by HHL Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="8_quantum_search_algorithm.html">Chapter 8: Quantum Search Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="8.1_oracle.html">8-1. oracle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8.2_Grovers_algorithm.html">8-2. Grover’s algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="9_quantum_error_correction.html">Chapter 9 Quantum Error Correction</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="9.1_error_correction.html">9-1. classical error</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">9-2. quantum error</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav>
+  <template data-toggle-item-template>
+    <button class="btn btn-sm btn-link toctree-expand" type="button">
+      <i class="bi bi-caret-right"></i>
+      <span class="visually-hidden">Toggle menu contents</span>
+    </button>
+  </template>
+</div>
+            </div>
+          </div>
+        </aside>
+        <article id="content" class="nftt-content" role="main">
+    <section id="9-2.-quantum-error">
+<h1>9-2. quantum error<a class="headerlink" href="#9-2.-quantum-error" title="Link to this heading">¶</a></h1>
+<p>The underlying causes of error in the quantum bit itself are actually not that different from those in the classical bit.</p>
+<p>One is the error caused by the leakage of information to the outside at a certain rate due to the interaction with the outside environment. In particular, when reading and writing information with electromagnetic waves such as light or microwaves as a quantum bit, a path must be secured for injecting electromagnetic waves, and a certain amount of information leaks out from there. In addition, even when experimenting with dilution refrigerators, microwaves are greatly affected by thermal noise
+because their energy scale is close to the ambient temperature, which is another source of noise. On the other hand, in the case of using traps such as ions or neutral atoms, in addition to decoherence, errors that cause materials to fall out of the traps are also a problem. When light is used as a quantum bit, the above decoherence is not a problem due to the difference in temperature scales. However, in order to scale optical quantum bits, it is necessary to secure the path by induction or
+mirror reflection using a fiber, and since there are also fluctuations in the laser, the loss of photons and coherence associated with these fluctuations can be a problem. The associated loss of photons and loss of coherence due to the passage of coherence time are effectively the lifetime of the qubit, which occurs even if nothing is done.</p>
+<p>The second is the noise that occurs during manipulation of the device. In the case of microwave operation of devices such as superconducting qubits, errors in the operation include noise due to fluctuations in microwave frequency and power, and bias due to unintended contributions from interaction terms. Such noise can be divided into bias noise, which can be canceled by inversion, and stochastic noise, which is not. The result of noise can also be divided into noise that eventually moves a
+state to either 0 or 1 and leakage, and notise which moves a state to neither 0 nor 1. Noise such as stochastic noise and leakage is more serious in terms of error correction.</p>
+<p>Such errors can in principle be avoided by calibrating the pulses or applying canceling pulses, but calibrating a huge number of bits is extremely difficult. The situation is similar for ions and neutral atoms. When light is used as a qubit, it is manipulated via interactions with optical crystals, which pose different problems from those of matter. First, the universal manipulation of optical qubits requires interactions with third-order or higher nonlinearities, and these higher-order
+nonlinearities are often accompanied by strong absorption. For this reason, we often give up on nondestructive third-order nonlinear operations and perform photon measurement and feedback operations with destruction on entangled photon qubits, and achieve the desired nonlinear operation in the form of gate teleportation. Such operations involve a large overhead compared to mere nondestructive manipulation.</p>
+<p>Also, in operations using electromagnetic waves, the qubits do not move and the electromagnetic waves are sent out with time, so the size of the system does not depend on the time to perform the computation. On the other hand, in the usual experiment using optical qubits, the material is fixed and placed on an optical surface plate, so the number of optical devices used increases in dependence on the computation time. To avoid this, time multiplexing is necessary, in which an optical device is
+used once and then used again through a loop. Such time multiplexing of optical systems is currently the subject of intense research.</p>
+<section id="Quantum-error-correction">
+<h2>Quantum error correction<a class="headerlink" href="#Quantum-error-correction" title="Link to this heading">¶</a></h2>
+<p>Quantum bits are extensions of ordinary bits that allow superposition of states. In quantum error correction, the qubit is made redundant, and the goal is to obtain an effectively small error probability, as in classical error correction. In this case, the nature of qubits makes the situation different from that of many classical codes, and most of them work in the direction that makes quantum error correction difficult.</p>
+<p>Currently proposed quantum error correction methods are, in principle, extensions of linear codes to quantum versions. For confirmation, we restate the framework of linear codes.</p>
+<ul class="simple">
+<li><p>code: Characterized by the generator matrix <span class="math notranslate nohighlight">\(G\)</span> and the parity check matrix matrix <span class="math notranslate nohighlight">\(H_c\)</span>. They satisfy <span class="math notranslate nohighlight">\(GH_c = 0\)</span>.</p></li>
+<li><p>Before coding: <span class="math notranslate nohighlight">\(k\)</span>-bit transversal vector data <span class="math notranslate nohighlight">\(V\)</span>.</p></li>
+<li><p>Encoding: Using the generator matrix <span class="math notranslate nohighlight">\(G\)</span> of <span class="math notranslate nohighlight">\(k \times n\)</span>, the encoded state <span class="math notranslate nohighlight">\(v'\)</span> is <span class="math notranslate nohighlight">\(v'=vG\)</span>.</p></li>
+<li><p>Error: <span class="math notranslate nohighlight">\(n\)</span>-bit sequence <span class="math notranslate nohighlight">\(e\)</span> is randomly added to <span class="math notranslate nohighlight">\(v'\)</span> after encoding.</p></li>
+<li><p>Error checking: <span class="math notranslate nohighlight">\(n \times (n-k)\)</span> parity check <span class="math notranslate nohighlight">\(H_c\)</span> is used to obtain the syndrome <span class="math notranslate nohighlight">\(s = e H_c\)</span>. If <span class="math notranslate nohighlight">\(s \neq 0\)</span>, an error can be detected. If <span class="math notranslate nohighlight">\(s=0\)</span>, either no error has occurred or the error is above the limit that can be inspected.</p></li>
+<li><p>Error correction: Guess <span class="math notranslate nohighlight">\(k\)</span>-bit transverse vector data <span class="math notranslate nohighlight">\(v\)</span> according to the value of <span class="math notranslate nohighlight">\((v'+e)\)</span>. The algorithm to find <span class="math notranslate nohighlight">\(v\)</span> from <span class="math notranslate nohighlight">\(v'+e\)</span> is called the decoding algorithm.</p></li>
+<li><p>Distance: The minimum weight of <span class="math notranslate nohighlight">\(e\)</span> such that <span class="math notranslate nohighlight">\(e H_c = 0\)</span> is the distance <span class="math notranslate nohighlight">\(d\)</span> of the code.</p></li>
+</ul>
+<p>If a qubit uses only two states of <span class="math notranslate nohighlight">\(|0\rangle, |1\rangle\)</span> and does not use superposition, it can be put on the framework of classical bits. Using this fact, the above classical error correction can be rewritten in terms of quantum information as follows.</p>
+<ul class="simple">
+<li><p>code: Characterized by the generator matrix <span class="math notranslate nohighlight">\(G\)</span> and the parity check matrix <span class="math notranslate nohighlight">\(H_c\)</span>. They satisfy <span class="math notranslate nohighlight">\(GH_c = 0\)</span>.</p></li>
+<li><p>Before coding: there is a quantum state <span class="math notranslate nohighlight">\(|v\rangle\)</span> of <span class="math notranslate nohighlight">\(k\)</span>-qubit of the computational basis .</p></li>
+<li><p>Coding: a unitary matrix <span class="math notranslate nohighlight">\(U_G\)</span> of <span class="math notranslate nohighlight">\(2^n \times 2^n\)</span> consisting only of CNOT and Pauli-<span class="math notranslate nohighlight">\(X\)</span> such that <span class="math notranslate nohighlight">\(|vG\rangle = U_G (|\psi\rangle \otimes |0\rangle^{n-k})\)</span> can be constructed from <span class="math notranslate nohighlight">\(G\)</span>.</p></li>
+<li><p>Error: A random bit-flip operation <span class="math notranslate nohighlight">\(E = X_1^{e_1} X_2 ^{e_2} \ldots X_n^{e_n}\)</span> acts on the <span class="math notranslate nohighlight">\(|vG \rangle\)</span> after encoding, resulting in <span class="math notranslate nohighlight">\(E |vG \rangle = |vG + e \rangle\)</span>.</p></li>
+<li><p>Error checking: Checks if the parities are consistent. This is equivalent to the following operations Let <span class="math notranslate nohighlight">\(h_i\)</span> be the <span class="math notranslate nohighlight">\(i\)</span> column vector of the parity check matrix <span class="math notranslate nohighlight">\(H_c\)</span>, consider the Pauli matrix <span class="math notranslate nohighlight">\(P_i = Z_1^{h_{i1}} Z_2^{h_{i2}} \ldots Z_n^{h_{in}}\)</span> and let <span class="math notranslate nohighlight">\(M_0^{(i)} = (I+P_i)/2, M_1^{(i)} = (I-P_ i)/2\)</span> , and consider the POVM <span class="math notranslate nohighlight">\(\{ M_0^{(i)}, M_1^{(i)} \}\)</span> . <a class="reference external" href="https://en.wikipedia.org/wiki/POVM">POVM</a> is a generalization of the projective measurements;
+for Nielsen-Chuang, it is <code class="docutils literal notranslate"><span class="pre">2.2.6</span> <span class="pre">POVM</span> <span class="pre">(measurements</span></code>). We measure the state <span class="math notranslate nohighlight">\(E |\psi' \rangle\)</span> with <span class="math notranslate nohighlight">\(n-k\)</span> POVM <span class="math notranslate nohighlight">\(\{M_0^{(i)}, M_1^{(i)}\}_i\)</span> and obtain <span class="math notranslate nohighlight">\(n-k\)</span> bits <span class="math notranslate nohighlight">\(s = (vG+e)H_c = eH_c\)</span>. Check whether this <span class="math notranslate nohighlight">\(s\)</span> is zero.</p></li>
+<li><p>Decoding: <span class="math notranslate nohighlight">\(|vG+e'\rangle\)</span> all measured in <span class="math notranslate nohighlight">\(Z\)</span> basis yields <span class="math notranslate nohighlight">\(n\)</span>-bit sequence <span class="math notranslate nohighlight">\((vG+e)\)</span>. According to the value of <span class="math notranslate nohighlight">\((vG+e)\)</span>, we construct a unitary operation <span class="math notranslate nohighlight">\(R = X_1^{e'_1} X_2 ^{e'_2} \ldots X_n^{e'_n}\)</span> such that <span class="math notranslate nohighlight">\(R E|vG\rangle = |vG\rangle\)</span>. The algorithm for finding <span class="math notranslate nohighlight">\(e'\)</span> from <span class="math notranslate nohighlight">\((vG+e)\)</span> is called the decoding algorithm.</p></li>
+<li><p>Distance: The minimum weight of <span class="math notranslate nohighlight">\(E\)</span> such that <span class="math notranslate nohighlight">\(s = 0\)</span> is the distance <span class="math notranslate nohighlight">\(d\)</span> of the code.</p></li>
+</ul>
+<p>The above protocol is a framework for classical error correction with qubits, and what we are saying is equivalent. As an example, we show a code in which one bit is increased to three bits to perform majority voting.</p>
+<p>Generator matrix is</p>
+<div class="math notranslate nohighlight">
+\[G =\left( \begin{matrix} 1 &amp; 1 &amp; 1 \end{matrix} \right)\]</div>
+<p>Parity check matrix is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}H_c = \left( \begin{matrix} 1 &amp; 0 \\ 1 &amp; 1 \\ 0 &amp; 1 \end{matrix} \right)\end{split}\]</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[120]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set code info</span>
+<span class="n">repetition</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">error_probability</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="n">initial_bit</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[121]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">,</span> <span class="n">round_digit</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">vector</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">()</span>
+    <span class="n">state_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">qubit_count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vector</span><span class="p">)</span><span class="o">+</span><span class="n">eps</span><span class="p">))</span>
+    <span class="n">binary_format</span> <span class="o">=</span> <span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="s2">&quot;:0</span><span class="si">{}</span><span class="s2">b&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">qubit_count</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+    <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vector</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">vector</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">1e-10</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">state_str</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">state_str</span> <span class="o">+=</span> <span class="s2">&quot; + &quot;</span>
+            <span class="n">state_str</span> <span class="o">+=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> |&quot;</span> <span class="o">+</span> <span class="n">binary_format</span> <span class="o">+</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">vector</span><span class="p">[</span><span class="n">ind</span><span class="p">],</span><span class="n">round_digit</span> <span class="p">),</span><span class="n">ind</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">state_str</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Secure the quantum state and write the initial state to the 0-th bit.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Run only for Google Colaboratory and local environment where Qulacs is not installed</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>qulacs
+
+<span class="c1">## Run only if you are in a Google Colaboratory / (Linux or Mac) jupyter notebook environment.</span>
+<span class="c1">## Qulacs errors will be output normally.</span>
+<span class="o">!</span>pip3<span class="w"> </span>install<span class="w"> </span>wurlitzer
+<span class="o">%</span><span class="k">load_ext</span> wurlitzer
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[122]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">repetition</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_computational_basis</span><span class="p">(</span><span class="n">initial_bit</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(1+0j) |001&gt;
+</pre></div></div>
+</div>
+<p>Create a circuit for encoding.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[123]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
+<span class="n">encode_circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">repetition</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">repetition</span><span class="p">):</span>
+    <span class="n">encode_circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ind</span><span class="p">)</span>
+<span class="n">encode_circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(1+0j) |111&gt;
+</pre></div></div>
+</div>
+<p>Create a quantum circuit to measure the syndrome values. At the current point, all the syndrome values are 0.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[124]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">Instrument</span>
+<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">DenseMatrix</span>
+
+<span class="k">def</span> <span class="nf">parity_measure_gate</span><span class="p">(</span><span class="n">fst</span><span class="p">,</span><span class="n">scn</span><span class="p">,</span><span class="n">register_pos</span><span class="p">):</span>
+    <span class="n">parity_measure_matrix_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">parity_measure_matrix_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">parity_measure_matrix_0</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">parity_measure_matrix_0</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">parity_measure_matrix_1</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">parity_measure_matrix_1</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">parity_measure_0</span> <span class="o">=</span> <span class="n">DenseMatrix</span><span class="p">([</span><span class="n">fst</span><span class="p">,</span><span class="n">scn</span><span class="p">],</span><span class="n">parity_measure_matrix_0</span><span class="p">)</span>
+    <span class="n">parity_measure_1</span> <span class="o">=</span> <span class="n">DenseMatrix</span><span class="p">([</span><span class="n">fst</span><span class="p">,</span><span class="n">scn</span><span class="p">],</span><span class="n">parity_measure_matrix_1</span><span class="p">)</span>
+    <span class="n">parity_measure</span> <span class="o">=</span> <span class="n">Instrument</span><span class="p">([</span><span class="n">parity_measure_0</span><span class="p">,</span> <span class="n">parity_measure_1</span><span class="p">],</span><span class="n">register_pos</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">parity_measure</span>
+
+<span class="n">parity_measure_circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">repetition</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetition</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">parity_measure_circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">parity_measure_gate</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span><span class="n">ind</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">ind</span><span class="p">))</span>
+
+<span class="n">parity_measure_circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetition</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;parity(</span><span class="si">{}</span><span class="s2">,</span><span class="si">{}</span><span class="s2">): </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span><span class="n">ind</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">state</span><span class="o">.</span><span class="n">get_classical_value</span><span class="p">(</span><span class="n">ind</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(1+0j) |111&gt;
+parity(0,1): 0
+parity(1,2): 0
+</pre></div></div>
+</div>
+<p>One bit error is made on a random data qubit. At this time, a bit error is equivalent to an unintended Pauli-<span class="math notranslate nohighlight">\(X\)</span> operation. The quantum state will be <span class="math notranslate nohighlight">\(|vG+e\rangle\)</span>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[125]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># invoke random error</span>
+<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">Pauli</span>
+<span class="k">def</span> <span class="nf">random_X_error</span><span class="p">(</span><span class="n">num_qubit</span><span class="p">,</span> <span class="n">error_probability</span><span class="p">):</span>
+    <span class="n">error_array</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_qubit</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">error_probability</span><span class="p">:</span>
+            <span class="n">error_array</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">error_array</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Pauli</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">num_qubit</span><span class="p">),</span> <span class="n">error_array</span><span class="p">)</span>
+<span class="n">error_operator</span> <span class="o">=</span> <span class="n">random_X_error</span><span class="p">(</span><span class="n">repetition</span><span class="p">,</span> <span class="n">error_probability</span><span class="p">)</span>
+<span class="n">error_operator</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(1+0j) |011&gt;
+</pre></div></div>
+</div>
+<p>Recover the parity measurement again.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[126]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">parity_measure_circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetition</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;parity(</span><span class="si">{}</span><span class="s2">,</span><span class="si">{}</span><span class="s2">): </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span><span class="n">ind</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">state</span><span class="o">.</span><span class="n">get_classical_value</span><span class="p">(</span><span class="n">ind</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(1+0j) |011&gt;
+parity(0,1): 0
+parity(1,2): 1
+</pre></div></div>
+</div>
+<p>Decryption.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[135]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># decoding process</span>
+<span class="k">def</span> <span class="nf">compute_recovery_operation</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">repetition</span><span class="p">):</span>
+    <span class="n">cand1</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cand2</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">cand1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">cand2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">flag</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repetition</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_classical_value</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">flag</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">flag</span>
+        <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
+            <span class="n">cand1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">cand2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cand1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">cand2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cand1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">cand2</span><span class="p">):</span>
+        <span class="n">cand</span> <span class="o">=</span> <span class="n">cand1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cand</span> <span class="o">=</span> <span class="n">cand2</span>
+    <span class="k">return</span> <span class="n">Pauli</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">repetition</span><span class="p">),</span> <span class="n">cand</span><span class="p">)</span>
+
+<span class="n">recovery_operation</span> <span class="o">=</span> <span class="n">compute_recovery_operation</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="n">repetition</span><span class="p">)</span>
+<span class="n">recovery_operation</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(1+0j) |111&gt;
+</pre></div></div>
+</div>
+<p>A series of operations can be performed even if the first quantum state is not a computational basis.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[146]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set code info</span>
+<span class="n">repetition</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">error_probability</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="n">initial_bit</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">RandomUnitary</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">repetition</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_computational_basis</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">RandomUnitary</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;initial state&quot;</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+<span class="n">encode_circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;encode&quot;</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+<span class="n">error_operator</span> <span class="o">=</span> <span class="n">random_X_error</span><span class="p">(</span><span class="n">repetition</span><span class="p">,</span> <span class="n">error_probability</span><span class="p">)</span>
+<span class="n">error_operator</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+<span class="n">parity_measure_circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;parity measurement&quot;</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+<span class="n">recovery_operation</span> <span class="o">=</span> <span class="n">compute_recovery_operation</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="n">repetition</span><span class="p">)</span>
+<span class="n">recovery_operation</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;recovery&quot;</span><span class="p">)</span>
+<span class="n">show_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+initial state
+(-0.111+0.987j) |000&gt; + (0.053-0.101j) |001&gt;
+encode
+(-0.111+0.987j) |000&gt; + (0.053-0.101j) |111&gt;
+error
+(-0.111+0.987j) |010&gt; + (0.053-0.101j) |101&gt;
+parity measurement
+(-0.111+0.987j) |010&gt; + (0.053-0.101j) |101&gt;
+recovery
+(-0.111+0.987j) |000&gt; + (0.053-0.101j) |111&gt;
+</pre></div></div>
+</div>
+<p>Quantum error correction is a framework that allows error correction even when a quantum state has not only bit-flip (Pauli-<span class="math notranslate nohighlight">\(X\)</span>) but also phase-flip (Pauli-<span class="math notranslate nohighlight">\(Z\)</span>) errors. Assuming that the errors that occur are probabilistic Pauli operators, the quantum error correction framework is as follows.</p>
+<ul class="simple">
+<li><p>Code: characterized by generative unitary acting on <span class="math notranslate nohighlight">\(N\)</span>-qubit <span class="math notranslate nohighlight">\(U_G\)</span> and a Set of <span class="math notranslate nohighlight">\(n-k\)</span> POVMs <span class="math notranslate nohighlight">\(\{M_0^{(i)}, M_1^{(i)}\}_i\)</span>. They satisfy <span class="math notranslate nohighlight">\(\langle \psi,0 | U_G^{\dagger} M_j^{(i)} U_G | \psi,0 \rangle\)</span> for any <span class="math notranslate nohighlight">\(k\)</span>-qubit state <span class="math notranslate nohighlight">\(|\psi\rangle\)</span>.</p></li>
+<li><p>Before coding: There is a quantum state <span class="math notranslate nohighlight">\(|\psi\rangle\)</span> of the computational basis of <span class="math notranslate nohighlight">\(k\)</span>-qubit.</p></li>
+<li><p>Coding: Generate <span class="math notranslate nohighlight">\(|\psi' \rangle = U_G (|\psi\rangle \otimes |0\rangle^{n-k})\)</span> with unitary matrix <span class="math notranslate nohighlight">\(U_G\)</span>.</p></li>
+<li><p>Error: after encoding <span class="math notranslate nohighlight">\(|\psi' \rangle\)</span>, a random Pauli operation <span class="math notranslate nohighlight">\(E = X_1^{e_1} X_2 ^{e_2} \ldots X_n^{e_n} Z_1^{e_{n+1}} Z_2 ^{e_{n+2}} \ldots Z_n^{e_{2n}}\)</span> is applied, and gets <span class="math notranslate nohighlight">\(E |\psi' \rangle\)</span>.</p></li>
+<li><p>Error Checking: Measure the state <span class="math notranslate nohighlight">\(E |\psi' \rangle\)</span> with <span class="math notranslate nohighlight">\(n-k\)</span> POVMs <span class="math notranslate nohighlight">\(\{M_0^{(i)}, M_1^{(i)}\}_i\)</span> and obtain <span class="math notranslate nohighlight">\(n-k\)</span> bits <span class="math notranslate nohighlight">\(s\)</span>. Check whether this <span class="math notranslate nohighlight">\(s\)</span> is zero or not.</p></li>
+<li><p>Decoding: according to the value of <span class="math notranslate nohighlight">\(s\)</span>, unitary operation <span class="math notranslate nohighlight">\(R = X_1^{e'_1} X_2 ^{e'_2} \ldots X_n^{e'_n} Z_1^{e'_{n+1}} Z_2 ^{e'_{n+2}} \ldots Z_n^{e '_{2n}}\)</span> is constructed. The algorithm for finding <span class="math notranslate nohighlight">\(R\)</span> from <span class="math notranslate nohighlight">\(s\)</span> is called the decoding algorithm of quantum error correction.</p></li>
+<li><p>Distance: The minimum weight of <span class="math notranslate nohighlight">\(E\)</span> such that <span class="math notranslate nohighlight">\(s = 0\)</span> is the distance <span class="math notranslate nohighlight">\(d\)</span> of the code.</p></li>
+</ul>
+<p>There is an essential change in the framework of quantum error correction from classical error correction. Quantum error correction introduces errors that cause phase inversion. For this reason, the Pauli operator <span class="math notranslate nohighlight">\(E\)</span> of the error has a form that includes not only Pauli-<span class="math notranslate nohighlight">\(X\)</span> but also Pauli-<span class="math notranslate nohighlight">\(Z\)</span>. This change requires that the code be error correctable for phase reversals. The code must also have a distance greater than <span class="math notranslate nohighlight">\(1\)</span> for Pauli-<span class="math notranslate nohighlight">\(Z\)</span> errors. The classical code
+rewritten in the framework of a quantum code is a code with <span class="math notranslate nohighlight">\(d=1\)</span> for Pauli-<span class="math notranslate nohighlight">\(Z\)</span>. Also, the syndrome measurement by one code must not destroy the quantum state of <span class="math notranslate nohighlight">\(k\)</span>-qubit. This corresponds to the fact that any coded state is indistinguishable in <span class="math notranslate nohighlight">\((n-k)\)</span> POVM measurements. Thus, for all POVM elements, <span class="math notranslate nohighlight">\(\langle \psi' |M_j^{(i)} | \psi' \rangle\)</span> must be a value independent of <span class="math notranslate nohighlight">\(|\psi'\rangle\)</span> for any <span class="math notranslate nohighlight">\(k\)</span>-qubit encoded state
+<span class="math notranslate nohighlight">\(|\psi'\rangle = U_B (|\psi\rangle \otimes |0\rangle^{n-k})\)</span>.</p>
+<p>The stabilizer code described below is a framework that gives <span class="math notranslate nohighlight">\(U_B\)</span> and POVM such that the above is satisfied.</p>
+<p>Finally, in classical codes, it is possible to obtain <span class="math notranslate nohighlight">\((vG+e)\)</span> by measuring all quantum states in the <span class="math notranslate nohighlight">\(Z\)</span> basis for decoding, but in quantum codes, such measurement cannot be done because the <span class="math notranslate nohighlight">\(Z\)</span> basis of quantum states destroys the information. Also, the operation used for correction is a Pauli operator that mixes Pauli-<span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Z\)</span>. Therefore, the algorithm for estimating the decoding operation <span class="math notranslate nohighlight">\(R\)</span> from the obtained syndrome value <span class="math notranslate nohighlight">\(s\)</span> alone also needs
+to be modified for the quantum.</p>
+</section>
+<section id="Stabilizer-Codes">
+<h2>Stabilizer Codes<a class="headerlink" href="#Stabilizer-Codes" title="Link to this heading">¶</a></h2>
+<p>Just as the matrix <span class="math notranslate nohighlight">\(H_c\)</span> that constitutes parity is given in parity checking codes, there is a framework of stabilizer codes that constitute POVMs in quantum codes. Instead of directly specifying the code space, stabilizer codes specify the code space using a set of Pauli operators that satisfy certain properties called stabilizer operators.</p>
+<p>The generator <span class="math notranslate nohighlight">\(S\)</span> of the stabilizer operator is a set <span class="math notranslate nohighlight">\(S\)</span> of Pauli operators satisfying the following properties.</p>
+<ul class="simple">
+<li><p>Each element of <span class="math notranslate nohighlight">\(S\)</span> is mutually commutative for all. That is, for any <span class="math notranslate nohighlight">\(s,s' \in s\)</span>, <span class="math notranslate nohighlight">\(ss' = s's\)</span>.</p></li>
+<li><p>Every element of <span class="math notranslate nohighlight">\(S\)</span> is independent. That is, for any <span class="math notranslate nohighlight">\(s \in S\)</span>, the group generated from the set <span class="math notranslate nohighlight">\(S\setminus \{s\}\)</span> does not contain <span class="math notranslate nohighlight">\(s\)</span>.</p></li>
+<li><p>The group generated from <span class="math notranslate nohighlight">\(S\)</span> does not contain <span class="math notranslate nohighlight">\(-I\)</span>.</p></li>
+</ul>
+<p>When the above is satisfied, the logical code specified by the stabilizer operator is the subspace composed of quantum states satisfying the following properties.</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(|\psi\rangle\)</span> is an eigenstate with eigenvalue +1 for all <span class="math notranslate nohighlight">\(s \in S\)</span>.</p></li>
+</ul>
+<p>When there are <span class="math notranslate nohighlight">\(l\)</span> independent stabilizer generators, the dimension of the spanned space of such quantum states is <span class="math notranslate nohighlight">\(2^{n-l}\)</span>. Thus, if we want to construct a space of <span class="math notranslate nohighlight">\(k\)</span> logical qubits in a space of <span class="math notranslate nohighlight">\(n\)</span>-qubits, we need to have <span class="math notranslate nohighlight">\(l = n-k\)</span>.</p>
+<p>In this code, the syndrome value is given as the result of a projective measurement of the quantum state in <span class="math notranslate nohighlight">\(s \in S\)</span>. Since it is the +1 eigenspace of all stabilizer operators that is now used for the calculation, the projective measurement of the stabilizer operator does not destroy the logical qubit of interest. Now, for simplicity, we assume that one of Pauli<span class="math notranslate nohighlight">\(X,Y,Z\)</span> is probabilistically applied to each qubit. Since Pauli<span class="math notranslate nohighlight">\(Y\)</span> is the product of <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Z\)</span>, we
+can regard this as a case where both Pauli<span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Z\)</span> occur.</p>
+<p>If we decide to express whether <span class="math notranslate nohighlight">\(X\)</span>(<span class="math notranslate nohighlight">\(Z\)</span>) error is occurring in the <span class="math notranslate nohighlight">\(i\)</span>-th qubit in binary <span class="math notranslate nohighlight">\(e^{(X)}_i\)</span> (<span class="math notranslate nohighlight">\(e^{(Z)}_i\)</span>), measuring a qubit at <span class="math notranslate nohighlight">\(Z\)</span> is equivalent to obtaining <span class="math notranslate nohighlight">\(e^{(X)}_i\)</span>, and the act of measuring at <span class="math notranslate nohighlight">\(X\)</span> is equivalent to obtaining <span class="math notranslate nohighlight">\(e^{(Z)}_i\)</span>. If we measure with a Pauli operator acting on multiple qubits, we would obtain the XOR of each resulting bit. I.e., If <span class="math notranslate nohighlight">\(P=Z_2 X_3 Z_4 Z_5\)</span>, then the measurement result is
+<span class="math notranslate nohighlight">\(\left(e^{(X)}_2 + e^{(Z)}_3 + e^{(X)}_4 + e^{(X)}_5\right)\bmod 2\)</span>.</p>
+<p>If <span class="math notranslate nohighlight">\(P\)</span> is only a product of Pauli <span class="math notranslate nohighlight">\(Z\)</span> and the only error acting on a qubit is a bit flip due to Pauli <span class="math notranslate nohighlight">\(X\)</span>, then this is synonymous with parity checking, which computes the parity of some bits. Thus, it can be seen that the stabilizer code is a kind of extension of the parity checking code that allows it to be applied to errors related to Pauli<span class="math notranslate nohighlight">\(Z\)</span>.</p>
+<p>Given a certain stabilizer generator, the distance to its code can be considered as follows. First, consider the normalization group (Normalizer) for the stabilizer group. A normalization group is a group that satisfies the following equation.</p>
+<div class="math notranslate nohighlight">
+\[C(S) = \{p \in P \mid \forall s \in S, sp = ps \}\]</div>
+<p>The normalization group minus the stabilizer group, ignoring the difference in global phase, is called the logical operator. A logic operator is a set of operations that cannot detect errors by the syndrome but change the logical quantum state. Thus, if an error occurs in enough qubits to execute a logical operator, we cannot detect an error.</p>
+<p>Let weight <span class="math notranslate nohighlight">\(w(P)\)</span> of <span class="math notranslate nohighlight">\(P\)</span> be the number of qubits on which Pauli operator <span class="math notranslate nohighlight">\(P\)</span> acts nontrivially (one of Pauli <span class="math notranslate nohighlight">\(X,Y,Z\)</span> acts). The code distance is the smallest weight in the set of logical operators, i.e..</p>
+<div class="math notranslate nohighlight">
+\[d := \min_{P \in C(S)\setminus \langle S \rangle} w(P)\]</div>
+</section>
+<section id="Topological-Codes">
+<h2>Topological Codes<a class="headerlink" href="#Topological-Codes" title="Link to this heading">¶</a></h2>
+<p>Topological codes are codes that originated from the idea of using the degenerate ground state of topological matter as the space of logical qubits. From an experimental point of view, a topological code is a kind of stabilizer code that satisfies the following good properties.</p>
+<ul class="simple">
+<li><p>The parity check matrix <span class="math notranslate nohighlight">\(H_c\)</span> is a sparse matrix. Such codes are known to have good performance due to their similarity to low-density parity checking codes, and each syndrome is represented as <span class="math notranslate nohighlight">\(O(1)\)</span> parities.</p></li>
+<li><p>The data qubits to be checked in each syndrome are spatially clustered within a distance of <span class="math notranslate nohighlight">\(O(1)\)</span>. Therefore, even in physical systems where CNOT can only be applied to adjacent qubits, it is possible to efficiently measure the syndrome.</p></li>
+</ul>
+<p>Among topological codes, surface codes, with which measurement qubits can also be embedded on a two-dimensional plane, are the closest to realization.</p>
+<p>Topological codes also inherit the drawbacks of low-density parity checking codes, which generally make decoding NP-hard. In reality, some approximations to the nature of the error are often used to formulate an efficient decoding algorithm that can be solved.</p>
+</section>
+<section id="Computation-on-stabilizer-codes">
+<h2>Computation on stabilizer codes<a class="headerlink" href="#Computation-on-stabilizer-codes" title="Link to this heading">¶</a></h2>
+<p>Since quantum computation introduces errors as the operation is performed, the operation must be performed with the quantum state encoded for the duration of the computation. In this computation, too, there is a significant difference from the classical case.</p>
+<p>In parity check codes, the inversion operation on one logical bit corresponds to an inversion operation on at least <span class="math notranslate nohighlight">\(O(d)\)</span> and at most <span class="math notranslate nohighlight">\(O(n)\)</span> bits. This can obviously be accomplished with <span class="math notranslate nohighlight">\(O(n)\)</span> bit flips, which can be completed in 1step if parallelized.</p>
+<p>In stabilizer codes, a quantum operation on one logical bit similarly maps to some unitary operation on at least <span class="math notranslate nohighlight">\(O(d)\)</span> qubits. Here, the difference from the classical case is that <span class="math notranslate nohighlight">\(O(2^d)\)</span> gates are generally required to realize unitary operations on <span class="math notranslate nohighlight">\(O(d)\)</span> qubits. Therefore, on a quantum code, even the operation on one logical bit cannot be performed efficiently in general, and the error correction operation will create a new error and the computation on the code will not
+scale.</p>
+<p>On the other hand, depending on the code, there exists <span class="math notranslate nohighlight">\(U\)</span> such that the quantum operation <span class="math notranslate nohighlight">\(U'\)</span> of <span class="math notranslate nohighlight">\(O(d)\)</span> qubits corresponding to the operation <span class="math notranslate nohighlight">\(U\)</span> of one logical bit can be completed in <span class="math notranslate nohighlight">\(O(1)\)</span> steps. Such an operation on a logic bit that can be efficiently realized on a code is called a transversal operation. If the transversal operation constructs a universal gate set, universal quantum computation can be efficiently performed on the code, but unfortunately, it
+has been proved that there is no such stabilizer code.</p>
+<p>Therefore, it is necessary to somehow procure the missing operations for universal operation. On the surface code, <span class="math notranslate nohighlight">\(X, Y, Z, H\)</span>, etc. are transversals, and although it is nontrivial whether CNOT is possible, it is known that it can be done efficiently by lattice surgery. Since <span class="math notranslate nohighlight">\(S\)</span>, <span class="math notranslate nohighlight">\(T\)</span>, etc. are not transversal, it is possible to create <span class="math notranslate nohighlight">\(S\)</span>, <span class="math notranslate nohighlight">\(T\)</span>gate states, etc. with another code and use a method called magic state distillation to gate-teleport these states,
+thereby creating a universal set.</p>
+</section>
+</section>
+
+</article>
+        <aside class="nftt-toc">
+          
+          <div class="mt-3 mb-1 my-lg-0 ps-xl-3 text-muted">
+            <button class="btn btn-link link-dark p-lg-0 mb-2 mb-lg-0 text-decoration-none nftt-toc-toggle d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents"
+            >On this page <i class="ms-2 bi bi-chevron-expand"></i></button>
+            <div class="title d-none d-lg-block">
+              <i class="bi bi-file-earmark-text"></i>&nbsp;&nbsp;<span class="small">On this page</span>
+            </div>
+            <div class="collapse nftt-toc-collapse" id="tocContents">
+              <nav id="TableOfContents">
+                <ul>
+<li><a class="reference internal" href="#">9-2. quantum error</a><ul>
+<li><a class="reference internal" href="#Quantum-error-correction">Quantum error correction</a></li>
+<li><a class="reference internal" href="#Stabilizer-Codes">Stabilizer Codes</a></li>
+<li><a class="reference internal" href="#Topological-Codes">Topological Codes</a></li>
+<li><a class="reference internal" href="#Computation-on-stabilizer-codes">Computation on stabilizer codes</a></li>
+</ul>
+</li>
+</ul>
+
+              </nav>
+            </div>
+          </div>
+          
+        </aside>
+      </div>
+    </div>
+
+    <footer class="nftt-footer">
+      <nav id="paginator" class="py-4" aria-label="Documentation navigation">
+    <div class="container">
+      <ul class="pagination justify-content-between mb-0"><li class="page-item">
+            <a href="9.1_error_correction.html" class="d-flex px-5 align-items-end" rel="prev" aria-label="Previous page: 9-1. Classical Error">
+              <span class="prev-page"><i class="bi bi-caret-left"></i></span>
+              <div class="d-flex flex-column">
+                <span class="text-small text-start text-muted">Previous</span>
+                <span class="underline">9-1. Classical Error</span>
+              </div>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </nav>
+
+      <div class="py-5 px-4 px-md-3">
+  <div class="container">
+    
+
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <a class="brand-text d-inline-flex align-items-center mb-2 text-decoration-none" href="/" aria-label="Nefertiti-for-Sphinx">
+          <span class="fs-6 fw-bold">Quantum Native Dojo</span>
+        </a>
+        
+          <ul class="list-unstyled small text-muted">
+            <li>2023, Quantum Native Dojo Contributors</li>
+          </ul>
+        
+        
+        <div class="built-with pt-2">
+          Built with <a href="http://sphinx-doc.org">Sphinx 7.2.6</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.3.0</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+    </footer>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"CommonHTML": {"undefinedFamily": "\"Source Serif Pro\", \"Yakumono\", \"Noto Serif JP\", \"Hiragino Mincho ProN\", \"STIXGeneral\", \"Arial Unicode MS\", serif"}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
+
+    <script type="text/javascript" src="../_static/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinx-nefertiti.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/doc_versions.js"></script>
+  </body>
+</html>
