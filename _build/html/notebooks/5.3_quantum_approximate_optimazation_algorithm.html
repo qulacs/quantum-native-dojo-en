@@ -1,0 +1,680 @@
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+      <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="docsearch:name" content="Quantum Native Dojo" />
+    <meta name="docsearch:package_type" content="" />
+    <meta name="docsearch:release" content="" />
+    <meta name="docsearch:version" content="" />
+    
+      <title>5-3. Quantum Approximate Optimazation Algorithm (QAOA) &mdash; Quantum Native Dojo  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-icons.css" type="text/css" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+          <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+          <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+        <link rel="index" title="Index" href="../genindex.html" />
+        <link rel="search" title="Search" href="../search.html" />
+        <link rel="top" title="Quantum Native Dojo  documentation" href="#" />
+        <link rel="up" title="Chapter 5 Algorithms Based on Variational Quantum Circuits" href="5_VQC_based_algorithms.html" />
+        <link rel="next" title="Chapter 6 Quantum chemistry calculation" href="6_quantum_chemistry_calculation.html" />
+        <link rel="prev" title="5-2. Quantum Circuit learning" href="5.2_Quantum_Circuit_Learning.html" />
+    <style>
+      :root {
+        --nftt-body-font-family: "Nunito", var(--nftt-font-sans-serif) !important;
+        --nftt-font-monospace: "Red Hat Mono", var(--nftt-font-family-monospace) !important;
+        --nftt-project-name-font: var(--nftt-body-font-family);
+        --nftt-documentation-font: var(--nftt-body-font-family);
+        --nftt-doc-headers-font: "Georgia", var(--nftt-documentation-font);}
+      h1 *, h2 *, h3 *, h4 *, h5 *, h6 * { font-size: inherit; }
+    </style>
+  </head>
+  <body>
+    <header class="navbar navbar-expand-xl navbar-dark nftt-navbar flex-column fixed-top">
+      <div class="skip-links container-fluid visually-hidden-focusable overflow-hidden justify-content-start">
+        <div class="border-bottom mb-2 pb-2 w-100">
+          <a class="d-none d-md-inline-flex p-2 m-1" href="#sidebar-filter">Skip to docs navigation</a>
+          <a class="d-inline-flex p-2 m-1" href="#content">Skip to main content</a>
+        </div>
+      </div>
+      <nav class="container-xxl nftt-gutter flex-wrap flex-xl-nowrap" aria-label="Main navigation">
+        <div class="nftt-navbar-toggler">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Toggle documentation navigation">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+          <a href="../index.html"
+              
+              class="navbar-brand p-0 me-0 md-lg-2"
+          ><span class="brand-text">Quantum Native Dojo</span></a>
+        
+        <div class="d-flex d-xl-none">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttSearch" aria-controls="nfttSearch" aria-label="Search">
+            <i class="bi bi-search"></i>
+          </button>
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttNavbar" aria-controls="nfttNavbar" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+        </div>
+        
+<div class="offcanvas-xl offcanvas-end flex-grow-1" tabindex="-1" id="nfttSearch" aria-labelledby="nfttSearchOffcanvasLabel" data-bs-scroll="true">
+  <div class="offcanvas-header px-4 pb-0">
+    <h5 class="offcanvas-title fw-bold" id="nfttSearchOffcanvasLabel">Search the documentation</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttSearch"></button>
+  </div>
+  <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+    <hr class="d-xl-none text-white-50">
+    <ul class="navbar-nav flex-row align-items-center flex-wrap ms-md-auto">
+      <li class="nav-item col-12 col-xl-auto">
+        <form id="nftt-search-form" action="../search.html" method="get">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search docs" aria-label="Search" aria-describedby="button-search">
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+            <button class="btn btn-primary" type="submit" id="button-search" aria-label="Search"><i class="bi bi-search"></i></button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+</div>
+
+        <div class="offcanvas-xl offcanvas-end" tabindex="-1" id="nfttNavbar" aria-labelledby="nfttNavbarOffcanvasLabel" data-bs-scroll="true">
+          <div class="offcanvas-header px-4 pb-0">
+            <div class="offcanvas-title navbar-brand" id="nfttNavbarOffcanvasLabel"><span class="brand-text">Nefertiti for Sphinx</span></div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttNavbar"></button>
+          </div>
+          <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+            <hr class="d-xl-none text-white-50">
+            <ul class="navbar-nav flex-row align-items-center flex-wrap ms-lg-auto">
+              
+              <!-- version_dropdown.html -->
+
+              
+              <!-- colorscheme_dropdown.html -->
+<li class="nav-item dropdown">
+  <a class="nav-link d-flex py-2 px-0 px-xl-2 dropdown-toggle align-items-center" id="snftt-luz" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" aria-label="Toggle light/dark">
+    <i class="bi bi-circle-half" data-snftt-luz-icon-active></i>
+    <span id="snftt-luz-text" class="d-xl-none small ms-2">Toggle light/dark</span>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="snftt-luz-text">
+    <li>
+      <h6 class="dropdown-header">Light/dark</h6>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="light" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-sun" data-snftt-luz-icon="light"></i>
+        </span>
+        <span class="small ms-3">Light</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="dark" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-moon-stars" data-snftt-luz-icon="dark"></i>
+        </span>
+        <span class="small ms-3">Dark</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item current d-flex align-items-center" data-snftt-luz="default" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-circle-half" data-snftt-luz-icon="default"></i>
+        </span>
+        <span class="small ms-3">Default</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+  </ul>
+</li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container-fluid">
+      <div class="nftt-gutter nftt-page">
+        <aside class="nftt-sidebar">
+          <div class="nftt-sidebar-content">
+            <div class="title d-none d-xl-block">
+              <i class="bi bi-book"></i>&nbsp;&nbsp;<span>Index</span>
+            </div>
+            <div id="sidebar" tabindex="-1" class="offcanvas-xl offcanvas-start" aria-labelledby="nfttSidebarOffcanvasLabel">
+                <!-- danirus sidebartemplate: "globaltoc.html" --><div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title fw-bold" id="nfttSidebarOffcanvasLabel">
+    Table of contents
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#sidebar"></button>
+</div>
+
+<div class="offcanvas-body">
+  <nav class="toc" aria-label="Main menu">
+    <div class="mb-3 p-1 pt-3 pb-4 border-bottom">
+      <input id="sidebar-filter" type="text" name="filter" class="form-control form-control-sm" placeholder="filter" aria-label="filter">
+    </div>
+    <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="0_prologue.html">Chapter 0: What is a Quantum Computer ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_quantum_information_foundation.html">Chapter 1: Fundamentals of Quantum Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1.1_qubit_representation.html">1-1. Qubit Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.2_qubit_operations.html">1-2. Qubit Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html">1-3. Multiqubit representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html#Column:-What-is-a-universal-gate-set?">Column: What is a universal gate set?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.4_quantum_circuit_diagram.html">1-4. Quantum Circuit Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2_introduction_to_quantum_algorithms.html">Chapter 2: Introduction to Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2.1_NISQ_and_long_term.html">2-1. NISQ algorithm and long-term algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.2_Hadamard_test.html">2-2. Hadamard test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.3_quantum_Fourier_transform.html">2-3. Quantum Fourier transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.4_phase_estimation_beginner.html">2-4. Phase Estimation Algorithm（Introductory）</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3_execution_environments_of_quantum_algorithms.html">Chapter 3: Execution Environment for Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3.1_Qulacs_tutorial.html">3-1. Qulacs_tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.2_Qiskit_IBMQ.html">3-2. Qiskit_IBMQ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4_quantum_dynamics_simulation.html">Chapter4 Quantum dynamics simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4.1_quantum_simulation.html">4-1. Quantum Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4.2_trotter_decomposition.html">4-2. Trotter Decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="5_VQC_based_algorithms.html">Chapter 5 Algorithms Based on Variational Quantum Circuits</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="5.1_variational_quantum_eigensolver.html">5-1. Variational Quantum Eigensolver（VQE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.2_Quantum_Circuit_Learning.html">5-2. Quantum Circuit Learning</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5-3. Quantum Approximate Optimazation Algorithm (QAOA)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6_quantum_chemistry_calculation.html">Chapter 6 Quantum chemistry calculation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="6.1_openfermion_basics.html">6-1. OpenFermion Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7_quantum_phase_estimation.html">chapter 7 Quantum phase estimation algorithm and its application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7.1_quantum_phase_estimation_detailed.html">7-1. Quantum Phase Estimation (QPE) Algorithm Detailed：Hydrogen Molecule as Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.2_Harrow-Hassidim-Lloyd_algorithm.html">7-2. Harrow-Hassidim-Lloyd (HHL) Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.3_application_of_HHL_algorithm.html">7-3. Portofolio Optimization by HHL Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="8_quantum_search_algorithm.html">Chapter 8: Quantum Search Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="8.1_oracle.html">8-1. oracle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8.2_Grovers_algorithm.html">8-2. Grover’s algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="9_quantum_error_correction.html">Chapter 9 Quantum Error Correction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="9.1_error_correction.html">9-1. classical error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9.2_quantum_error_correction.html">9-2. quantum error</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav>
+  <template data-toggle-item-template>
+    <button class="btn btn-sm btn-link toctree-expand" type="button">
+      <i class="bi bi-caret-right"></i>
+      <span class="visually-hidden">Toggle menu contents</span>
+    </button>
+  </template>
+</div>
+            </div>
+          </div>
+        </aside>
+        <article id="content" class="nftt-content" role="main">
+    <section id="5-3.-Quantum-Approximate-Optimazation-Algorithm-(QAOA)">
+<h1>5-3. Quantum Approximate Optimazation Algorithm (QAOA)<a class="headerlink" href="#5-3.-Quantum-Approximate-Optimazation-Algorithm-(QAOA)" title="Link to this heading">¶</a></h1>
+<section id="Overview">
+<h2>Overview<a class="headerlink" href="#Overview" title="Link to this heading">¶</a></h2>
+<p>In this section, we learn the Quantum Approximate Optimazation Algorithm (QAOA), which is considered one of the NISQ algorithms. QAOA, like quantum annealing, is an algorithm for solving combinatorial optimization problems.</p>
+</section>
+<section id="Problem-setting">
+<h2>Problem setting<a class="headerlink" href="#Problem-setting" title="Link to this heading">¶</a></h2>
+<p>In QAOA, for a <span class="math notranslate nohighlight">\(n\)</span> digit bit string <span class="math notranslate nohighlight">\(z = z_{1}z_{2}\cdots z_{n} \: (z_i =0,1)\)</span>, we consider a problem of finding <span class="math notranslate nohighlight">\(z\)</span> such that cost function <span class="math notranslate nohighlight">\(C(z) = \sum_\alpha C_\alpha(z)\)</span> is minimized. <span class="math notranslate nohighlight">\(C_\alpha(z)\)</span> is some kind of function that takes a bit string <span class="math notranslate nohighlight">\(z\)</span> as an argument, and here we should especially consider terms such as Ising model-like <span class="math notranslate nohighlight">\(C_\alpha(z) = z_i\cdot z_j\)</span>.</p>
+<p>To solve this minimization problem, we use a <span class="math notranslate nohighlight">\(n\)</span><strong>-bit quantum system</strong>. And using <span class="math notranslate nohighlight">\(\beta = (\beta^{(1)}, \cdots \beta^{(p)}), \gamma = (\gamma^{(1)}, and \cdots \gamma^{(p)})\)</span> as parameter, consider the following quantum state.</p>
+<p><span class="math">\begin{align}
+&|s\rangle = |+\rangle^{\otimes n} = \frac{1}{2^{n/2}} \sum_{z=0}^{2^{n}-1} |z\rangle, \\
+&|\beta, \gamma \rangle = U_X(\beta^{(p)}) U_C(\gamma^{(p)}) \cdots U_X(\beta^{(1)}) U_C(\gamma^{(1)}) |s\rangle.
+\end{align}</span></p>
+<p>Here, <span class="math notranslate nohighlight">\(|+\rangle=\frac{1}{\sqrt{2}}(|0\rangle+|1\rangle)\)</span> is the eigenstate of operator <span class="math notranslate nohighlight">\(X\)</span>, <span class="math notranslate nohighlight">\(X|+\rangle=|+\rangle\)</span>. Also, <span class="math notranslate nohighlight">\(U_C(\gamma), U_X(\beta)\)</span> are defined as follows.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}U_C(\gamma^{(i)}) = e^{-i\gamma^{(i)} C(Z)} = \prod_{\alpha} e^{-i\gamma^{(i)} C_{\alpha}(Z)}, \\
+U_X(\beta^{(i)}) = e^{-i\beta^{(i)} \sum_{j=1}^n X_j} = \prod_{j =1}^n e^{-i\beta^{(i)} X_j}.\end{split}\]</div>
+<p>Knowledge of quantum annealing is required to explain the states <span class="math notranslate nohighlight">\(|\beta, \gamma \rangle\)</span> and the meaning of these operators. For the time being, if you just use QAOA, you should accept it as such and use it. (Note that <span class="math notranslate nohighlight">\(C(Z)\)</span> is obtained by substituting the Pauli operator <span class="math notranslate nohighlight">\(Z_1\cdots Z_n\)</span> for the input of the function <span class="math notranslate nohighlight">\(C(z)\)</span> that takes a bit string as an argument.)</p>
+<p>and QAOA algorithm tries to find the answer to the original optimization problem by searching for <span class="math notranslate nohighlight">\(\beta,\gamma\)</span> which minimize <span class="math notranslate nohighlight">\(F(\beta, \gamma) = \langle{\bf \gamma, \,\beta}|C(Z)|{\bf \gamma, \,\beta}\rangle\)</span></p>
+</section>
+<section id="QAOA-Algorithm-Steps">
+<h2>QAOA Algorithm Steps<a class="headerlink" href="#QAOA-Algorithm-Steps" title="Link to this heading">¶</a></h2>
+<p>The concrete procedure of the QAOA algorithm is as follows.</p>
+<ol class="arabic simple">
+<li><p>Create a superposition state <span class="math notranslate nohighlight">\(|s\rangle = |+\rangle^{\otimes n}\)</span> on a quantum computer.</p></li>
+<li><p>Depending on the parameters <span class="math notranslate nohighlight">\(\beta, \gamma\)</span>, multiply the quantum state by <span class="math notranslate nohighlight">\(U_C(\gamma^{(i)}),U_X(\beta^{(i)})\)</span> to get the state <span class="math notranslate nohighlight">\(|\beta, \gamma \rangle\)</span>.</p></li>
+<li><p>Measure <span class="math notranslate nohighlight">\(\langle \beta, \gamma |C(Z)|\beta, \gamma \rangle\)</span> using a quantum computer.</p></li>
+<li><p>On classical computers, update the parameters <span class="math notranslate nohighlight">\(\beta, \gamma\)</span> so that <span class="math notranslate nohighlight">\(\langle \beta, \gamma |C(Z)|\beta, \gamma \rangle\)</span> becomes smaller.</p></li>
+<li><p>Repeat steps 1-4 to get the best <span class="math notranslate nohighlight">\(\beta^*, \gamma^*\)</span>.</p></li>
+<li><p>For the state <span class="math notranslate nohighlight">\(|\beta^*, \gamma^* \rangle\)</span>, perform multiple projection measurements in the direction of <span class="math notranslate nohighlight">\(z\)</span>, take <strong>obtained measurement result</strong> <span class="math notranslate nohighlight">\(z_1\cdots z_n\)</span> ** (which looks good) <strong>as the solution to the original optimization problem.</strong> (Note: the measurement result <span class="math notranslate nohighlight">\(z_1\cdots z_n\)</span> is the classical bit)</p></li>
+</ol>
+<p>It’s a little confusing, so let’s check it while implementing a specific example.</p>
+</section>
+<section id="Implementation:-Solve-the-Maxcut-problem-with-QAOA">
+<h2>Implementation: Solve the Maxcut problem with QAOA<a class="headerlink" href="#Implementation:-Solve-the-Maxcut-problem-with-QAOA" title="Link to this heading">¶</a></h2>
+<p>As a specific example, we use the Maxcut problem. <a class="reference external" href="https://en.wikipedia.org/wiki/Maximum_cut">Maxcut problem</a> is the problem to find a cut that maximizes the number of edges split when a graph with <span class="math notranslate nohighlight">\(n\)</span> vertices (for example, the figure below) is split into two.</p>
+<p><img alt="maxcut-example" src="../_images/maxcut_example.png" /> (Figure source: Wikipedia <a class="reference external" href="https://en.wikipedia.org/wiki/Maximum_cut">Maximum cut</a>)</p>
+<p>To reduce this problem to an optimization problem that can be handled by QAOA, we do the following. If you divide the vertices into two groups, give +1 to the vertices belonging to one group and -1 to the other group. Then, the cost function</p>
+<div class="math notranslate nohighlight">
+\[C(z) = -\frac{1}{2} \sum_{\text{vertices connected by edges}i,j} ( 1 - z_i z_j)\]</div>
+<p>represents (number of edges divided by grouping) <span class="math notranslate nohighlight">\(\times (-1)\)</span>. Therefore, if we find a bit string <span class="math notranslate nohighlight">\(z=z_1\cdots z_n\)</span> that minimizes <span class="math notranslate nohighlight">\(C(z)\)</span>, it meand that we have found a way to divide vertices that maximizes the number of split edges.</p>
+<p>In the following, let’s solve the maxcut problem for a rectangle (a figure with four vertices).</p>
+<img alt="maxcut" src="../_images/maxcut_4nodes.png" />
+<p>In this case, <span class="math notranslate nohighlight">\(C(Z)\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+C(Z) &amp;= -\frac{1}{2}(1-Z_{0}Z_{1})-\frac{1}{2}(1-Z_{1}Z_{2})-\frac{1}{2}(1-Z_{2}Z_{3})-\frac{1}{2}(1-Z_{3}Z_{1})\\
+&amp;=\frac{1}{2}(Z_{0}Z_{1}+Z_{1}Z_{2}+Z_{2}Z_{3}+Z_{3}Z_{1}) - 2
+\end{align}\end{split}\]</div>
+<p>The second term is a constant. Therefore,</p>
+<div class="math notranslate nohighlight">
+\[C(Z) = \frac{1}{2}(Z_{0}Z_{1}+Z_{1}Z_{2}+Z_{2}Z_{3}+Z_{3}Z_{1})\]</div>
+<section id="p=1-case">
+<h3><span class="math notranslate nohighlight">\(p=1\)</span> case<a class="headerlink" href="#p=1-case" title="Link to this heading">¶</a></h3>
+<p>Let’s implement the case when <span class="math notranslate nohighlight">\(p=1\)</span>. Here, <span class="math notranslate nohighlight">\(|\beta, \gamma \rangle = U_X(\beta^{(1)}) U_C(\gamma^{(1)}) |s\rangle\)</span></p>
+<p>When we implement <span class="math notranslate nohighlight">\(U_C(\gamma^{(1)}) = \prod_{i=0}^3 e^{-i\gamma^{(1)} Z_i Z_{i+1} }\)</span> , we use the following relation used in chapter 4-2</p>
+<div class="math notranslate nohighlight">
+\[e^{-i \delta Z_i Z_{i+1}}　= \operatorname{CNOT}_{i,i+1} \cdot e^{-i\delta Z_{i+1}} \cdot \operatorname{CNOT}_{i,i+1}.\]</div>
+<p>When you convert this into a matrix and calculate, you will find that the above equation is correct.</p>
+<p>Next, we will compose <span class="math notranslate nohighlight">\(|\beta, \gamma \rangle\)</span>, measure <span class="math notranslate nohighlight">\(\langle \beta, \gamma | C(Z) |\beta, \gamma \rangle\)</span> and implement the process to minimize it.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Run only if you are in Google Colaboratory or in a local environment where Qulacs is not installed</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>qulacs
+
+<span class="c1">## Run only in Google Colaboratory or (Linux or Mac) jupyter notebook environment</span>
+<span class="c1">## Qulacs errors will be output normally.</span>
+<span class="o">!</span>pip3<span class="w"> </span>install<span class="w"> </span>wurlitzer
+<span class="o">%</span><span class="k">load_ext</span> wurlitzer
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Import required libraries</span>
+<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span><span class="p">,</span> <span class="n">QuantumCircuit</span><span class="p">,</span> <span class="n">Observable</span><span class="p">,</span> <span class="n">PauliOperator</span>
+<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">H</span><span class="p">,</span> <span class="n">CNOT</span><span class="p">,</span> <span class="n">RX</span><span class="p">,</span> <span class="n">RZ</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1">## number of vertices</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="c1">## Define C(Z) as qulacs.Observable</span>
+<span class="n">cost_observable</span> <span class="o">=</span> <span class="n">Observable</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">cost_observable</span><span class="o">.</span><span class="n">add_operator</span><span class="p">(</span> <span class="n">PauliOperator</span><span class="p">(</span><span class="s2">&quot;Z </span><span class="si">{:}</span><span class="s2"> Z </span><span class="si">{:}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="k">n</span>), 0.5) )
+
+<span class="c1"># A function to add U_C(gamma) to a circuit</span>
+<span class="k">def</span> <span class="nf">add_U_C</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">gamma</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">n</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">RZ</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">gamma</span><span class="p">))</span> <span class="c1">## With qulacs, RZ(theta)=e^{i*theta/2*Z}</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">circuit</span>
+
+<span class="c1"># A function to add U_X(beta) to a circuit</span>
+<span class="k">def</span> <span class="nf">add_U_X</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">beta</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">RX</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">beta</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">circuit</span>
+
+<span class="c1"># a fuction to prepare |beta, gamma&gt; in the case of p=1 and return &lt;beta, gamma| C(Z) |beta, gamma&gt;</span>
+<span class="c1"># x = [beta, gamma]</span>
+<span class="k">def</span> <span class="nf">QAOA_output_onelayer</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">beta</span><span class="p">,</span> <span class="n">gamma</span> <span class="o">=</span> <span class="n">x</span>
+
+    <span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="c1">## to create superposition, apply Hadamard gate</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="c1">##apply  U_C, U_X</span>
+    <span class="n">circuit</span> <span class="o">=</span>  <span class="n">add_U_C</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">gamma</span><span class="p">)</span>
+    <span class="n">circuit</span> <span class="o">=</span>  <span class="n">add_U_X</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">beta</span><span class="p">)</span>
+
+    <span class="c1">## prepare |beta, gamma&gt;</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cost_observable</span><span class="o">.</span><span class="n">get_expectation_value</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+<span class="c1">## initial value</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span> <span class="p">])</span>
+
+<span class="c1">## minimize with scipy.minimize</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">QAOA_output_onelayer</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;maxiter&#39;</span><span class="p">:</span><span class="mi">500</span><span class="p">},</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;powell&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">fun</span><span class="p">)</span> <span class="c1"># value after optimization</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="c1"># (beta, gamma) after optimization</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-0.999999999499185
+[1.17809152 0.39269362]
+</pre></div></div>
+</div>
+<p>We got the minimum value -1 and corresponding <span class="math notranslate nohighlight">\(\beta^{(1)}, \gamma^{(1)}\)</span>. What value do we get from projective measurement of <span class="math notranslate nohighlight">\(|\beta, \gamma\rangle\)</span> in z axis ?</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># prepare |beta, gamma&gt; using optimized best, gamma</span>
+<span class="n">beta_opt</span><span class="p">,</span> <span class="n">gamma_opt</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">x</span>
+
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="c1">## to create superposition, apply Hadamard gate</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="c1">##apply  U_C, U_X</span>
+<span class="n">circuit</span> <span class="o">=</span>  <span class="n">add_U_C</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">gamma_opt</span><span class="p">)</span>
+<span class="n">circuit</span> <span class="o">=</span>  <span class="n">add_U_X</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">beta_opt</span><span class="p">)</span>
+
+<span class="c1">## prepare |beta, gamma&gt;</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+<span class="c1">## Find the of each component of the state vector = probability distribution when observed in the z direction. (Square of the absolute value observation probability)</span>
+<span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span><span class="o">**</span><span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">probs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[0.01562503 0.01562568 0.01562568 0.0781236  0.01562568 0.26562503
+ 0.0781236  0.01562568 0.01562568 0.0781236  0.26562503 0.01562568
+ 0.0781236  0.01562568 0.01562568 0.01562503]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="c1">## a bit string which can be acquired from z axis projective measurement</span>
+<span class="n">z_basis</span> <span class="o">=</span> <span class="p">[</span><span class="nb">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">probs</span><span class="o">.</span><span class="n">size</span><span class="p">)]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;states&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;probability(%)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">z_basis</span><span class="p">,</span> <span class="n">probs</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_5.3_quantum_approximate_optimazation_algorithm_11_0.png" src="../_images/notebooks_5.3_quantum_approximate_optimazation_algorithm_11_0.png" />
+</div>
+</div>
+<p>In other words, it was found that there is a high probability that <code class="docutils literal notranslate"><span class="pre">0101</span></code> or <code class="docutils literal notranslate"><span class="pre">1010</span></code> will be measured when projective measurement is performed in the <span class="math notranslate nohighlight">\(z\)</span> direction. These bit strings mean that vertices 1 and 3, and vertices 2 and 4 belong to the same group, so they represent the following partition:</p>
+<img alt="maxcut-p-1" src="../_images/maxcut_result_p1.png" />
+<p>Here, the number of edges crossed by the curve that divides the figure is 4, which is the maximum number of edges that pass when dividing this figure.</p>
+<p>Therefore, if we perform projection measurement on the optimized <span class="math notranslate nohighlight">\(|\beta, \gamma\rangle\)</span>, perform a certain number of measurement, and adopt a bit string with a high measurement probability, we can solve the optimization problem <span class="math notranslate nohighlight">\(C(z)\)</span> solution is obtained. However, remember that the value of the optimized cost function <span class="math notranslate nohighlight">\(\langle \beta, \gamma | C(Z) |\beta, \gamma \rangle\)</span> was -1. <span class="math notranslate nohighlight">\(\langle 0101 | C(Z) |0101 \rangle = \langle 1010 | C(Z) |1010 \rangle = -2\)</span>, so we are not
+getting the correct value for the cost function! This is because the variational state <span class="math notranslate nohighlight">\(|\beta, \gamma \rangle\)</span> did not have sufficient expressiveness, and the true solution <span class="math notranslate nohighlight">\(|0101\rangle, |1010\rangle\)</span> could not be expressed.</p>
+<p>So let’s see how the results change when the circuit is more complicated and <span class="math notranslate nohighlight">\(p=2\)</span>.</p>
+<p>*By the way, if I measure <span class="math notranslate nohighlight">\(|\beta, \gamma\rangle\)</span> 100 times to obtain 100 bit strings <span class="math notranslate nohighlight">\(z\)</span>, and calculate <span class="math notranslate nohighlight">\(C(z)\)</span> for each of them using a classical computer, such a problem may not occur.</p>
+</section>
+<section id="p=2-case">
+<h3><span class="math notranslate nohighlight">\(p=2\)</span> case<a class="headerlink" href="#p=2-case" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Import required libraries</span>
+<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span><span class="p">,</span> <span class="n">QuantumCircuit</span><span class="p">,</span> <span class="n">Observable</span><span class="p">,</span> <span class="n">PauliOperator</span>
+<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">H</span><span class="p">,</span> <span class="n">CNOT</span><span class="p">,</span> <span class="n">RX</span><span class="p">,</span> <span class="n">RZ</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1">## number of vertices</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="c1">## define C(Z) as qulacs.Observable</span>
+<span class="n">cost_observable</span> <span class="o">=</span> <span class="n">Observable</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">cost_observable</span><span class="o">.</span><span class="n">add_operator</span><span class="p">(</span> <span class="n">PauliOperator</span><span class="p">(</span><span class="s2">&quot;Z </span><span class="si">{:}</span><span class="s2"> Z </span><span class="si">{:}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">%</span><span class="k">n</span>), 0.5) )
+
+<span class="c1"># a function to add U_C(gamma) to a circuit</span>
+<span class="k">def</span> <span class="nf">add_U_C</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">gamma</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">n</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">RZ</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">gamma</span><span class="p">))</span> <span class="c1">## With qulacs, RZ(theta)=e^{i*theta/2*Z}</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">circuit</span>
+
+<span class="c1"># A function to add U_X(beta) to a circuit</span>
+<span class="k">def</span> <span class="nf">add_U_X</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">beta</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">RX</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">beta</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">circuit</span>
+
+<span class="c1"># a function to |beta, gamma&gt; in the case of p=2  and return  &lt;beta, gamma| C(Z) |beta, gamma&gt;</span>
+<span class="c1"># x = [beta0, beta1, gamma0, gamma1]</span>
+<span class="k">def</span> <span class="nf">QAOA_output_twolayer</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">beta0</span><span class="p">,</span> <span class="n">beta1</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span> <span class="n">gamma1</span> <span class="o">=</span> <span class="n">x</span>
+
+    <span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="c1">## to create superposition, apply Hadamard gate</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="c1">##apply  U_C, U_X</span>
+    <span class="n">circuit</span> <span class="o">=</span>  <span class="n">add_U_C</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">)</span>
+    <span class="n">circuit</span> <span class="o">=</span>  <span class="n">add_U_X</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">beta0</span><span class="p">)</span>
+    <span class="n">circuit</span> <span class="o">=</span>  <span class="n">add_U_C</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">gamma1</span><span class="p">)</span>
+    <span class="n">circuit</span> <span class="o">=</span>  <span class="n">add_U_X</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">beta1</span><span class="p">)</span>
+
+    <span class="c1">## prepare |beta, gamma&gt;</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cost_observable</span><span class="o">.</span><span class="n">get_expectation_value</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+<span class="c1">## initial value</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span> <span class="p">])</span>
+
+<span class="c1">## minimize with scipy.minimize</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">QAOA_output_twolayer</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;maxiter&#39;</span><span class="p">:</span><span class="mi">500</span><span class="p">},</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;powell&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">fun</span><span class="p">)</span> <span class="c1"># value after optimization</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="c1"># [beta0, beta1, gamma0, gamma1] after optimization</span>
+
+<span class="c1">## Check the probability distribution when measuring the state after optimization</span>
+<span class="n">beta0</span><span class="p">,</span> <span class="n">beta1</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">,</span> <span class="n">gamma1</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">x</span>
+
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+ <span class="c1">## to create superposition, apply Hadamard gate</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="c1">## apply U_C, U_X</span>
+<span class="n">circuit</span> <span class="o">=</span>  <span class="n">add_U_C</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">gamma0</span><span class="p">)</span>
+<span class="n">circuit</span> <span class="o">=</span>  <span class="n">add_U_X</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">beta0</span><span class="p">)</span>
+<span class="n">circuit</span> <span class="o">=</span>  <span class="n">add_U_C</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">gamma1</span><span class="p">)</span>
+<span class="n">circuit</span> <span class="o">=</span>  <span class="n">add_U_X</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">beta1</span><span class="p">)</span>
+
+<span class="c1">## prepare |beta, gamma&gt;</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+<span class="c1">##  Square of the absolute value observation probability</span>
+<span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span><span class="o">**</span><span class="mi">2</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">probs</span><span class="p">)</span>
+
+<span class="c1">## a bit string which can be acquired from z axis projective measurement</span>
+<span class="n">z_basis</span> <span class="o">=</span> <span class="p">[</span><span class="nb">format</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="s2">&quot;b&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">zfill</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">probs</span><span class="o">.</span><span class="n">size</span><span class="p">)]</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;states&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;probability(%)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">z_basis</span><span class="p">,</span> <span class="n">probs</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-1.9999996223652372
+[1.01150163 1.11872823 0.45213228 0.55937865]
+[1.10913271e-15 9.96406007e-09 9.96406007e-09 2.72762241e-08
+ 9.96406007e-09 4.99999906e-01 2.72762241e-08 9.96406007e-09
+ 9.96406007e-09 2.72762241e-08 4.99999906e-01 9.96406007e-09
+ 2.72762241e-08 9.96406007e-09 9.96406007e-09 1.10913271e-15]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_5.3_quantum_approximate_optimazation_algorithm_14_1.png" src="../_images/notebooks_5.3_quantum_approximate_optimazation_algorithm_14_1.png" />
+</div>
+</div>
+<p>Compared to the case of <span class="math notranslate nohighlight">\(p=1\)</span>, it can be seen that the probability of obtaining the true solutions <span class="math notranslate nohighlight">\(|0101\rangle, |1010\rangle\)</span> is overwhelmingly high. Also, the value of the cost function is correctly approaching -2.</p>
+<p>Thus, when using QAOA, it will be necessary to pay attention to the size of the complexity <span class="math notranslate nohighlight">\(p\)</span> of the variational quantum circuit.</p>
+</section>
+</section>
+<section id="Reference">
+<h2>Reference<a class="headerlink" href="#Reference" title="Link to this heading">¶</a></h2>
+<p>[1] E. Farhi, J. Goldstone, and S. Gutmann, “A Quantum Approximate Optimization Algorithm”, <a class="reference external" href="https://arxiv.org/abs/1411.4028">arXiv:1411.4028</a> (2014).</p>
+<p>[2] Eddie Farhi: A Quantum Approximate Optimization Algorithm, <a class="reference external" href="https://www.youtube.com/watch?v=J8y0VhnISi8">https://www.youtube.com/watch?v=J8y0VhnISi8</a></p>
+</section>
+</section>
+
+</article>
+        <aside class="nftt-toc">
+          
+          <div class="mt-3 mb-1 my-lg-0 ps-xl-3 text-muted">
+            <button class="btn btn-link link-dark p-lg-0 mb-2 mb-lg-0 text-decoration-none nftt-toc-toggle d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents"
+            >On this page <i class="ms-2 bi bi-chevron-expand"></i></button>
+            <div class="title d-none d-lg-block">
+              <i class="bi bi-file-earmark-text"></i>&nbsp;&nbsp;<span class="small">On this page</span>
+            </div>
+            <div class="collapse nftt-toc-collapse" id="tocContents">
+              <nav id="TableOfContents">
+                <ul>
+<li><a class="reference internal" href="#">5-3. Quantum Approximate Optimazation Algorithm (QAOA)</a><ul>
+<li><a class="reference internal" href="#Overview">Overview</a></li>
+<li><a class="reference internal" href="#Problem-setting">Problem setting</a></li>
+<li><a class="reference internal" href="#QAOA-Algorithm-Steps">QAOA Algorithm Steps</a></li>
+<li><a class="reference internal" href="#Implementation:-Solve-the-Maxcut-problem-with-QAOA">Implementation: Solve the Maxcut problem with QAOA</a><ul>
+<li><a class="reference internal" href="#p=1-case"><span class="math notranslate nohighlight">\(p=1\)</span> case</a></li>
+<li><a class="reference internal" href="#p=2-case"><span class="math notranslate nohighlight">\(p=2\)</span> case</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Reference">Reference</a></li>
+</ul>
+</li>
+</ul>
+
+              </nav>
+            </div>
+          </div>
+          
+        </aside>
+      </div>
+    </div>
+
+    <footer class="nftt-footer">
+      <nav id="paginator" class="py-4" aria-label="Documentation navigation">
+    <div class="container">
+      <ul class="pagination justify-content-between mb-0"><li class="page-item">
+            <a href="5.2_Quantum_Circuit_Learning.html" class="d-flex px-5 align-items-end" rel="prev" aria-label="Previous page: 5-2. Quantum Circuit learning">
+              <span class="prev-page"><i class="bi bi-caret-left"></i></span>
+              <div class="d-flex flex-column">
+                <span class="text-small text-start text-muted">Previous</span>
+                <span class="underline">5-2. Quantum Circuit learning</span>
+              </div>
+            </a>
+          </li>
+        <li class="page-item ms-auto">
+            <a href="6_quantum_chemistry_calculation.html" class="d-flex px-5 align-items-end" rel="next" aria-label="Next page: Chapter 6 Quantum chemistry calculation">
+              <div class="d-flex flex-column">
+                <span class="text-small text-end text-start text-muted">Next</span>
+                <span class="underline">Chapter 6 Quantum chemistry calculation</span>
+              </div>
+              <span class="next-page"><i class="bi bi-caret-right"></i></span>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </nav>
+
+      <div class="py-5 px-4 px-md-3">
+  <div class="container">
+    
+
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <a class="brand-text d-inline-flex align-items-center mb-2 text-decoration-none" href="/" aria-label="Nefertiti-for-Sphinx">
+          <span class="fs-6 fw-bold">Quantum Native Dojo</span>
+        </a>
+        
+          <ul class="list-unstyled small text-muted">
+            <li>2023, Quantum Native Dojo Contributors</li>
+          </ul>
+        
+        
+        <div class="built-with pt-2">
+          Built with <a href="http://sphinx-doc.org">Sphinx 7.2.6</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.3.0</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+    </footer>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"CommonHTML": {"undefinedFamily": "\"Source Serif Pro\", \"Yakumono\", \"Noto Serif JP\", \"Hiragino Mincho ProN\", \"STIXGeneral\", \"Arial Unicode MS\", serif"}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
+
+    <script type="text/javascript" src="../_static/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinx-nefertiti.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/doc_versions.js"></script>
+  </body>
+</html>

@@ -1,0 +1,66 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "colab_type": "text",
+    "id": "A46fkXZnkD6Z"
+   },
+   "source": [
+    "# Chapter 1: Fundamentals of Quantum Information"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "colab_type": "text",
+    "id": "va9-CH5yj8be"
+   },
+   "source": [
+    "In Chapter 1, you will learn quantum mechanics, which is necessary to fully understand how quantum computers work, and how to describe the states and operations of quantum computers. In particular, the idea of tensor products is essential for deep understanding of quantum computers. Although the computation of tensor products is a bit complicated, the Python math library [SymPy](https://www.sympy.org/en/index.html) supports algebraic processing of quantum mechanics, including tensor products. Let's learn the basics of quantum mechanics and quantum computers while looking at the results of calculations using SymPy."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "nbsphinx-toctree": {}
+   },
+   "source": [
+    "- [1-1. Qubit Representation](1.1_qubit_representation.ipynb)\n",
+    "- [1-2. Qubit Operations](1.2_qubit_operations.ipynb)\n",
+    "- [1-3. Multiqubit Representation and Operations](1.3_multiqubit_representation_and_operations.ipynb)\n",
+    "- [1-4. Quantum Circuit Diagram](1.4_quantum_circuit_diagram.ipynb)\n",
+    "- [Column: The No-cloning Theorem ・ CHSH Inequality](1.c_CHSH-inequality_etc.ipynb)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "celltoolbar": "Edit Metadata",
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

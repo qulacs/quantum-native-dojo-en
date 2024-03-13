@@ -1,0 +1,703 @@
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+      <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="docsearch:name" content="Quantum Native Dojo" />
+    <meta name="docsearch:package_type" content="" />
+    <meta name="docsearch:release" content="" />
+    <meta name="docsearch:version" content="" />
+    
+      <title>6-1. OpenFermion basics &mdash; Quantum Native Dojo  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-icons.css" type="text/css" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+          <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+          <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+        <link rel="index" title="Index" href="../genindex.html" />
+        <link rel="search" title="Search" href="../search.html" />
+        <link rel="top" title="Quantum Native Dojo  documentation" href="#" />
+        <link rel="up" title="Chapter 6 Quantum chemistry calculation" href="6_quantum_chemistry_calculation.html" />
+        <link rel="next" title="6-2. Implementation of variational quantum eigensolver (VQE) using Qulacs" href="6.2_qulacs_VQE.html" />
+        <link rel="prev" title="Chapter 6 Quantum chemistry calculation" href="6_quantum_chemistry_calculation.html" />
+    <style>
+      :root {
+        --nftt-body-font-family: "Nunito", var(--nftt-font-sans-serif) !important;
+        --nftt-font-monospace: "Red Hat Mono", var(--nftt-font-family-monospace) !important;
+        --nftt-project-name-font: var(--nftt-body-font-family);
+        --nftt-documentation-font: var(--nftt-body-font-family);
+        --nftt-doc-headers-font: "Georgia", var(--nftt-documentation-font);}
+      h1 *, h2 *, h3 *, h4 *, h5 *, h6 * { font-size: inherit; }
+    </style>
+  </head>
+  <body>
+    <header class="navbar navbar-expand-xl navbar-dark nftt-navbar flex-column fixed-top">
+      <div class="skip-links container-fluid visually-hidden-focusable overflow-hidden justify-content-start">
+        <div class="border-bottom mb-2 pb-2 w-100">
+          <a class="d-none d-md-inline-flex p-2 m-1" href="#sidebar-filter">Skip to docs navigation</a>
+          <a class="d-inline-flex p-2 m-1" href="#content">Skip to main content</a>
+        </div>
+      </div>
+      <nav class="container-xxl nftt-gutter flex-wrap flex-xl-nowrap" aria-label="Main navigation">
+        <div class="nftt-navbar-toggler">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Toggle documentation navigation">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+          <a href="../index.html"
+              
+              class="navbar-brand p-0 me-0 md-lg-2"
+          ><span class="brand-text">Quantum Native Dojo</span></a>
+        
+        <div class="d-flex d-xl-none">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttSearch" aria-controls="nfttSearch" aria-label="Search">
+            <i class="bi bi-search"></i>
+          </button>
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttNavbar" aria-controls="nfttNavbar" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+        </div>
+        
+<div class="offcanvas-xl offcanvas-end flex-grow-1" tabindex="-1" id="nfttSearch" aria-labelledby="nfttSearchOffcanvasLabel" data-bs-scroll="true">
+  <div class="offcanvas-header px-4 pb-0">
+    <h5 class="offcanvas-title fw-bold" id="nfttSearchOffcanvasLabel">Search the documentation</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttSearch"></button>
+  </div>
+  <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+    <hr class="d-xl-none text-white-50">
+    <ul class="navbar-nav flex-row align-items-center flex-wrap ms-md-auto">
+      <li class="nav-item col-12 col-xl-auto">
+        <form id="nftt-search-form" action="../search.html" method="get">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search docs" aria-label="Search" aria-describedby="button-search">
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+            <button class="btn btn-primary" type="submit" id="button-search" aria-label="Search"><i class="bi bi-search"></i></button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+</div>
+
+        <div class="offcanvas-xl offcanvas-end" tabindex="-1" id="nfttNavbar" aria-labelledby="nfttNavbarOffcanvasLabel" data-bs-scroll="true">
+          <div class="offcanvas-header px-4 pb-0">
+            <div class="offcanvas-title navbar-brand" id="nfttNavbarOffcanvasLabel"><span class="brand-text">Nefertiti for Sphinx</span></div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttNavbar"></button>
+          </div>
+          <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+            <hr class="d-xl-none text-white-50">
+            <ul class="navbar-nav flex-row align-items-center flex-wrap ms-lg-auto">
+              
+              <!-- version_dropdown.html -->
+
+              
+              <!-- colorscheme_dropdown.html -->
+<li class="nav-item dropdown">
+  <a class="nav-link d-flex py-2 px-0 px-xl-2 dropdown-toggle align-items-center" id="snftt-luz" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" aria-label="Toggle light/dark">
+    <i class="bi bi-circle-half" data-snftt-luz-icon-active></i>
+    <span id="snftt-luz-text" class="d-xl-none small ms-2">Toggle light/dark</span>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="snftt-luz-text">
+    <li>
+      <h6 class="dropdown-header">Light/dark</h6>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="light" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-sun" data-snftt-luz-icon="light"></i>
+        </span>
+        <span class="small ms-3">Light</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="dark" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-moon-stars" data-snftt-luz-icon="dark"></i>
+        </span>
+        <span class="small ms-3">Dark</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item current d-flex align-items-center" data-snftt-luz="default" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-circle-half" data-snftt-luz-icon="default"></i>
+        </span>
+        <span class="small ms-3">Default</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+  </ul>
+</li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container-fluid">
+      <div class="nftt-gutter nftt-page">
+        <aside class="nftt-sidebar">
+          <div class="nftt-sidebar-content">
+            <div class="title d-none d-xl-block">
+              <i class="bi bi-book"></i>&nbsp;&nbsp;<span>Index</span>
+            </div>
+            <div id="sidebar" tabindex="-1" class="offcanvas-xl offcanvas-start" aria-labelledby="nfttSidebarOffcanvasLabel">
+                <!-- danirus sidebartemplate: "globaltoc.html" --><div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title fw-bold" id="nfttSidebarOffcanvasLabel">
+    Table of contents
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#sidebar"></button>
+</div>
+
+<div class="offcanvas-body">
+  <nav class="toc" aria-label="Main menu">
+    <div class="mb-3 p-1 pt-3 pb-4 border-bottom">
+      <input id="sidebar-filter" type="text" name="filter" class="form-control form-control-sm" placeholder="filter" aria-label="filter">
+    </div>
+    <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="0_prologue.html">Chapter 0: What is a Quantum Computer ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_quantum_information_foundation.html">Chapter 1: Fundamentals of Quantum Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1.1_qubit_representation.html">1-1. Qubit Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.2_qubit_operations.html">1-2. Qubit Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html">1-3. Multiqubit representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html#Column:-What-is-a-universal-gate-set?">Column: What is a universal gate set?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.4_quantum_circuit_diagram.html">1-4. Quantum Circuit Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2_introduction_to_quantum_algorithms.html">Chapter 2: Introduction to Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2.1_NISQ_and_long_term.html">2-1. NISQ algorithm and long-term algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.2_Hadamard_test.html">2-2. Hadamard test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.3_quantum_Fourier_transform.html">2-3. Quantum Fourier transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.4_phase_estimation_beginner.html">2-4. Phase Estimation Algorithm（Introductory）</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3_execution_environments_of_quantum_algorithms.html">Chapter 3: Execution Environment for Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3.1_Qulacs_tutorial.html">3-1. Qulacs_tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.2_Qiskit_IBMQ.html">3-2. Qiskit_IBMQ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4_quantum_dynamics_simulation.html">Chapter4 Quantum dynamics simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4.1_quantum_simulation.html">4-1. Quantum Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4.2_trotter_decomposition.html">4-2. Trotter Decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5_VQC_based_algorithms.html">Chapter 5 Algorithms Based on Variational Quantum Circuits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5.1_variational_quantum_eigensolver.html">5-1. Variational Quantum Eigensolver（VQE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.2_Quantum_Circuit_Learning.html">5-2. Quantum Circuit Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.3_quantum_approximate_optimazation_algorithm.html">5-3. Quantum Approximate Optimazation Algorithm (QAOA)</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="6_quantum_chemistry_calculation.html">Chapter 6 Quantum chemistry calculation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">6-1. OpenFermion Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7_quantum_phase_estimation.html">chapter 7 Quantum phase estimation algorithm and its application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7.1_quantum_phase_estimation_detailed.html">7-1. Quantum Phase Estimation (QPE) Algorithm Detailed：Hydrogen Molecule as Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.2_Harrow-Hassidim-Lloyd_algorithm.html">7-2. Harrow-Hassidim-Lloyd (HHL) Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.3_application_of_HHL_algorithm.html">7-3. Portofolio Optimization by HHL Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="8_quantum_search_algorithm.html">Chapter 8: Quantum Search Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="8.1_oracle.html">8-1. oracle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8.2_Grovers_algorithm.html">8-2. Grover’s algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="9_quantum_error_correction.html">Chapter 9 Quantum Error Correction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="9.1_error_correction.html">9-1. classical error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9.2_quantum_error_correction.html">9-2. quantum error</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav>
+  <template data-toggle-item-template>
+    <button class="btn btn-sm btn-link toctree-expand" type="button">
+      <i class="bi bi-caret-right"></i>
+      <span class="visually-hidden">Toggle menu contents</span>
+    </button>
+  </template>
+</div>
+            </div>
+          </div>
+        </aside>
+        <article id="content" class="nftt-content" role="main">
+    <section id="6-1.-OpenFermion-basics">
+<h1>6-1. OpenFermion basics<a class="headerlink" href="#6-1.-OpenFermion-basics" title="Link to this heading">¶</a></h1>
+<p>In this chapter, we introduce a method to convert the Hamiltonian of an interacting electron system into a form that is easy for quantum computers to handle using OpenFermion[1], a python library for quantum chemistry calculation. OpenFermion provides connectivity to the open source libraries for quantum chemical calculations <a class="reference external" href="http://www.psicode.org">Psi4</a> and <a class="reference external" href="https://github.com/pyscf/pyscf">PySCF</a>. Even if you do not understand the details of how to use these libraries, you can obtain
+the Hamiltonian of the electron system that appears in quantum chemical calculations simply by entering the structure of the molecule. Here, we use PySCF.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## If various libraries are not installed, please execute.</span>
+<span class="c1">## If you run on Google Colaboratory, ignore the following message waring, &#39;You must restart the runtime in order to use newly installed versions.&#39;</span>
+<span class="c1">## Resuming runtime will lead to a crash.</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>qulacs<span class="w"> </span>pyscf<span class="w"> </span>openfermion<span class="w"> </span>openfermionpyscf
+
+
+<span class="c1">## Run only if you are in Google Colaboratory or in a local environment where Qulacs is not installed</span>
+<span class="c1">## Qulacs errors will now be output normally.</span>
+<span class="o">!</span>pip3<span class="w"> </span>install<span class="w"> </span>wurlitzer
+<span class="o">%</span><span class="k">load_ext</span> wurlitzer
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Import required libraries</span>
+<span class="c1">#If you get an error, install openfermion later than v.1.0.0</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">openfermion.chem</span> <span class="kn">import</span> <span class="n">MolecularData</span>
+<span class="kn">from</span> <span class="nn">openfermion.transforms</span> <span class="kn">import</span> <span class="n">get_fermion_operator</span><span class="p">,</span> <span class="n">jordan_wigner</span><span class="p">,</span> <span class="n">bravyi_kitaev</span>
+<span class="kn">from</span> <span class="nn">openfermion.linalg</span> <span class="kn">import</span> <span class="n">get_sparse_operator</span>
+<span class="kn">from</span> <span class="nn">openfermion.ops</span> <span class="kn">import</span> <span class="n">FermionOperator</span>
+<span class="kn">from</span> <span class="nn">openfermionpyscf</span> <span class="kn">import</span> <span class="n">run_pyscf</span>
+<span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">fci</span>
+</pre></div>
+</div>
+</div>
+<section id="Calculation-of-hydrogen-molecule">
+<h2>Calculation of hydrogen molecule<a class="headerlink" href="#Calculation-of-hydrogen-molecule" title="Link to this heading">¶</a></h2>
+<p>In openfermion, we enter data describing molecules into MolecularData class.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#define constants</span>
+<span class="n">basis</span> <span class="o">=</span> <span class="s2">&quot;sto-3g&quot;</span>  <span class="c1">#basis set</span>
+<span class="n">multiplicity</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1">#spin multiplicity</span>
+<span class="n">charge</span> <span class="o">=</span> <span class="mi">0</span>        <span class="c1">#total charge for the molecule</span>
+<span class="n">distance</span> <span class="o">=</span> <span class="mf">0.65</span>
+<span class="n">geometry</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;H&quot;</span><span class="p">,(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)),(</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">distance</span><span class="p">))]</span>  <span class="c1">#xyz coordinates for atoms</span>
+<span class="n">description</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span>  <span class="c1">#description for the psi4 output file</span>
+
+<span class="n">molecule</span> <span class="o">=</span> <span class="n">MolecularData</span><span class="p">(</span><span class="n">geometry</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">multiplicity</span><span class="p">,</span> <span class="n">charge</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Variable-description">
+<h2>Variable description<a class="headerlink" href="#Variable-description" title="Link to this heading">¶</a></h2>
+<p>The meaning of the variables appearing in the above code is explained below.</p>
+<section id="basis:-basis-function">
+<h3>basis: basis function<a class="headerlink" href="#basis:-basis-function" title="Link to this heading">¶</a></h3>
+<p>Set basis functions for representing molecular orbitals. There are various basis sets such as sto-3g, 6-31G.</p>
+<p>sto-3g (Slater Type Orbital - 3 gaussian) used here is a basis function that approximates Slater type orbital with 3 gaussians.</p>
+<p>Slater type orbital is an orbital that resembles the solution of a hydrogen atom. As a radial function, we use</p>
+<div class="math notranslate nohighlight">
+\[R_{nl}(r) = r^{n-l} \exp \left(-\frac{Z-s}{na_0}r\right),\]</div>
+<p>In angular direction, we use spherical harmonic function <span class="math notranslate nohighlight">\(Y_{lm}(\theta,\phi)\)</span>.</p>
+<p>sto-3g uses a function which approximates this radial wavefunction <span class="math notranslate nohighlight">\(R_{nl}(r)\)</span> with three gaussians.</p>
+</section>
+<section id="multiplicity:-spin-multiplicity">
+<h3>multiplicity: spin multiplicity<a class="headerlink" href="#multiplicity:-spin-multiplicity" title="Link to this heading">¶</a></h3>
+<p>Since electrons have a spin of 1/2, the spin multiplicity is 2 when one electron exists in isolation. However, in the case of a hydrogen molecule, electrons form a singlet in the ground state, and the total spin is 0. Since spin 0 has only one state, the spin multiplicity is set to 1 in this case.</p>
+</section>
+<section id="charge:-total-charge">
+<h3>charge: total charge<a class="headerlink" href="#charge:-total-charge" title="Link to this heading">¶</a></h3>
+<p>Input the total charge. When considering an ion, it becomes + or −.</p>
+</section>
+<section id="geometry:-nuclear-configuration">
+<h3>geometry: nuclear configuration<a class="headerlink" href="#geometry:-nuclear-configuration" title="Link to this heading">¶</a></h3>
+<p>Specify atomic species and their coordinates in x,y,z.</p>
+</section>
+<section id="description">
+<h3>description<a class="headerlink" href="#description" title="Link to this heading">¶</a></h3>
+<p>The output results calculated by pyscf are saved in the directory where the openfermion library is saved. This is a variable that determines the name of the file.</p>
+</section>
+</section>
+<section id="Calculatin-with-PySCF">
+<h2>Calculatin with PySCF<a class="headerlink" href="#Calculatin-with-PySCF" title="Link to this heading">¶</a></h2>
+<p>Input the MolecularData set above to the function <code class="docutils literal notranslate"><span class="pre">run_pyscf</span></code> and perform quantum chemical calculations with PySCF. It should finish in a few seconds.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">molecule</span> <span class="o">=</span> <span class="n">run_pyscf</span><span class="p">(</span><span class="n">molecule</span><span class="p">,</span><span class="n">run_scf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">run_fci</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="HF-&amp;-Full-CI-energy">
+<h2>HF &amp; Full-CI energy<a class="headerlink" href="#HF-&-Full-CI-energy" title="Link to this heading">¶</a></h2>
+<p>Let’s take a look at the Hartree-Fock energy and Full-CI energy (=exact basis energy) calculated by PySCF. (1 Hartree = 27.2116 eV)</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HF energy: </span><span class="si">{}</span><span class="s2"> (Hartree)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">molecule</span><span class="o">.</span><span class="n">hf_energy</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FCI energy: </span><span class="si">{}</span><span class="s2"> (Hartree)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">molecule</span><span class="o">.</span><span class="n">fci_energy</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+HF energy: -1.1129965456691684 (Hartree)
+FCI energy: -1.1299047843229135 (Hartree)
+</pre></div></div>
+</div>
+</section>
+<section id="One-Electron-integral-h_{ij}・Two-Electron-integral-h_{ijkl}">
+<h2>One-Electron integral <span class="math notranslate nohighlight">\(h_{ij}\)</span>・Two-Electron integral <span class="math notranslate nohighlight">\(h_{ijkl}\)</span><a class="headerlink" href="#One-Electron-integral-h_{ij}・Two-Electron-integral-h_{ijkl}" title="Link to this heading">¶</a></h2>
+<p>Quantities such as the one-electron and two-electron integrals are also stored in the MolecularData class.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">molecule</span><span class="o">.</span><span class="n">one_body_integrals</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[-1.30950987e+00  1.98461056e-17]
+ [ 8.14840166e-17 -4.10026381e-01]]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">molecule</span><span class="o">.</span><span class="n">two_body_integrals</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[[[ 6.91904405e-01 -4.16333634e-17]
+   [-2.77555756e-17  1.76318452e-01]]
+
+  [[-2.77555756e-17  1.76318452e-01]
+   [ 6.79683914e-01  0.00000000e+00]]]
+
+
+ [[[-4.16333634e-17  6.79683914e-01]
+   [ 1.76318452e-01  8.32667268e-17]]
+
+  [[ 1.76318452e-01  8.32667268e-17]
+   [ 0.00000000e+00  7.14671111e-01]]]]
+</pre></div></div>
+</div>
+</section>
+<section id="Hamiltonian-in-second-quantized-form">
+<h2>Hamiltonian in second quantized form<a class="headerlink" href="#Hamiltonian-in-second-quantized-form" title="Link to this heading">¶</a></h2>
+<p>openfermion computes the Hamiltonian of the second quantized form from these integrals.</p>
+<div class="math notranslate nohighlight">
+\[H = \sum_i h_{ij}c_i^\dagger c_j + \sum_{ijkl} h_{ijkl} c_i^\dagger c_j^\dagger c_k c_l\]</div>
+<p>(For the second quantization, see e.g. reference [2]). The Hamiltonian can be calculated by calling the <code class="docutils literal notranslate"><span class="pre">get_molecular_hamiltonian</span></code> method.</p>
+<p>For example, (3,1)represents <span class="math notranslate nohighlight">\(c_3^\dagger\)</span>, and (1,0) represents <span class="math notranslate nohighlight">\(c_1\)</span> .</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">molecule</span><span class="o">.</span><span class="n">get_molecular_hamiltonian</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+() 0.8141187860307693
+((0, 1), (0, 0)) -1.309509868464871
+((1, 1), (1, 0)) -1.309509868464871
+((2, 1), (2, 0)) -0.4100263808117837
+((3, 1), (3, 0)) -0.4100263808117837
+((0, 1), (0, 1), (0, 0), (0, 0)) 0.3459522026149022
+((0, 1), (0, 1), (2, 0), (2, 0)) 0.0881592258051036
+((0, 1), (1, 1), (1, 0), (0, 0)) 0.3459522026149022
+((0, 1), (1, 1), (3, 0), (2, 0)) 0.0881592258051036
+((0, 1), (2, 1), (0, 0), (2, 0)) 0.0881592258051036
+((0, 1), (2, 1), (2, 0), (0, 0)) 0.3398419569652305
+((0, 1), (3, 1), (1, 0), (2, 0)) 0.0881592258051036
+((0, 1), (3, 1), (3, 0), (0, 0)) 0.3398419569652305
+((1, 1), (0, 1), (0, 0), (1, 0)) 0.3459522026149022
+((1, 1), (0, 1), (2, 0), (3, 0)) 0.0881592258051036
+((1, 1), (1, 1), (1, 0), (1, 0)) 0.3459522026149022
+((1, 1), (1, 1), (3, 0), (3, 0)) 0.0881592258051036
+((1, 1), (2, 1), (0, 0), (3, 0)) 0.0881592258051036
+((1, 1), (2, 1), (2, 0), (1, 0)) 0.3398419569652305
+((1, 1), (3, 1), (1, 0), (3, 0)) 0.0881592258051036
+((1, 1), (3, 1), (3, 0), (1, 0)) 0.3398419569652305
+((2, 1), (0, 1), (0, 0), (2, 0)) 0.33984195696523034
+((2, 1), (0, 1), (2, 0), (0, 0)) 0.0881592258051036
+((2, 1), (1, 1), (1, 0), (2, 0)) 0.33984195696523034
+((2, 1), (1, 1), (3, 0), (0, 0)) 0.0881592258051036
+((2, 1), (2, 1), (0, 0), (0, 0)) 0.0881592258051036
+((2, 1), (2, 1), (2, 0), (2, 0)) 0.35733555551906837
+((2, 1), (3, 1), (1, 0), (0, 0)) 0.0881592258051036
+((2, 1), (3, 1), (3, 0), (2, 0)) 0.35733555551906837
+((3, 1), (0, 1), (0, 0), (3, 0)) 0.33984195696523034
+((3, 1), (0, 1), (2, 0), (1, 0)) 0.0881592258051036
+((3, 1), (1, 1), (1, 0), (3, 0)) 0.33984195696523034
+((3, 1), (1, 1), (3, 0), (1, 0)) 0.0881592258051036
+((3, 1), (2, 1), (0, 0), (1, 0)) 0.0881592258051036
+((3, 1), (2, 1), (2, 0), (3, 0)) 0.35733555551906837
+((3, 1), (3, 1), (1, 0), (1, 0)) 0.0881592258051036
+((3, 1), (3, 1), (3, 0), (3, 0)) 0.35733555551906837
+
+</pre></div></div>
+</div>
+</section>
+<section id="Convert-to-tractable-operators-for-quantum-computers">
+<h2>Convert to tractable operators for quantum computers<a class="headerlink" href="#Convert-to-tractable-operators-for-quantum-computers" title="Link to this heading">¶</a></h2>
+<p>The easiest to handle on a quantum computer are the Pauli operators <span class="math notranslate nohighlight">\(I, X, Y, Z\)</span> and their tensor products. Therefore, in order to treat the Hamiltonian of ordinary electrons with a quantum computer, convert the Hamiltonian of the second quantization form</p>
+<div class="math notranslate nohighlight">
+\[H_{fermion} = \sum_i h_{ij}c_i^\dagger c_j + \sum_{ijkl} h_{ijkl} c_i^\dagger c_j^\dagger c_k c_l\]</div>
+<p>to</p>
+<div class="math notranslate nohighlight">
+\[H_{qubit} = \sum_{P\in \{I,X,Y,Z\}^{\otimes n}} h_{P} P\]</div>
+<p>Various transformation methods have been proposed, but here we use the simplest one, called the Jordan-Wigner transformation. In the Jordan-Wigner transformation, the molecular orbital <span class="math notranslate nohighlight">\(i\)</span> corresponds to the <span class="math notranslate nohighlight">\(i\)</span>-th qubit. The state that the molecular orbital is occupied by an electron is represented with <span class="math notranslate nohighlight">\(|1\rangle\)</span>, otherwise <span class="math notranslate nohighlight">\(|0\rangle\)</span>.</p>
+<p>Under such a convention, constructing the Pauli operator so as to satisfy the anticommutation relation of the following creation-annihilation operator of fermion,</p>
+<div class="math notranslate nohighlight">
+\[\{c^\dagger_i, c^\dagger_j\} = c^\dagger_i c^\dagger_j + c^\dagger_j c^\dagger_i = 0,  \:
+\{c_i, c_j\} = 0,  \:
+\{c^\dagger_i, c_j\} = \delta_{ij}\]</div>
+<p>we obtain</p>
+<div class="math notranslate nohighlight">
+\[a^{\dagger}_{j} \leftrightarrow \frac{X_j-iY_j}{2}\otimes Z_{j-1}\otimes Z_{j-2} \cdots Z_{1}\]</div>
+<p>For transformation methods other than the Jordan-Wigner transformation, see [2][3].</p>
+<p>Jordan-Wigner transformation is implemented in openfermion. By passing <code class="docutils literal notranslate"><span class="pre">FermionOperator</span></code> to <code class="docutils literal notranslate"><span class="pre">jordan_wigner</span></code> function, it will return <code class="docutils literal notranslate"><span class="pre">QubitOperator</span></code> corresponding to the Jordan-Wigner transformation of that operator. Below, the <code class="docutils literal notranslate"><span class="pre">FermionOperator</span></code> is created from the <code class="docutils literal notranslate"><span class="pre">MolecularData</span></code> of the hydrogen molecule created above, and the Jordan-Wigner transform is used to convert the Hamiltonian of the hydrogen molecule into a form that can be easily handled by a quantum computer.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">jw_hamiltonian</span> <span class="o">=</span> <span class="n">jordan_wigner</span><span class="p">(</span><span class="n">get_fermion_operator</span><span class="p">(</span><span class="n">molecule</span><span class="o">.</span><span class="n">get_molecular_hamiltonian</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">jw_hamiltonian</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(0.0377511039464572+0j) [] +
+(-0.0440796129025518+0j) [X0 X1 Y2 Y3] +
+(0.0440796129025518+0j) [X0 Y1 Y2 X3] +
+(0.0440796129025518+0j) [Y0 X1 X2 Y3] +
+(-0.0440796129025518+0j) [Y0 Y1 X2 X3] +
+(0.18601648886230573+0j) [Z0] +
+(0.1729761013074511+0j) [Z0 Z1] +
+(0.12584136558006342+0j) [Z0 Z2] +
+(0.16992097848261523+0j) [Z0 Z3] +
+(0.18601648886230576+0j) [Z1] +
+(0.16992097848261523+0j) [Z1 Z2] +
+(0.12584136558006342+0j) [Z1 Z3] +
+(-0.26941693141632095+0j) [Z2] +
+(0.17866777775953419+0j) [Z2 Z3] +
+(-0.26941693141632095+0j) [Z3]
+</pre></div></div>
+</div>
+<p>Let’s calculate the Hartree-Fock (HF) energy from this Hamiltonian. In the Jordan-Wigner transform, the qubit <span class="math notranslate nohighlight">\(\left|0\right\rangle, \left|1\right\rangle\)</span> and the orbital occupancy numbers correspond one-to-one. Therefore, in order to calculate the HF energy, calculate the expected value for <span class="math notranslate nohighlight">\(\left|1100\right\rangle\)</span>. Because theare 2 electrons, the state is filled with 1 twice from the bottom.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># function for computing the tensor product</span>
+<span class="k">def</span> <span class="nf">kron_N</span><span class="p">(</span><span class="o">*</span><span class="n">ops</span><span class="p">):</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">ops</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">ops</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span><span class="n">op</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tmp</span>
+
+<span class="n">bra0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="n">bra1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
+<span class="n">HFbra</span> <span class="o">=</span> <span class="n">kron_N</span><span class="p">(</span><span class="n">bra1</span><span class="p">,</span> <span class="n">bra1</span><span class="p">,</span> <span class="n">bra0</span><span class="p">,</span> <span class="n">bra0</span><span class="p">)</span>
+<span class="n">HFket</span> <span class="o">=</span> <span class="n">HFbra</span><span class="o">.</span><span class="n">T</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">HFbra</span><span class="p">)</span>
+<span class="n">jw_matrix</span> <span class="o">=</span> <span class="n">get_sparse_operator</span><span class="p">(</span><span class="n">jw_hamiltonian</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">HFbra</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">jw_matrix</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">HFket</span><span class="p">))),</span> <span class="n">molecule</span><span class="o">.</span><span class="n">hf_energy</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]]
+[[-1.11299655]] -1.1129965456691684
+</pre></div></div>
+</div>
+<p>It can be confirmed that it almost matches the calculation of pyscf.</p>
+<p>Now let’s diagonalize the Hamiltonian and see that the result agrees with the Full-CI (exact solution) energy.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">eigenenergies</span><span class="p">,</span> <span class="n">eigenvecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">jw_matrix</span><span class="o">.</span><span class="n">toarray</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">eigenenergies</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">molecule</span><span class="o">.</span><span class="n">fci_energy</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-1.129904784322913 -1.1299047843229135
+</pre></div></div>
+</div>
+<p>It can be confirmed that this also almost matches. The ground state wavefunction <span class="math notranslate nohighlight">\(\left|\psi_g\right\rangle\)</span> is</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">eigenvecs</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[ 0.        +0.j  0.        +0.j  0.        +0.j  0.09545811+0.j
+  0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+  0.        +0.j  0.        +0.j  0.        +0.j  0.        +0.j
+ -0.99543345+0.j  0.        +0.j  0.        +0.j  0.        +0.j]
+</pre></div></div>
+</div>
+<p><span class="math notranslate nohighlight">\(\left|\psi_g \right\rangle \approx - 0.995\left|1100\right\rangle + 0.0955 \left|0011\right\rangle\)</span>. It turns out that the Hartree-Fock solution <span class="math notranslate nohighlight">\(\left|1100\right\rangle\)</span> is slightly combined with the two-electron excited state <span class="math notranslate nohighlight">\(\left|0011\right\rangle\)</span>.</p>
+</section>
+<section id="Reference">
+<h2>Reference<a class="headerlink" href="#Reference" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">[1] R. Babbush and J. McClean, “Announcing OpenFermion: The Open Source Package for Quantum Computers”, Google AI Blog, <a class="reference external" href="https://ai.googleblog.com/2017/10/announcing-openfermion-open-source.html">https://ai.googleblog.com/2017/10/announcing-openfermion-open-source.html</a></div>
+<div class="line">[2] A. Tranter, P. J. Love, F. Mintert, and P. V. Convey, “A Comparison of the Bravyi and Jordan-Wigner Transformations for the Quantum Simulation of Quantum Chemistry“, <a class="reference external" href="https://pubs.acs.org/doi/10.1021/acs.jctc.8b00450">J. Chem. Theory Comput. 2018, 14, 11, 5617-5630</a></div>
+<div class="line">[3] S. McArdle, S. Endo, A. Aspuru-Guzik, S. Benjamin, X. Yuan, “Quantum computational chemistry”, <a class="reference external" href="https://arxiv.org/abs/1808.10402">arXiv:1808.10402</a></div>
+</div>
+</section>
+</section>
+
+</article>
+        <aside class="nftt-toc">
+          
+          <div class="mt-3 mb-1 my-lg-0 ps-xl-3 text-muted">
+            <button class="btn btn-link link-dark p-lg-0 mb-2 mb-lg-0 text-decoration-none nftt-toc-toggle d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents"
+            >On this page <i class="ms-2 bi bi-chevron-expand"></i></button>
+            <div class="title d-none d-lg-block">
+              <i class="bi bi-file-earmark-text"></i>&nbsp;&nbsp;<span class="small">On this page</span>
+            </div>
+            <div class="collapse nftt-toc-collapse" id="tocContents">
+              <nav id="TableOfContents">
+                <ul>
+<li><a class="reference internal" href="#">6-1. OpenFermion basics</a><ul>
+<li><a class="reference internal" href="#Calculation-of-hydrogen-molecule">Calculation of hydrogen molecule</a></li>
+<li><a class="reference internal" href="#Variable-description">Variable description</a><ul>
+<li><a class="reference internal" href="#basis:-basis-function">basis: basis function</a></li>
+<li><a class="reference internal" href="#multiplicity:-spin-multiplicity">multiplicity: spin multiplicity</a></li>
+<li><a class="reference internal" href="#charge:-total-charge">charge: total charge</a></li>
+<li><a class="reference internal" href="#geometry:-nuclear-configuration">geometry: nuclear configuration</a></li>
+<li><a class="reference internal" href="#description">description</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Calculatin-with-PySCF">Calculatin with PySCF</a></li>
+<li><a class="reference internal" href="#HF-&amp;-Full-CI-energy">HF &amp; Full-CI energy</a></li>
+<li><a class="reference internal" href="#One-Electron-integral-h_{ij}・Two-Electron-integral-h_{ijkl}">One-Electron integral <span class="math notranslate nohighlight">\(h_{ij}\)</span>・Two-Electron integral <span class="math notranslate nohighlight">\(h_{ijkl}\)</span></a></li>
+<li><a class="reference internal" href="#Hamiltonian-in-second-quantized-form">Hamiltonian in second quantized form</a></li>
+<li><a class="reference internal" href="#Convert-to-tractable-operators-for-quantum-computers">Convert to tractable operators for quantum computers</a></li>
+<li><a class="reference internal" href="#Reference">Reference</a></li>
+</ul>
+</li>
+</ul>
+
+              </nav>
+            </div>
+          </div>
+          
+        </aside>
+      </div>
+    </div>
+
+    <footer class="nftt-footer">
+      <nav id="paginator" class="py-4" aria-label="Documentation navigation">
+    <div class="container">
+      <ul class="pagination justify-content-between mb-0"><li class="page-item">
+            <a href="6_quantum_chemistry_calculation.html" class="d-flex px-5 align-items-end" rel="prev" aria-label="Previous page: Chapter 6 Quantum chemistry calculation">
+              <span class="prev-page"><i class="bi bi-caret-left"></i></span>
+              <div class="d-flex flex-column">
+                <span class="text-small text-start text-muted">Previous</span>
+                <span class="underline">Chapter 6 Quantum chemistry calculation</span>
+              </div>
+            </a>
+          </li>
+        <li class="page-item ms-auto">
+            <a href="6.2_qulacs_VQE.html" class="d-flex px-5 align-items-end" rel="next" aria-label="Next page: 6-2. Implementation of variational quantum eigensolver (VQE) using Qulacs">
+              <div class="d-flex flex-column">
+                <span class="text-small text-end text-start text-muted">Next</span>
+                <span class="underline">6-2. Implementation of variational quantum eigensolver (VQE) using Qulacs</span>
+              </div>
+              <span class="next-page"><i class="bi bi-caret-right"></i></span>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </nav>
+
+      <div class="py-5 px-4 px-md-3">
+  <div class="container">
+    
+
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <a class="brand-text d-inline-flex align-items-center mb-2 text-decoration-none" href="/" aria-label="Nefertiti-for-Sphinx">
+          <span class="fs-6 fw-bold">Quantum Native Dojo</span>
+        </a>
+        
+          <ul class="list-unstyled small text-muted">
+            <li>2023, Quantum Native Dojo Contributors</li>
+          </ul>
+        
+        
+        <div class="built-with pt-2">
+          Built with <a href="http://sphinx-doc.org">Sphinx 7.2.6</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.3.0</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+    </footer>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"CommonHTML": {"undefinedFamily": "\"Source Serif Pro\", \"Yakumono\", \"Noto Serif JP\", \"Hiragino Mincho ProN\", \"STIXGeneral\", \"Arial Unicode MS\", serif"}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
+
+    <script type="text/javascript" src="../_static/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinx-nefertiti.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/doc_versions.js"></script>
+  </body>
+</html>

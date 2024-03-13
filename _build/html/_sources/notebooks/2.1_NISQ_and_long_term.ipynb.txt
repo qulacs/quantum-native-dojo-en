@@ -1,0 +1,122 @@
+{
+ "cells": [
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 2-1. NISQ algorithms and long-term algorithms\n",
+    "The quantum algorithms that are currently being invented and discovered can be broadly classified into two groups in terms of feasibility.\n",
+    "One is the **NISQ algorithm** and the other is the **long-term algorithm**. (Note that these words are not common and should be used with caution when looking at other literature. Also note that **the distinction between the two is not absolute, but shifts depending on the size of the problem to be solved, technological advances, etc.**) Typical examples of these are shown in Table.   \n",
+    "\n",
+    "![2-1](figs/2/quantum_algo_table.png)\n",
+    "\n",
+    "(VQE = Variational Quantum Eigensolver ([5-1](5.1_variational_quantum_eigensolver.ipynb)), QAOA = Quantum Approximate Optimization Algorithm ([5-3](5.3_quantum_approximate_optimazation_algorithm.ipynb)), QCL = Quantum Circuit Learning ([5-2](5.2_Quantum_Circuit_Learning.ipynb)), QFT = Quantum Fourier Transform ([2-3](2.3_quantum_Fourier_transform.ipynb)), QPE = Quantum Phase Estimation ([2-4](2.4_phase_estimation_beginner.ipynb)、[7-1](7.1_quantum_phase_estimation_detailed.ipynb)), HHL = Harrow-Hassidim-Lloyd algorithm ([7-2](7.2_Harrow-Hassidim-Lloyd_algorithm.ipynb)))"
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### NISQ Algorithm\n",
+    "\n",
+    "#### What is NISQ?\n",
+    "First of all, what is the NISQ  device that we often hear about these days?   \n",
+    "NISQ (generally pronounced \"nisk\") device stands for Noisy Intermediate-Scale Quantum device, which is a generic term for small- to medium-scale (a few qubits to several hundred qubits) quantum computers that are expected to be realized within a few years to 10 years. The NISQ device cannot perform \"quantum error correction\" ([Chapter 9]), which requires a large number of qubits, and is thus susceptible to errors (noise) that occur during computation (hence \"noisy\"). A true quantum computer that can correct errors in the middle of a calculation as needed is still far away. If we compare it to an ordinary computer, we might say that it is at a stage similar to transistor or vacuum-tube computers before the invention of integrated circuits.   "
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### NISQ Algorithm Overview\n",
+    "In the NISQ device, as mentioned above, the effect of noise is inevitable. The longer the computation (and the more complex the algorithm), the more noise accumulates, eventually making the output result a hoax. For example, the famous quantum algorithms, Shor's algorithm and Grover's algorithm, have complex circuits (many operations) and are difficult to execute with NISQ, which has low error tolerance, due to lack of power.\n",
+    "\n",
+    "On the other hand, the NISQ algorithm was created to see if it is possible to find some practical useful examples even if NISQ is used. Although the above statement may give a negative impression, it has been suggested that NISQ may outperform classical computers in tasks such as simulating chemical reactions (see the Qmedia article [Quantum Computers Today and Tomorrow](https://www.qmedia.jp/nisq-era-john-preskill).) NISQ is attracting attention as a leader in \"quantum supremacy,\" where the superiority of quantum computers over classical computers is demonstrated.\n",
+    "\n",
+    "In general, quantum computation is more susceptible to errors as the number of qubits and quantum operations increase. Therefore, the NISQ algorithm must be able to perform with a small number of qubits and shallow quantum circuits (small number of quantum gates). Against this background, the \"**quantum-classical hybrid algorithm**\" approach has become the dominant approach in the study of NISQ algorithms. This means that instead of entrusting the quantum computer with all of the calculations to be performed, only the parts in which the quantum computer excels are entrusted to the quantum computer, and the rest is handled by the classical computer. The NISQ algorithm used in Quantum Native Dojo is basically based on this quantum-classical hybrid algorithm approach. "
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Long-Term Algorithm\n",
+    "On the other hand, the long-term algorithm is an algorithm that becomes possible only under the assumption that a large number of qubits are available and that [error correction](9_quantum_error_correction.ipynb) is possible. Of course, whether or not it can be performed by **NISQ depends on the size and desired accuracy of the problem to be solved**, so there is no deep meaning in distinction between NISQ algorithm and long-term algorithm. It may be better to think of all quantum algorithms as long-term algorithms, and some of them as algorithms that can be run on NISQ devices.\n",
+    "\n",
+    "The algorithms we will study in this chapter are the introductory long-term algorithms (see the yellow area in the table above). In the latter part of the chapter, we will deal with more advanced long-term algorithms such as Grover's algorithm as well as the NISQ algorithm, which has been actively studied in recent years."
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### To learn more :\n",
+    "- Qmedia \"Quantum Computers Today and Tomorrow\" https://www.qmedia.jp/nisq-era-john-preskill/\n",
+    "- Quantum Algorithm Zoo http://quantumalgorithmzoo.org/\n",
+    "- Quantum Algorithm Zoo Japanese translation https://www.qmedia.jp/algebraic-number-theoretic-algorithms/"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.3"
+  },
+  "varInspector": {
+   "cols": {
+    "lenName": 16,
+    "lenType": 16,
+    "lenVar": 40
+   },
+   "kernels_config": {
+    "python": {
+     "delete_cmd_postfix": "",
+     "delete_cmd_prefix": "del ",
+     "library": "var_list.py",
+     "varRefreshCmd": "print(var_dic_list())"
+    },
+    "r": {
+     "delete_cmd_postfix": ") ",
+     "delete_cmd_prefix": "rm(",
+     "library": "var_list.r",
+     "varRefreshCmd": "cat(var_dic_list()) "
+    }
+   },
+   "types_to_exclude": [
+    "module",
+    "function",
+    "builtin_function_or_method",
+    "instance",
+    "_Feature"
+   ],
+   "window_display": false
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

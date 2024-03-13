@@ -1,0 +1,990 @@
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+      <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="docsearch:name" content="Quantum Native Dojo" />
+    <meta name="docsearch:package_type" content="" />
+    <meta name="docsearch:release" content="" />
+    <meta name="docsearch:version" content="" />
+    
+      <title>5-2. Quantum Circuit learning &mdash; Quantum Native Dojo  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-icons.css" type="text/css" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+          <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+          <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+        <link rel="index" title="Index" href="../genindex.html" />
+        <link rel="search" title="Search" href="../search.html" />
+        <link rel="top" title="Quantum Native Dojo  documentation" href="#" />
+        <link rel="up" title="Chapter 5 Algorithms Based on Variational Quantum Circuits" href="5_VQC_based_algorithms.html" />
+        <link rel="next" title="5-3. Quantum Approximate Optimazation Algorithm (QAOA)" href="5.3_quantum_approximate_optimazation_algorithm.html" />
+        <link rel="prev" title="5-1. Variational Quantum Eigensolver (VQE) Algorithm" href="5.1_variational_quantum_eigensolver.html" />
+    <style>
+      :root {
+        --nftt-body-font-family: "Nunito", var(--nftt-font-sans-serif) !important;
+        --nftt-font-monospace: "Red Hat Mono", var(--nftt-font-family-monospace) !important;
+        --nftt-project-name-font: var(--nftt-body-font-family);
+        --nftt-documentation-font: var(--nftt-body-font-family);
+        --nftt-doc-headers-font: "Georgia", var(--nftt-documentation-font);}
+      h1 *, h2 *, h3 *, h4 *, h5 *, h6 * { font-size: inherit; }
+    </style>
+  </head>
+  <body>
+    <header class="navbar navbar-expand-xl navbar-dark nftt-navbar flex-column fixed-top">
+      <div class="skip-links container-fluid visually-hidden-focusable overflow-hidden justify-content-start">
+        <div class="border-bottom mb-2 pb-2 w-100">
+          <a class="d-none d-md-inline-flex p-2 m-1" href="#sidebar-filter">Skip to docs navigation</a>
+          <a class="d-inline-flex p-2 m-1" href="#content">Skip to main content</a>
+        </div>
+      </div>
+      <nav class="container-xxl nftt-gutter flex-wrap flex-xl-nowrap" aria-label="Main navigation">
+        <div class="nftt-navbar-toggler">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Toggle documentation navigation">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+          <a href="../index.html"
+              
+              class="navbar-brand p-0 me-0 md-lg-2"
+          ><span class="brand-text">Quantum Native Dojo</span></a>
+        
+        <div class="d-flex d-xl-none">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttSearch" aria-controls="nfttSearch" aria-label="Search">
+            <i class="bi bi-search"></i>
+          </button>
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttNavbar" aria-controls="nfttNavbar" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+        </div>
+        
+<div class="offcanvas-xl offcanvas-end flex-grow-1" tabindex="-1" id="nfttSearch" aria-labelledby="nfttSearchOffcanvasLabel" data-bs-scroll="true">
+  <div class="offcanvas-header px-4 pb-0">
+    <h5 class="offcanvas-title fw-bold" id="nfttSearchOffcanvasLabel">Search the documentation</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttSearch"></button>
+  </div>
+  <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+    <hr class="d-xl-none text-white-50">
+    <ul class="navbar-nav flex-row align-items-center flex-wrap ms-md-auto">
+      <li class="nav-item col-12 col-xl-auto">
+        <form id="nftt-search-form" action="../search.html" method="get">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search docs" aria-label="Search" aria-describedby="button-search">
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+            <button class="btn btn-primary" type="submit" id="button-search" aria-label="Search"><i class="bi bi-search"></i></button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+</div>
+
+        <div class="offcanvas-xl offcanvas-end" tabindex="-1" id="nfttNavbar" aria-labelledby="nfttNavbarOffcanvasLabel" data-bs-scroll="true">
+          <div class="offcanvas-header px-4 pb-0">
+            <div class="offcanvas-title navbar-brand" id="nfttNavbarOffcanvasLabel"><span class="brand-text">Nefertiti for Sphinx</span></div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttNavbar"></button>
+          </div>
+          <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+            <hr class="d-xl-none text-white-50">
+            <ul class="navbar-nav flex-row align-items-center flex-wrap ms-lg-auto">
+              
+              <!-- version_dropdown.html -->
+
+              
+              <!-- colorscheme_dropdown.html -->
+<li class="nav-item dropdown">
+  <a class="nav-link d-flex py-2 px-0 px-xl-2 dropdown-toggle align-items-center" id="snftt-luz" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" aria-label="Toggle light/dark">
+    <i class="bi bi-circle-half" data-snftt-luz-icon-active></i>
+    <span id="snftt-luz-text" class="d-xl-none small ms-2">Toggle light/dark</span>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="snftt-luz-text">
+    <li>
+      <h6 class="dropdown-header">Light/dark</h6>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="light" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-sun" data-snftt-luz-icon="light"></i>
+        </span>
+        <span class="small ms-3">Light</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="dark" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-moon-stars" data-snftt-luz-icon="dark"></i>
+        </span>
+        <span class="small ms-3">Dark</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item current d-flex align-items-center" data-snftt-luz="default" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-circle-half" data-snftt-luz-icon="default"></i>
+        </span>
+        <span class="small ms-3">Default</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+  </ul>
+</li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container-fluid">
+      <div class="nftt-gutter nftt-page">
+        <aside class="nftt-sidebar">
+          <div class="nftt-sidebar-content">
+            <div class="title d-none d-xl-block">
+              <i class="bi bi-book"></i>&nbsp;&nbsp;<span>Index</span>
+            </div>
+            <div id="sidebar" tabindex="-1" class="offcanvas-xl offcanvas-start" aria-labelledby="nfttSidebarOffcanvasLabel">
+                <!-- danirus sidebartemplate: "globaltoc.html" --><div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title fw-bold" id="nfttSidebarOffcanvasLabel">
+    Table of contents
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#sidebar"></button>
+</div>
+
+<div class="offcanvas-body">
+  <nav class="toc" aria-label="Main menu">
+    <div class="mb-3 p-1 pt-3 pb-4 border-bottom">
+      <input id="sidebar-filter" type="text" name="filter" class="form-control form-control-sm" placeholder="filter" aria-label="filter">
+    </div>
+    <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="0_prologue.html">Chapter 0: What is a Quantum Computer ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_quantum_information_foundation.html">Chapter 1: Fundamentals of Quantum Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1.1_qubit_representation.html">1-1. Qubit Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.2_qubit_operations.html">1-2. Qubit Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html">1-3. Multiqubit representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html#Column:-What-is-a-universal-gate-set?">Column: What is a universal gate set?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.4_quantum_circuit_diagram.html">1-4. Quantum Circuit Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2_introduction_to_quantum_algorithms.html">Chapter 2: Introduction to Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2.1_NISQ_and_long_term.html">2-1. NISQ algorithm and long-term algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.2_Hadamard_test.html">2-2. Hadamard test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.3_quantum_Fourier_transform.html">2-3. Quantum Fourier transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.4_phase_estimation_beginner.html">2-4. Phase Estimation Algorithm（Introductory）</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3_execution_environments_of_quantum_algorithms.html">Chapter 3: Execution Environment for Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3.1_Qulacs_tutorial.html">3-1. Qulacs_tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.2_Qiskit_IBMQ.html">3-2. Qiskit_IBMQ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4_quantum_dynamics_simulation.html">Chapter4 Quantum dynamics simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4.1_quantum_simulation.html">4-1. Quantum Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4.2_trotter_decomposition.html">4-2. Trotter Decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="5_VQC_based_algorithms.html">Chapter 5 Algorithms Based on Variational Quantum Circuits</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="5.1_variational_quantum_eigensolver.html">5-1. Variational Quantum Eigensolver（VQE)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5-2. Quantum Circuit Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.3_quantum_approximate_optimazation_algorithm.html">5-3. Quantum Approximate Optimazation Algorithm (QAOA)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6_quantum_chemistry_calculation.html">Chapter 6 Quantum chemistry calculation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="6.1_openfermion_basics.html">6-1. OpenFermion Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7_quantum_phase_estimation.html">chapter 7 Quantum phase estimation algorithm and its application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7.1_quantum_phase_estimation_detailed.html">7-1. Quantum Phase Estimation (QPE) Algorithm Detailed：Hydrogen Molecule as Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.2_Harrow-Hassidim-Lloyd_algorithm.html">7-2. Harrow-Hassidim-Lloyd (HHL) Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.3_application_of_HHL_algorithm.html">7-3. Portofolio Optimization by HHL Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="8_quantum_search_algorithm.html">Chapter 8: Quantum Search Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="8.1_oracle.html">8-1. oracle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8.2_Grovers_algorithm.html">8-2. Grover’s algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="9_quantum_error_correction.html">Chapter 9 Quantum Error Correction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="9.1_error_correction.html">9-1. classical error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9.2_quantum_error_correction.html">9-2. quantum error</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav>
+  <template data-toggle-item-template>
+    <button class="btn btn-sm btn-link toctree-expand" type="button">
+      <i class="bi bi-caret-right"></i>
+      <span class="visually-hidden">Toggle menu contents</span>
+    </button>
+  </template>
+</div>
+            </div>
+          </div>
+        </aside>
+        <article id="content" class="nftt-content" role="main">
+    <section id="5-2.-Quantum-Circuit-learning">
+<h1>5-2. Quantum Circuit learning<a class="headerlink" href="#5-2.-Quantum-Circuit-learning" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line"><strong>Quantum Circuit Learning</strong> (Quantum Circuit Learning, QCL) is an algorithm for applying quantum computers to machine learning <a class="reference external" href="https://arxiv.org/abs/1803.00745">[1]</a>.</div>
+<div class="line">Like VQE (Variational Quantum Eigensolver) studied in the previous section, it is a <strong>quantum/classical hybrid algorithm</strong> is designed to work on <strong>NISQ</strong> (Noisy Intermediate-Scale Quantum Computer), a medium-scale quantum computer without error correction capability. Experiments using actual NISQ devices have already been conducted, and a paper on an actual implementation of QCL by an IBM experimental team was published in Nature in March 2019 and became a hot topic.</div>
+</div>
+<p>In the following, we first provide an overview of the algorithm and specific learning steps, and finally present an example implementation using the quantum simulator Qulacs.</p>
+<section id="Overview-of-QCL">
+<h2>Overview of QCL<a class="headerlink" href="#Overview-of-QCL" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">In recent years, deep learning has been in the limelight in the field of machine learning.</div>
+<div class="line">In deep learning, a deep <strong>neural network</strong> is used to approximate complex functions to learn the relationship between inputs and outputs and to make predictions on new data.</div>
+</div>
+<div class="line-block">
+<div class="line">QCL is a machine learning method that replaces this neural network with a <strong>quantum circuit</strong>, or quantum computer. The use of quantum circuits improves the expressive power of the model because it can learn using <strong>a large number of basis functions in an exponential manner</strong>, taking advantage of the principle of superposition in quantum mechanics. Furthermore, it is believed that the conditions that must be satisfied by quantum circuits (unitarity) can <strong>automatically prevent overfitting</strong>.
+This is expected to further improve performance beyond that of machine learning on classical computers.</div>
+<div class="line">(For details, see reference [1].)</div>
+</div>
+<div class="line-block">
+<div class="line">In neural networks, the function is approximated by adjusting the weight parameter <span class="math notranslate nohighlight">\(W\)</span> of each layer, and the concept is exactly the same in QCL.</div>
+<div class="line">In other words, the quantum circuit used in QCL contains multiple “rotation gates,” and the function is approximated by adjusting the rotation angle <span class="math notranslate nohighlight">\(\theta\)</span> of these rotation gates. The specific procedure is shown below.</div>
+</div>
+</section>
+<section id="Learning-Procedure">
+<h2>Learning Procedure<a class="headerlink" href="#Learning-Procedure" title="Link to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>prepare learning data <span class="math notranslate nohighlight">\(\{(x_i, y_i)\}_i\)</span> (<span class="math notranslate nohighlight">\(x_i\)</span> is the input data and <span class="math notranslate nohighlight">\(y_i\)</span> is the correct data to be predicted from <span class="math notranslate nohighlight">\(x_i\)</span> (training data) )</p></li>
+<li><p>prepare a circuit <span class="math notranslate nohighlight">\(U_{\text{in}}(x)\)</span>, which is determined by some rule from the input <span class="math notranslate nohighlight">\(x\)</span>, and set the input state <span class="math notranslate nohighlight">\(\{|\psi_{\rm in}(x_i)\rangle\}_i = \{U_{\text{in}}(x_i)|0\rangle\}_i\)</span></p></li>
+<li><p>multiply the input state by the gate <span class="math notranslate nohighlight">\(U(\theta)\)</span> depending on the parameter <span class="math notranslate nohighlight">\(\theta\)</span> and make the output state <span class="math notranslate nohighlight">\(\{|\psi_{\rm out}(x_i, \theta)\rangle = U(\theta)|\psi_{\rm in}(x_i)\rangle \}_i\)</span>.</p></li>
+<li><p>measure some observable under the output state and obtain the measured value (e.g., the expected value of <span class="math notranslate nohighlight">\(Z\)</span> for the first qubit <span class="math notranslate nohighlight">\(\langle Z_1\rangle = \langle \psi_{\rm out} |Z_1|\psi_{\rm out} \rangle\)</span>)</p></li>
+<li><p>let <span class="math notranslate nohighlight">\(F\)</span> be an appropriate function (sigmoid, softmax, constant times or whatever) and let <span class="math notranslate nohighlight">\(F(measurements_i)\)</span> be the model output <span class="math notranslate nohighlight">\(y(x_i, \theta)\)</span></p></li>
+<li><p>calculate the “cost function <span class="math notranslate nohighlight">\(L(\theta)\)</span>” that represents the deviation between the correct data <span class="math notranslate nohighlight">\(\{y_i\}_i\)</span> and the model output <span class="math notranslate nohighlight">\(\{y(x_i, \theta)\}_i\)</span>.</p></li>
+<li><p>find <span class="math notranslate nohighlight">\(\theta=\theta^*\)</span> that minimizes the cost function</p></li>
+<li><p><span class="math notranslate nohighlight">\(y(x, \theta^*)\)</span> is the desired predictive model</p></li>
+</ol>
+<p>(In QCL, input data <span class="math notranslate nohighlight">\(x\)</span> is first transformed to a quantum state using <span class="math notranslate nohighlight">\(U_{\text{in}}(x)\)</span>. Then, by using a variational quantum circuit <span class="math notranslate nohighlight">\(U(\theta)\)</span> and measurements, the output <span class="math notranslate nohighlight">\(y\)</span> is obtained. (In the figure, the output is <span class="math notranslate nohighlight">\(\langle B(x,\theta)\rangle\)</span>) (Source: Modified from Figure 1 in reference [1])</p>
+</section>
+<section id="Implementation-using-the-quantum-simulator-Qulacs">
+<h2>Implementation using the quantum simulator Qulacs<a class="headerlink" href="#Implementation-using-the-quantum-simulator-Qulacs" title="Link to this heading">¶</a></h2>
+<p>In the following, as a demonstration of function approximation, let’s perform fitting of the sin function <span class="math notranslate nohighlight">\(y=\sin(\pi x)\)</span> .</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">reduce</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">########  parameter  #############</span>
+<span class="n">nqubit</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1">##number of qubits</span>
+<span class="n">c_depth</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1">## depth of circuit</span>
+<span class="n">time_step</span> <span class="o">=</span> <span class="mf">0.77</span>  <span class="c1">##Elapsed time of time evolution by random Hamiltonian</span>
+
+<span class="c1">## Take number_x_train points from [x_min, x_max] randomly and use them as the training data.</span>
+<span class="n">x_min</span> <span class="o">=</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">;</span> <span class="n">x_max</span> <span class="o">=</span> <span class="mf">1.</span><span class="p">;</span>
+<span class="n">num_x_train</span> <span class="o">=</span> <span class="mi">50</span>
+
+<span class="c1">## The 1-variable function we want to learn</span>
+<span class="n">func_to_learn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+
+<span class="c1">##Seed of random numbers</span>
+<span class="n">random_seed</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1">## Initialize random number generator</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_seed</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="学習データの準備">
+<h3>学習データの準備<a class="headerlink" href="#学習データの準備" title="Link to this heading">¶</a></h3>
+</section>
+<section id="Prepare-training-data">
+<h3>Prepare training data<a class="headerlink" href="#Prepare-training-data" title="Link to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#### Prepare training data</span>
+
+<span class="n">x_train</span> <span class="o">=</span> <span class="n">x_min</span> <span class="o">+</span> <span class="p">(</span><span class="n">x_max</span> <span class="o">-</span> <span class="n">x_min</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">num_x_train</span><span class="p">)</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">func_to_learn</span><span class="p">(</span><span class="n">x_train</span><span class="p">)</span>
+
+<span class="c1"># Add noise to a clean sin function</span>
+<span class="n">mag_noise</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">y_train</span> <span class="o">+</span> <span class="n">mag_noise</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">num_x_train</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">);</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_5.2_Quantum_Circuit_Learning_9_0.png" src="../_images/notebooks_5.2_Quantum_Circuit_Learning_9_0.png" />
+</div>
+</div>
+</section>
+<section id="Composition-of-input-state">
+<h3>Composition of input state<a class="headerlink" href="#Composition-of-input-state" title="Link to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line">First, create a gate <span class="math notranslate nohighlight">\(U_{\rm in}(x_i)\)</span> to embed the input value <span class="math notranslate nohighlight">\(x_i\)</span> into the initial state <span class="math notranslate nohighlight">\(|00\ldots0\rangle\)</span>.</div>
+<div class="line">Following reference [1], by using the rotation gates <span class="math notranslate nohighlight">\(R_j^X(\theta)=e^{i\theta X_j/2}, R_j^Z(\theta)=e^{i\theta Z_j/2}\)</span> and we define the gate as follow. <span class="math notranslate nohighlight">\(U_{\rm in}(x) = \prod_j R^Z_j(\cos^{-1} x^2) R^Y_j(\ sin^{-1}x)\)</span>.</div>
+<div class="line">The input value <span class="math notranslate nohighlight">\(x_i\)</span> will be converted to the quantum state <span class="math notranslate nohighlight">\(|\psi_{\rm in}(x_i)\rangle =U_{\rm in}(x_i)|00\ldots0\rangle\)</span>.</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Run only if you are in Google Colaboratory or in a local environment where Qulacs is not installed</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>qulacs
+
+<span class="c1">## Run only in Google Colaboratory or (Linux or Mac) jupyter notebook environment</span>
+<span class="c1">## Qulacs errors will be output normally.</span>
+<span class="o">!</span>pip3<span class="w"> </span>install<span class="w"> </span>wurlitzer
+<span class="o">%</span><span class="k">load_ext</span> wurlitzer
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Import required libraries</span>
+<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span><span class="p">,</span> <span class="n">QuantumCircuit</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubit</span><span class="p">)</span> <span class="c1"># The initial state</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j]
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># a function to create a gate which encodes x</span>
+<span class="k">def</span> <span class="nf">U_in</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">nqubit</span><span class="p">)</span>
+
+    <span class="n">angle_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">angle_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubit</span><span class="p">):</span>
+        <span class="n">U</span><span class="o">.</span><span class="n">add_RY_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">angle_y</span><span class="p">)</span>
+        <span class="n">U</span><span class="o">.</span><span class="n">add_RZ_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">angle_z</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">U</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># sample calculation of an input state</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="c1"># a sample value</span>
+<span class="n">U_in</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="c1"># calculation of U_in|000&gt;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[-6.93804351e-01+7.14937415e-01j -3.54871219e-02-3.51340074e-02j
+ -3.54871219e-02-3.51340074e-02j  1.77881430e-03-1.76111422e-03j
+ -3.54871219e-02-3.51340074e-02j  1.77881430e-03-1.76111422e-03j
+  1.77881430e-03-1.76111422e-03j  8.73809020e-05+9.00424970e-05j]
+</pre></div></div>
+</div>
+</section>
+<section id="Configuration-of-variational-quantum-circuit-U(\theta)">
+<h3>Configuration of variational quantum circuit <span class="math notranslate nohighlight">\(U(\theta)\)</span><a class="headerlink" href="#Configuration-of-variational-quantum-circuit-U(\theta)" title="Link to this heading">¶</a></h3>
+<p>Next, we create a variational quantum circuit <span class="math notranslate nohighlight">\(U(\theta)\)</span> to be optimized. This is done in the following three steps.</p>
+<ol class="arabic simple">
+<li><p>Generation of transverse magnetic field Ising Hamiltonian</p></li>
+<li><p>Creation of rotating gate</p></li>
+<li><p>Alternately combine the gates of 1. and 2. to create one large variational quantum circuit <span class="math notranslate nohighlight">\(U(\theta)\)</span></p></li>
+</ol>
+<section id="1.-Creation-of-transverse-magnetic-field-Ising-Hamiltonian">
+<h4>1. Creation of transverse magnetic field Ising Hamiltonian<a class="headerlink" href="#1.-Creation-of-transverse-magnetic-field-Ising-Hamiltonian" title="Link to this heading">¶</a></h4>
+<p>By performing time evolution using the transverse magnetic field Ising model learned in Section 4-2 and increasing the complexity (entanglement) of the quantum circuit, the expressive power of the model is enhanced. (This part can be skipped unless the reader wants to know the details.)</p>
+<p>The Hamiltonian of the transverse Ising model is as follows and is used to define the time evolution operator <span class="math notranslate nohighlight">\(U_{\text{rand}} = e^{-iHt}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[H = \sum_{j=1}^N a_j X_j + \sum_{j=1}^N \sum_{k=1}^{j-1} J_{jk} Z_j Z_k\]</div>
+<p>Here, the coefficients <span class="math notranslate nohighlight">\(a\)</span>, <span class="math notranslate nohighlight">\(J\)</span> are the uniform distribution of <span class="math notranslate nohighlight">\([-1, 1]\)</span>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## basic gates</span>
+<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">X</span><span class="p">,</span> <span class="n">Z</span>
+<span class="n">I_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">complex</span><span class="p">)</span>
+<span class="n">X_mat</span> <span class="o">=</span> <span class="n">X</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">get_matrix</span><span class="p">()</span>
+<span class="n">Z_mat</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">get_matrix</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## a function to create fullsize gate.</span>
+<span class="k">def</span> <span class="nf">make_fullgate</span><span class="p">(</span><span class="n">list_SiteAndOperator</span><span class="p">,</span> <span class="n">nqubit</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Receive list_SiteAndOperator = [ [i_0, O_0], [i_1, O_1], ...] ,</span>
+<span class="sd">    insert Identity into irrelevent qubit, and create (2**nqubit, 2**nqubit) size matrix</span>
+<span class="sd">    I(0) * ... * O_0(i_0) * ... * O_1(i_1) ...</span>
+<span class="sd">    &#39;&#39;&#39;</span>    <span class="n">list_Site</span> <span class="o">=</span> <span class="p">[</span><span class="n">SiteAndOperator</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">SiteAndOperator</span> <span class="ow">in</span> <span class="n">list_SiteAndOperator</span><span class="p">]</span>
+    <span class="n">list_SingleGates</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1">## list single 1-qubit gates and reduce them using np.kron</span>
+    <span class="n">cnt</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubit</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="ow">in</span> <span class="n">list_Site</span><span class="p">):</span>
+            <span class="n">list_SingleGates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">list_SiteAndOperator</span><span class="p">[</span><span class="n">cnt</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span>
+            <span class="n">cnt</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c1">## insert identity if i is not included in list_Site</span>
+            <span class="n">list_SingleGates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">I_mat</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">reduce</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">,</span> <span class="n">list_SingleGates</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">####  Create a time evolution operator by creating a random magnetic field/random coupling Ising Hamiltonian</span>
+
+<span class="n">ham</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="o">**</span><span class="n">nqubit</span><span class="p">,</span><span class="mi">2</span><span class="o">**</span><span class="n">nqubit</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="nb">complex</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubit</span><span class="p">):</span> <span class="c1">## i runs 0 to nqubit-1</span>
+    <span class="n">Jx</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span> <span class="o">+</span> <span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="c1">## random number between -1~1</span>
+    <span class="n">ham</span> <span class="o">+=</span> <span class="n">Jx</span> <span class="o">*</span> <span class="n">make_fullgate</span><span class="p">(</span> <span class="p">[</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">X_mat</span><span class="p">]</span> <span class="p">],</span> <span class="n">nqubit</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">nqubit</span><span class="p">):</span>
+        <span class="n">J_ij</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span> <span class="o">+</span> <span class="mf">2.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
+        <span class="n">ham</span> <span class="o">+=</span> <span class="n">J_ij</span> <span class="o">*</span> <span class="n">make_fullgate</span> <span class="p">([</span> <span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">Z_mat</span><span class="p">],</span> <span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">Z_mat</span><span class="p">]],</span> <span class="n">nqubit</span><span class="p">)</span>
+
+<span class="c1">## Create a time evolution operator by diagonalizing.  H*P = P*D &lt;-&gt; H = P*D*P^dagger</span>
+<span class="n">diag</span><span class="p">,</span> <span class="n">eigen_vecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">ham</span><span class="p">)</span>
+<span class="n">time_evol_op</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">eigen_vecs</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">time_step</span><span class="o">*</span><span class="n">diag</span><span class="p">))),</span> <span class="n">eigen_vecs</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">conj</span><span class="p">())</span> <span class="c1"># e^-iHT</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">time_evol_op</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(8, 8)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># convert to qulacs gate</span>
+<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">DenseMatrix</span>
+<span class="n">time_evol_gate</span> <span class="o">=</span> <span class="n">DenseMatrix</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubit</span><span class="p">)],</span> <span class="n">time_evol_op</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="2.-Creation-of-rotating-gate,-3.-Configuration-of-U(\theta)">
+<h4>2. Creation of rotating gate, 3. Configuration of <span class="math notranslate nohighlight">\(U(\theta)\)</span><a class="headerlink" href="#2.-Creation-of-rotating-gate,-3.-Configuration-of-U(\theta)" title="Link to this heading">¶</a></h4>
+<p>we create a variational quantum circuit <span class="math notranslate nohighlight">\(U(\theta)\)</span> by combining time evolution by random transverse magnetic Ising model <span class="math notranslate nohighlight">\(U_{\text{rand}}\)</span>, and <span class="math notranslate nohighlight">\(j \:(=1,2,\cdots n)\)</span> th quantum qubit multiplied by the following rotation gate</p>
+<div class="math notranslate nohighlight">
+\[U_{\text{rot}}(\theta_j^{(i)}) = R_j^X(\theta_{j1}^{(i)})R_j^Z(\theta_{j2}^{(i)})R_j^X(\theta_{j3}^{(i)})\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(i\)</span> is a subscript representing the layer of the quantum circuit, and <span class="math notranslate nohighlight">\(U_{\text{rand}}\)</span> and the above rotation are repeated for a total of <span class="math notranslate nohighlight">\(d\)</span> layers. In other words, on the whole, we compose the variational Quantum circuit as follows. In total, there are <span class="math notranslate nohighlight">\(3nd\)</span> parameters. the initital values of each <span class="math notranslate nohighlight">\(\theta\)</span> follows uniform distribution of <span class="math notranslate nohighlight">\([0, 2\pi]\)</span>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">ParametricQuantumCircuit</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># composition of gate for output U_out &amp; setting the initial parameter</span>
+
+<span class="n">U_out</span> <span class="o">=</span> <span class="n">ParametricQuantumCircuit</span><span class="p">(</span><span class="n">nqubit</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">c_depth</span><span class="p">):</span>
+    <span class="n">U_out</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">time_evol_gate</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubit</span><span class="p">):</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
+        <span class="n">U_out</span><span class="o">.</span><span class="n">add_parametric_RX_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">angle</span><span class="p">)</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
+        <span class="n">U_out</span><span class="o">.</span><span class="n">add_parametric_RZ_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">angle</span><span class="p">)</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
+        <span class="n">U_out</span><span class="o">.</span><span class="n">add_parametric_RX_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">angle</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#  Get a list of initial values ​​for the parameter theta</span>
+<span class="n">parameter_count</span> <span class="o">=</span> <span class="n">U_out</span><span class="o">.</span><span class="n">get_parameter_count</span><span class="p">()</span>
+<span class="n">theta_init</span> <span class="o">=</span> <span class="p">[</span><span class="n">U_out</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">parameter_count</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">theta_init</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[6.007250646127814,
+ 4.046309757767312,
+ 2.663159813474645,
+ 3.810080933381979,
+ 0.12059442161498848,
+ 1.8948504571449056,
+ 4.14799267096281,
+ 1.8226113595664735,
+ 3.88310546309581,
+ 2.6940332019609157,
+ 0.851208649826403,
+ 1.8741631278382846,
+ 3.5811951525261123,
+ 3.7125630518871535,
+ 3.6085919651139333,
+ 4.104181793964002,
+ 4.097285684838374,
+ 2.71068197476515,
+ 5.633168398253273,
+ 2.309459341364396,
+ 2.738620094343915,
+ 5.6041197193647925,
+ 5.065466226710866,
+ 4.4226624059922806,
+ 0.6297441057449945,
+ 5.777279648887616,
+ 4.487710439107831]
+</pre></div></div>
+</div>
+<p>For convenience, create a function to update <span class="math notranslate nohighlight">\(\theta\)</span>, the parameter of <span class="math notranslate nohighlight">\(U(\theta)\)</span></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># function to update parameter theta</span>
+<span class="k">def</span> <span class="nf">set_U_out</span><span class="p">(</span><span class="n">theta</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">U_out</span>
+
+    <span class="n">parameter_count</span> <span class="o">=</span> <span class="n">U_out</span><span class="o">.</span><span class="n">get_parameter_count</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">parameter_count</span><span class="p">):</span>
+        <span class="n">U_out</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">theta</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Measurement">
+<h3>Measurement<a class="headerlink" href="#Measurement" title="Link to this heading">¶</a></h3>
+<p>The output of the model is the expected value of pauli Z of the 0th qubit at the output state <span class="math notranslate nohighlight">\(|\psi_{\rm out}\rangle\)</span>. That is, <span class="math notranslate nohighlight">\(y(\theta, x_i) = \langle Z_0 \rangle = \langle \psi_{\rm out}|Z_0|\psi_{\rm out}\rangle\)</span>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create Observable Z_0</span>
+<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">Observable</span>
+<span class="n">obs</span> <span class="o">=</span> <span class="n">Observable</span><span class="p">(</span><span class="n">nqubit</span><span class="p">)</span>
+<span class="n">obs</span><span class="o">.</span><span class="n">add_operator</span><span class="p">(</span><span class="mf">2.</span><span class="p">,</span><span class="s1">&#39;Z 0&#39;</span><span class="p">)</span> <span class="c1"># set Observable 2 * Z. Multipy 2 to widen the final range of &lt;Z&gt;. This constant must be optimized as one of the parameters in order to deal with unknown functions.</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">obs</span><span class="o">.</span><span class="n">get_expectation_value</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1.9899748742132404
+</pre></div></div>
+</div>
+</section>
+<section id="Organize-a-series-of-steps-into-a-function">
+<h3>Organize a series of steps into a function<a class="headerlink" href="#Organize-a-series-of-steps-into-a-function" title="Link to this heading">¶</a></h3>
+<p>Summarize the flow up to this point and define a function that returns the predicted value <span class="math notranslate nohighlight">\(y(x_i, \theta)\)</span> of the model from the input <span class="math notranslate nohighlight">\(x_i\)</span>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># A function that returns the model&#39;s predicted value y(x_i, theta) from the input x_i</span>
+<span class="k">def</span> <span class="nf">qcl_pred</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">U_out</span><span class="p">):</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubit</span><span class="p">)</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+
+    <span class="c1"># calculate input state</span>
+    <span class="n">U_in</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+    <span class="c1"># calculate output state</span>
+    <span class="n">U_out</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+    <span class="c1"># the output of model</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">get_expectation_value</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">res</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Cost-function-calculation">
+<h3>Cost function calculation<a class="headerlink" href="#Cost-function-calculation" title="Link to this heading">¶</a></h3>
+<p>The cost function <span class="math notranslate nohighlight">\(L(\theta)\)</span> is the mean squared error (MSE) between the training data and the prediction data.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># calculate cost function L</span>
+<span class="k">def</span> <span class="nf">cost_func</span><span class="p">(</span><span class="n">theta</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    theta: an array of length c_depth * nqubit * 3</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># update theta, the parameter of U_out</span>
+    <span class="n">set_U_out</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+
+    <span class="c1"># calculate data of num_x_train</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="p">[</span><span class="n">qcl_pred</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">U_out</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_train</span><span class="p">]</span>
+
+    <span class="c1"># quadratic loss</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="p">((</span><span class="n">y_pred</span> <span class="o">-</span> <span class="n">y_train</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">L</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># the value of cost function with the initial value of parameter theta</span>
+<span class="n">cost_func</span><span class="p">(</span><span class="n">theta_init</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+1.3889259316193516
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># graph with the initial value of parameter theta</span>
+<span class="n">xlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">)</span>
+<span class="n">y_init</span> <span class="o">=</span> <span class="p">[</span><span class="n">qcl_pred</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">U_out</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xlist</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xlist</span><span class="p">,</span> <span class="n">y_init</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&lt;matplotlib.lines.Line2D at 0x1a24c6b5320&gt;]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_5.2_Quantum_Circuit_Learning_38_1.png" src="../_images/notebooks_5.2_Quantum_Circuit_Learning_38_1.png" />
+</div>
+</div>
+</section>
+<section id="Learning-(optimize-with-scipy.optimize.minimize)">
+<h3>Learning (optimize with scipy.optimize.minimize)<a class="headerlink" href="#Learning-(optimize-with-scipy.optimize.minimize)" title="Link to this heading">¶</a></h3>
+<p>Finally, the preparation is over, and it’s finally time to study. Here, for simplicity, the optimization is performed using the Nelder-Mead method, which does not require a gradient formula. When using an optimization method that uses gradients (e.g. BFGS method), a convenient formula for calculating gradients is introduced in Reference <a class="reference external" href="https://arxiv.org/abs/1803.00745">[1]</a>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<span class="c1"># Learning (takes about 1-2 minutes on my PC)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">cost_func</span><span class="p">,</span> <span class="n">theta_init</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;Nelder-Mead&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Wall time: 1min 21s
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># value of cost_function after optimization</span>
+<span class="n">result</span><span class="o">.</span><span class="n">fun</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.003987076559624744
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># solution of theta obtained from optimization</span>
+<span class="n">theta_opt</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">x</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">theta_opt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[7.17242144 5.4043736  1.27744316 3.09192904 0.13144047 2.13757354
+ 4.58470259 2.01924008 2.96107066 2.91843537 1.0609229  1.70351774
+ 6.41114609 6.25686828 2.41619471 3.69387805 4.07551328 1.47666316
+ 3.4108701  2.28524042 1.75253621 6.47969129 3.18418337 1.58699008
+ 1.2831137  4.82903335 5.95931349]
+</pre></div></div>
+</div>
+</section>
+<section id="plotting-the-result">
+<h3>plotting the result<a class="headerlink" href="#plotting-the-result" title="Link to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Assign optimized theta to U_out</span>
+<span class="n">set_U_out</span><span class="p">(</span><span class="n">theta_opt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="n">xlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">x_min</span><span class="p">,</span> <span class="n">x_max</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">)</span>
+
+<span class="c1"># training data</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Teacher&#39;</span><span class="p">)</span>
+
+<span class="c1"># Graph under initial value of parameter θ</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xlist</span><span class="p">,</span> <span class="n">y_init</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Initial Model Prediction&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+
+<span class="c1"># prediction of model</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">qcl_pred</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">U_out</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xlist</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xlist</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Final Model Prediction&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_5.2_Quantum_Circuit_Learning_46_0.png" src="../_images/notebooks_5.2_Quantum_Circuit_Learning_46_0.png" />
+</div>
+</div>
+<p>It can be seen that the approximation of the sin function is indeed successful. Here, we dealt with a very simple task of approximating a function with one-dimensional input and output, but it can be extended to approximation of functions with multi-dimensional inputs and outputs and classification problems. Aspiring readers are encouraged to tackle classification problems of the <a class="reference external" href="https://scikit-learn.org/stable/auto_examples/datasets/plot_iris_dataset.html">Iris dataset</a>, which is one of the
+representative machine learning datasets.</p>
+</section>
+</section>
+<section id="Reference">
+<h2>Reference<a class="headerlink" href="#Reference" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">[1] K. Mitarai, M. Negoro, M. Kitagawa, and K. Fujii, “Quantum circuit learning”, <a class="reference external" href="https://journals.aps.org/pra/abstract/10.1103/PhysRevA.98.032309">Phys. Rev. A 98, 032309 (2018)</a>, arXiv：<a class="reference external" href="https://arxiv.org/abs/1803.00745">https://arxiv.org/abs/1803.00745</a></div>
+<div class="line">[2] V. Havlicek <em>et al.</em> , “Supervised learning with quantum-enhanced feature spaces”, <a class="reference external" href="https://www.nature.com/articles/s41586-019-0980-2">Nature 567, 209–212 (2019)</a>, arXiv：<a class="reference external" href="https://arxiv.org/abs/1804.11326">https://arxiv.org/abs/1804.11326</a></div>
+</div>
+</section>
+</section>
+
+</article>
+        <aside class="nftt-toc">
+          
+          <div class="mt-3 mb-1 my-lg-0 ps-xl-3 text-muted">
+            <button class="btn btn-link link-dark p-lg-0 mb-2 mb-lg-0 text-decoration-none nftt-toc-toggle d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents"
+            >On this page <i class="ms-2 bi bi-chevron-expand"></i></button>
+            <div class="title d-none d-lg-block">
+              <i class="bi bi-file-earmark-text"></i>&nbsp;&nbsp;<span class="small">On this page</span>
+            </div>
+            <div class="collapse nftt-toc-collapse" id="tocContents">
+              <nav id="TableOfContents">
+                <ul>
+<li><a class="reference internal" href="#">5-2. Quantum Circuit learning</a><ul>
+<li><a class="reference internal" href="#Overview-of-QCL">Overview of QCL</a></li>
+<li><a class="reference internal" href="#Learning-Procedure">Learning Procedure</a></li>
+<li><a class="reference internal" href="#Implementation-using-the-quantum-simulator-Qulacs">Implementation using the quantum simulator Qulacs</a><ul>
+<li><a class="reference internal" href="#学習データの準備">学習データの準備</a></li>
+<li><a class="reference internal" href="#Prepare-training-data">Prepare training data</a></li>
+<li><a class="reference internal" href="#Composition-of-input-state">Composition of input state</a></li>
+<li><a class="reference internal" href="#Configuration-of-variational-quantum-circuit-U(\theta)">Configuration of variational quantum circuit <span class="math notranslate nohighlight">\(U(\theta)\)</span></a><ul>
+<li><a class="reference internal" href="#1.-Creation-of-transverse-magnetic-field-Ising-Hamiltonian">1. Creation of transverse magnetic field Ising Hamiltonian</a></li>
+<li><a class="reference internal" href="#2.-Creation-of-rotating-gate,-3.-Configuration-of-U(\theta)">2. Creation of rotating gate, 3. Configuration of <span class="math notranslate nohighlight">\(U(\theta)\)</span></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Measurement">Measurement</a></li>
+<li><a class="reference internal" href="#Organize-a-series-of-steps-into-a-function">Organize a series of steps into a function</a></li>
+<li><a class="reference internal" href="#Cost-function-calculation">Cost function calculation</a></li>
+<li><a class="reference internal" href="#Learning-(optimize-with-scipy.optimize.minimize)">Learning (optimize with scipy.optimize.minimize)</a></li>
+<li><a class="reference internal" href="#plotting-the-result">plotting the result</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Reference">Reference</a></li>
+</ul>
+</li>
+</ul>
+
+              </nav>
+            </div>
+          </div>
+          
+        </aside>
+      </div>
+    </div>
+
+    <footer class="nftt-footer">
+      <nav id="paginator" class="py-4" aria-label="Documentation navigation">
+    <div class="container">
+      <ul class="pagination justify-content-between mb-0"><li class="page-item">
+            <a href="5.1_variational_quantum_eigensolver.html" class="d-flex px-5 align-items-end" rel="prev" aria-label="Previous page: 5-1. Variational Quantum Eigensolver (VQE) Algorithm">
+              <span class="prev-page"><i class="bi bi-caret-left"></i></span>
+              <div class="d-flex flex-column">
+                <span class="text-small text-start text-muted">Previous</span>
+                <span class="underline">5-1. Variational Quantum Eigensolver (VQE) Algorithm</span>
+              </div>
+            </a>
+          </li>
+        <li class="page-item ms-auto">
+            <a href="5.3_quantum_approximate_optimazation_algorithm.html" class="d-flex px-5 align-items-end" rel="next" aria-label="Next page: 5-3. Quantum Approximate Optimazation Algorithm (QAOA)">
+              <div class="d-flex flex-column">
+                <span class="text-small text-end text-start text-muted">Next</span>
+                <span class="underline">5-3. Quantum Approximate Optimazation Algorithm (QAOA)</span>
+              </div>
+              <span class="next-page"><i class="bi bi-caret-right"></i></span>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </nav>
+
+      <div class="py-5 px-4 px-md-3">
+  <div class="container">
+    
+
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <a class="brand-text d-inline-flex align-items-center mb-2 text-decoration-none" href="/" aria-label="Nefertiti-for-Sphinx">
+          <span class="fs-6 fw-bold">Quantum Native Dojo</span>
+        </a>
+        
+          <ul class="list-unstyled small text-muted">
+            <li>2023, Quantum Native Dojo Contributors</li>
+          </ul>
+        
+        
+        <div class="built-with pt-2">
+          Built with <a href="http://sphinx-doc.org">Sphinx 7.2.6</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.3.0</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+    </footer>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"CommonHTML": {"undefinedFamily": "\"Source Serif Pro\", \"Yakumono\", \"Noto Serif JP\", \"Hiragino Mincho ProN\", \"STIXGeneral\", \"Arial Unicode MS\", serif"}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
+
+    <script type="text/javascript" src="../_static/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinx-nefertiti.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/doc_versions.js"></script>
+  </body>
+</html>
