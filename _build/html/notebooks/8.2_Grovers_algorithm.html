@@ -1,0 +1,869 @@
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+      <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="docsearch:name" content="Quantum Native Dojo" />
+    <meta name="docsearch:package_type" content="" />
+    <meta name="docsearch:release" content="" />
+    <meta name="docsearch:version" content="" />
+    
+      <title>8-2. Grover’s algorithm &mdash; Quantum Native Dojo  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-icons.css" type="text/css" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+          <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+          <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+        <link rel="index" title="Index" href="../genindex.html" />
+        <link rel="search" title="Search" href="../search.html" />
+        <link rel="top" title="Quantum Native Dojo  documentation" href="#" />
+        <link rel="up" title="Chapter 8: Quantum Search Algorithms" href="8_quantum_search_algorithm.html" />
+        <link rel="next" title="Chapter 9 Quantum Error Correction" href="9_quantum_error_correction.html" />
+        <link rel="prev" title="8-1. Oracles" href="8.1_oracle.html" />
+    <style>
+      :root {
+        --nftt-body-font-family: "Nunito", var(--nftt-font-sans-serif) !important;
+        --nftt-font-monospace: "Red Hat Mono", var(--nftt-font-family-monospace) !important;
+        --nftt-project-name-font: var(--nftt-body-font-family);
+        --nftt-documentation-font: var(--nftt-body-font-family);
+        --nftt-doc-headers-font: "Georgia", var(--nftt-documentation-font);}
+      h1 *, h2 *, h3 *, h4 *, h5 *, h6 * { font-size: inherit; }
+    </style>
+  </head>
+  <body>
+    <header class="navbar navbar-expand-xl navbar-dark nftt-navbar flex-column fixed-top">
+      <div class="skip-links container-fluid visually-hidden-focusable overflow-hidden justify-content-start">
+        <div class="border-bottom mb-2 pb-2 w-100">
+          <a class="d-none d-md-inline-flex p-2 m-1" href="#sidebar-filter">Skip to docs navigation</a>
+          <a class="d-inline-flex p-2 m-1" href="#content">Skip to main content</a>
+        </div>
+      </div>
+      <nav class="container-xxl nftt-gutter flex-wrap flex-xl-nowrap" aria-label="Main navigation">
+        <div class="nftt-navbar-toggler">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Toggle documentation navigation">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+          <a href="../index.html"
+              
+              class="navbar-brand p-0 me-0 md-lg-2"
+          ><span class="brand-text">Quantum Native Dojo</span></a>
+        
+        <div class="d-flex d-xl-none">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttSearch" aria-controls="nfttSearch" aria-label="Search">
+            <i class="bi bi-search"></i>
+          </button>
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttNavbar" aria-controls="nfttNavbar" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+        </div>
+        
+<div class="offcanvas-xl offcanvas-end flex-grow-1" tabindex="-1" id="nfttSearch" aria-labelledby="nfttSearchOffcanvasLabel" data-bs-scroll="true">
+  <div class="offcanvas-header px-4 pb-0">
+    <h5 class="offcanvas-title fw-bold" id="nfttSearchOffcanvasLabel">Search the documentation</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttSearch"></button>
+  </div>
+  <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+    <hr class="d-xl-none text-white-50">
+    <ul class="navbar-nav flex-row align-items-center flex-wrap ms-md-auto">
+      <li class="nav-item col-12 col-xl-auto">
+        <form id="nftt-search-form" action="../search.html" method="get">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search docs" aria-label="Search" aria-describedby="button-search">
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+            <button class="btn btn-primary" type="submit" id="button-search" aria-label="Search"><i class="bi bi-search"></i></button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+</div>
+
+        <div class="offcanvas-xl offcanvas-end" tabindex="-1" id="nfttNavbar" aria-labelledby="nfttNavbarOffcanvasLabel" data-bs-scroll="true">
+          <div class="offcanvas-header px-4 pb-0">
+            <div class="offcanvas-title navbar-brand" id="nfttNavbarOffcanvasLabel"><span class="brand-text">Nefertiti for Sphinx</span></div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttNavbar"></button>
+          </div>
+          <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+            <hr class="d-xl-none text-white-50">
+            <ul class="navbar-nav flex-row align-items-center flex-wrap ms-lg-auto">
+              
+              <!-- version_dropdown.html -->
+
+              
+              <!-- colorscheme_dropdown.html -->
+<li class="nav-item dropdown">
+  <a class="nav-link d-flex py-2 px-0 px-xl-2 dropdown-toggle align-items-center" id="snftt-luz" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" aria-label="Toggle light/dark">
+    <i class="bi bi-circle-half" data-snftt-luz-icon-active></i>
+    <span id="snftt-luz-text" class="d-xl-none small ms-2">Toggle light/dark</span>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="snftt-luz-text">
+    <li>
+      <h6 class="dropdown-header">Light/dark</h6>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="light" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-sun" data-snftt-luz-icon="light"></i>
+        </span>
+        <span class="small ms-3">Light</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="dark" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-moon-stars" data-snftt-luz-icon="dark"></i>
+        </span>
+        <span class="small ms-3">Dark</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item current d-flex align-items-center" data-snftt-luz="default" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-circle-half" data-snftt-luz-icon="default"></i>
+        </span>
+        <span class="small ms-3">Default</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+  </ul>
+</li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container-fluid">
+      <div class="nftt-gutter nftt-page">
+        <aside class="nftt-sidebar">
+          <div class="nftt-sidebar-content">
+            <div class="title d-none d-xl-block">
+              <i class="bi bi-book"></i>&nbsp;&nbsp;<span>Index</span>
+            </div>
+            <div id="sidebar" tabindex="-1" class="offcanvas-xl offcanvas-start" aria-labelledby="nfttSidebarOffcanvasLabel">
+                <!-- danirus sidebartemplate: "globaltoc.html" --><div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title fw-bold" id="nfttSidebarOffcanvasLabel">
+    Table of contents
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#sidebar"></button>
+</div>
+
+<div class="offcanvas-body">
+  <nav class="toc" aria-label="Main menu">
+    <div class="mb-3 p-1 pt-3 pb-4 border-bottom">
+      <input id="sidebar-filter" type="text" name="filter" class="form-control form-control-sm" placeholder="filter" aria-label="filter">
+    </div>
+    <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="0_prologue.html">Chapter 0: What is a Quantum Computer ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_quantum_information_foundation.html">Chapter 1: Fundamentals of Quantum Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1.1_qubit_representation.html">1-1. Qubit Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.2_qubit_operations.html">1-2. Qubit Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html">1-3. Multiqubit representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html#Column:-What-is-a-universal-gate-set?">Column: What is a universal gate set?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.4_quantum_circuit_diagram.html">1-4. Quantum Circuit Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2_introduction_to_quantum_algorithms.html">Chapter 2: Introduction to Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2.1_NISQ_and_long_term.html">2-1. NISQ algorithm and long-term algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.2_Hadamard_test.html">2-2. Hadamard test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.3_quantum_Fourier_transform.html">2-3. Quantum Fourier transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.4_phase_estimation_beginner.html">2-4. Phase Estimation Algorithm（Introductory）</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3_execution_environments_of_quantum_algorithms.html">Chapter 3: Execution Environment for Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3.1_Qulacs_tutorial.html">3-1. Qulacs_tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.2_Qiskit_IBMQ.html">3-2. Qiskit_IBMQ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4_quantum_dynamics_simulation.html">Chapter4 Quantum dynamics simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4.1_quantum_simulation.html">4-1. Quantum Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4.2_trotter_decomposition.html">4-2. Trotter Decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5_VQC_based_algorithms.html">Chapter 5 Algorithms Based on Variational Quantum Circuits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5.1_variational_quantum_eigensolver.html">5-1. Variational Quantum Eigensolver（VQE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.2_Quantum_Circuit_Learning.html">5-2. Quantum Circuit Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.3_quantum_approximate_optimazation_algorithm.html">5-3. Quantum Approximate Optimazation Algorithm (QAOA)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6_quantum_chemistry_calculation.html">Chapter 6 Quantum chemistry calculation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="6.1_openfermion_basics.html">6-1. OpenFermion Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7_quantum_phase_estimation.html">chapter 7 Quantum phase estimation algorithm and its application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7.1_quantum_phase_estimation_detailed.html">7-1. Quantum Phase Estimation (QPE) Algorithm Detailed：Hydrogen Molecule as Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.2_Harrow-Hassidim-Lloyd_algorithm.html">7-2. Harrow-Hassidim-Lloyd (HHL) Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.3_application_of_HHL_algorithm.html">7-3. Portofolio Optimization by HHL Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="8_quantum_search_algorithm.html">Chapter 8: Quantum Search Algorithms</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="8.1_oracle.html">8-1. oracle</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">8-2. Grover’s algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="9_quantum_error_correction.html">Chapter 9 Quantum Error Correction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="9.1_error_correction.html">9-1. classical error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9.2_quantum_error_correction.html">9-2. quantum error</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav>
+  <template data-toggle-item-template>
+    <button class="btn btn-sm btn-link toctree-expand" type="button">
+      <i class="bi bi-caret-right"></i>
+      <span class="visually-hidden">Toggle menu contents</span>
+    </button>
+  </template>
+</div>
+            </div>
+          </div>
+        </aside>
+        <article id="content" class="nftt-content" role="main">
+    <section id="8-2.-Grover's-algorithm">
+<h1>8-2. Grover’s algorithm<a class="headerlink" href="#8-2.-Grover's-algorithm" title="Link to this heading">¶</a></h1>
+<p>Grover’s algorithm is a quantum algorithm for searching for specific data from an unsorted database [1]. Grover’s algorithm can find a solution in <span class="math notranslate nohighlight">\(O(\sqrt{N})\)</span> queries (calling an oracle) for <span class="math notranslate nohighlight">\(N\)</span> unsorted data. Since <span class="math notranslate nohighlight">\(O(N)\)</span> queries are required for a classical computer, a quadratic acceleration is achieved by using a quantum algorithm.</p>
+<p>Once the oracle is constructed, Grover’s algorithm can accelerate the entire search portion of any classical algorithm. For example</p>
+<ul class="simple">
+<li><p>Satisfiability problem (SAT problem)</p></li>
+<li><p>The problem of finding the original value from a particular hash value</p></li>
+</ul>
+<p>and the latter has actually been proposed in a paper as a Bitcoin mining acceleration [2].</p>
+<p>In this section, we first provide a theoretical explanation of Glover’s algorithm and then present an example implementation using Qulacs.</p>
+<section id="Algorithm-Flow">
+<h2>Algorithm Flow<a class="headerlink" href="#Algorithm-Flow" title="Link to this heading">¶</a></h2>
+<p>The flow of Grover’s algorithm is simple and is as follows. As in the previous section, consider the problem of searching for <span class="math notranslate nohighlight">\(M\)</span> solutions from a database of <span class="math notranslate nohighlight">\(N\)</span> elements, where the element labels are <span class="math notranslate nohighlight">\(N\)</span> digit bit sequences <span class="math notranslate nohighlight">\(x = x_1 \ldots x_n\)</span>.</p>
+<ol class="arabic simple">
+<li><p>prepare a superposition of all states <span class="math notranslate nohighlight">\(|s\rangle = \frac{1}{\sqrt{N}}\sum_x |x\rangle\)</span>.</p></li>
+<li><p>apply oracle <span class="math notranslate nohighlight">\(U_w\)</span> (reversal operation on the solution)</p></li>
+<li><p>apply the inversion operation <span class="math notranslate nohighlight">\(U_s\)</span> with <span class="math notranslate nohighlight">\(|s\rangle\)</span> as the axis of symmetry</p></li>
+<li><p>Repeat steps 2 and 3 <span class="math notranslate nohighlight">\(k\)</span> times</p></li>
+<li><p>perform the measurement</p></li>
+</ol>
+<p>Let’s look at each step in detail.</p>
+<section id="1.-prepare-a-superposition-state-of-all-states-|s\rangle-=-\frac{1}{\sqrt{N}}\sum_x-|x\rangle.">
+<h3>1. prepare a superposition state of all states <span class="math notranslate nohighlight">\(|s\rangle = \frac{1}{\sqrt{N}}\sum_x |x\rangle\)</span>.<a class="headerlink" href="#1.-prepare-a-superposition-state-of-all-states-|s\rangle-=-\frac{1}{\sqrt{N}}\sum_x-|x\rangle." title="Link to this heading">¶</a></h3>
+<p>This is easy. For the initial state <span class="math notranslate nohighlight">\(|0\cdots0\rangle\)</span>, we can apply Hadamard gate <span class="math notranslate nohighlight">\(H\)</span> to all qubits.</p>
+<div class="math notranslate nohighlight">
+\[(H\otimes \cdots \otimes H) |0\cdots0\rangle = \frac{1}{(\sqrt{2})^n} (|0\rangle+|1\rangle) \otimes \cdots \otimes (|0\rangle+|1\rangle)
+= |s\rangle\]</div>
+</section>
+<section id="2.-Apply-the-oracle-U_w-(reversal-operation-on-the-solution)">
+<h3>2. Apply the oracle <span class="math notranslate nohighlight">\(U_w\)</span> (reversal operation on the solution)<a class="headerlink" href="#2.-Apply-the-oracle-U_w-(reversal-operation-on-the-solution)" title="Link to this heading">¶</a></h3>
+<p>Next, we let the oracle act on the state <span class="math notranslate nohighlight">\(|s\rangle\)</span>. Here, as an oracle, we will consider the operation “if <span class="math notranslate nohighlight">\(x\)</span> is a solution to the input <span class="math notranslate nohighlight">\(|x\rangle\)</span>, the phase is inverted by multiplying by (-1), and if it is not a solution, nothing is done” as described at the end of <a class="reference internal" href="8.1_oracle.html"><span class="doc">previous section</span></a>, and the auxiliary bits are omitted. In other words, define the oracle <span class="math notranslate nohighlight">\(U_w\)</span> as follows.</p>
+<div class="math notranslate nohighlight">
+\[U_w = I - 2\sum_{w\in \text{solution}}|w\rangle \langle w|,\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split} U_w|x\rangle =
+\begin{cases}
+ |x\rangle  \:\: \text{(x is not solution)} \\
+ -|x\rangle \:\: \text{(x is solution)}
+\end{cases}\end{split}\]</div>
+<p>The oracle <span class="math notranslate nohighlight">\(U_w\)</span> is called an “inversion operation on the solution” because it inverts the phase only when the input is a solution.</p>
+</section>
+<section id="3.-Applying-the-inversion-operation-U_s-with-|s\rangle-as-the-axis-of-symmetry">
+<h3>3. Applying the inversion operation <span class="math notranslate nohighlight">\(U_s\)</span> with <span class="math notranslate nohighlight">\(|s\rangle\)</span> as the axis of symmetry<a class="headerlink" href="#3.-Applying-the-inversion-operation-U_s-with-|s\rangle-as-the-axis-of-symmetry" title="Link to this heading">¶</a></h3>
+<p>In step 2, we considered the inversion operation on the solution, and in step 3, we will apply the inversion operation <span class="math notranslate nohighlight">\(U_s\)</span> with the superposition of all states <span class="math notranslate nohighlight">\(|s\rangle\)</span> as the axis of symmetry.</p>
+<div class="math notranslate nohighlight">
+\[U_s = 2 |s\rangle \langle s| - I\]</div>
+<p>This operator acts on input state <span class="math notranslate nohighlight">\(|\psi\rangle = a|s\rangle + b|s_\perp\rangle\)</span> (<span class="math notranslate nohighlight">\(|s_\perp\rangle\)</span> is a vector orthogonal to <span class="math notranslate nohighlight">\(|s\rangle\)</span>)as follows</p>
+<div class="math notranslate nohighlight">
+\[U_s|\psi\rangle = a |s\rangle - b|s_\perp\rangle\]</div>
+<p>and inverts only the phase of the part proportional to <span class="math notranslate nohighlight">\(|s_\perp\rangle\)</span>.</p>
+</section>
+<section id="4.-Repeat-steps-2-and-3-k-times">
+<h3>4. Repeat steps 2 and 3 <span class="math notranslate nohighlight">\(k\)</span> times<a class="headerlink" href="#4.-Repeat-steps-2-and-3-k-times" title="Link to this heading">¶</a></h3>
+<p>Repeat the above two inversion operations <span class="math notranslate nohighlight">\(U_w\)</span> and <span class="math notranslate nohighlight">\(U_s\)</span>. As we will see later, approximately <span class="math notranslate nohighlight">\(O(\sqrt{N/M})\)</span> iterations are sufficient to obtain a solution with high enough probability for the next step 5 measurement. In other words, the number of times to call the oracle is <span class="math notranslate nohighlight">\(O(\sqrt{N})\)</span>.</p>
+</section>
+<section id="5.-Take-a-measurement">
+<h3>5. Take a measurement<a class="headerlink" href="#5.-Take-a-measurement" title="Link to this heading">¶</a></h3>
+<p>After the steps up to this point, the state is <span class="math notranslate nohighlight">\((U_s U_w)^k | s \rangle\)</span>. <span class="math notranslate nohighlight">\(k\)</span> is the number of iterations of steps 2 and 3. As described below, in fact, (absolute value of) the coefficient of the state <span class="math notranslate nohighlight">\(|w\rangle\)</span> corresponding to the solution <span class="math notranslate nohighlight">\(w\)</span> is very large in this state, so if we perform the measurement in the computational basis, we can obtain the solution <span class="math notranslate nohighlight">\(w\)</span> (bit string) with a high probability.</p>
+<p>Roughly speaking, this is the only operation to be performed in Grover’s algorithm, and it is very simple.</p>
+</section>
+</section>
+<section id="Geometric-Explanation">
+<h2>Geometric Explanation<a class="headerlink" href="#Geometric-Explanation" title="Link to this heading">¶</a></h2>
+<p>Next, we provide a geometric explanation of why Grover’s algorithm works. (There are other explanations that focus on the average operation of the coefficients, see for example [3].)</p>
+<section id="Definition-of-a-two-dimensional-plane">
+<h3>Definition of a two-dimensional plane<a class="headerlink" href="#Definition-of-a-two-dimensional-plane" title="Link to this heading">¶</a></h3>
+<p>First, consider a two-dimensional plane stretched in the following two states <span class="math notranslate nohighlight">\(|\alpha\rangle,|\beta\rangle\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[|\alpha\rangle = \frac{1}{\sqrt{N-M}} \sum_{x \in {not solution}} |x\rangle\]</div>
+<div class="math notranslate nohighlight">
+\[|\beta\rangle = \frac{1}{\sqrt{M}}\sum_{x \in solution} |x\rangle\]</div>
+<p>The superposition state <span class="math notranslate nohighlight">\(|s\rangle\)</span> of all states can be expressed as follows, which shows that it is a vector in this 2-dimensional plane.</p>
+<div class="math notranslate nohighlight">
+\[|s\rangle = \sqrt{\frac{N-M}{N}} |\alpha\rangle + \sqrt{\frac{M}{N}} |\beta\rangle\]</div>
+<p>In particular, using angles which satisfies <span class="math notranslate nohighlight">\(\cos{\frac{\theta}{2}} = \sqrt{\frac{N-M}{N}}, \sin{\frac{\theta}{2}} = \sqrt{\frac{M}{N}}\)</span> we can write</p>
+<div class="math notranslate nohighlight">
+\[|s\rangle = \cos{\frac{\theta}{2}} |\alpha\rangle + \sin{\frac{\theta}{2}} |\beta\rangle\]</div>
+<p>This is illustrated in the following figure. (Note that since <span class="math notranslate nohighlight">\(N \gg{} M\)</span> in general in search problems, <span class="math notranslate nohighlight">\(\sqrt{M/N}\)</span> is close to 0 and <span class="math notranslate nohighlight">\(\theta\)</span> is often a positive number close to 0.)</p>
+<img alt="Grovers" src="../_images/GroverReflection.png" />
+</section>
+<section id="Two-inversion-operations-U_s-U_w-=-rotation-in-a-two-dimensional-plane">
+<h3>Two inversion operations <span class="math notranslate nohighlight">\(U_s U_w\)</span> = rotation in a two-dimensional plane<a class="headerlink" href="#Two-inversion-operations-U_s-U_w-=-rotation-in-a-two-dimensional-plane" title="Link to this heading">¶</a></h3>
+<p>Considering in this plane, the oracle <span class="math notranslate nohighlight">\(U_w\)</span> is an inversion operation with respect to the <span class="math notranslate nohighlight">\(|\beta\rangle\)</span> axis (<span class="math notranslate nohighlight">\(U_w|\alpha\rangle =|\alpha\rangle, U_w|\beta\rangle = -|\beta\rangle\)</span>). Therefore, after applying <span class="math notranslate nohighlight">\(U_w\)</span>, applying inversion <span class="math notranslate nohighlight">\(U_s\)</span> with <span class="math notranslate nohighlight">\(|s\rangle\)</span> as the symmetry axis will result in a rotation in the <span class="math notranslate nohighlight">\(|\alpha\rangle,|\beta\rangle\)</span> plane by an angle <span class="math notranslate nohighlight">\(\theta\)</span>. (see the figure).</p>
+<p>Since Grover’s algorithm repeats <span class="math notranslate nohighlight">\(U_s U_w\)</span> <span class="math notranslate nohighlight">\(k\)</span> times, the state is rotated <span class="math notranslate nohighlight">\(k\)</span> times, and just before the measurement</p>
+<div class="math notranslate nohighlight">
+\[(U_s U_w)^k |s\rangle = \cos{\frac{(2k+1)\theta}{2}} |\alpha\rangle + \sin{\frac{(2k+1)\theta}{2}} |\beta\rangle\]</div>
+<p>When <span class="math notranslate nohighlight">\(N \gg M\)</span> , <span class="math notranslate nohighlight">\(\theta\)</span> was a positive number close to zero, so each time <span class="math notranslate nohighlight">\(|s\rangle\)</span> was acted on by <span class="math notranslate nohighlight">\(U_s U_w\)</span>, the coefficient of <span class="math notranslate nohighlight">\(|\alpha\rangle\)</span> would decrease and that of <span class="math notranslate nohighlight">\(|\beta\rangle\)</span> would increase. Since <span class="math notranslate nohighlight">\(|\beta\rangle\)</span> was made up of a superposition of all solution states, this means that the probability of obtaining a solution increases when <span class="math notranslate nohighlight">\((U_s U_w)^k |s\rangle\)</span> is measured.</p>
+<p>This is the reasons why Glover’s algorithm can successfully search for solutions.</p>
+</section>
+<section id="Estimating-the-optimal-k.">
+<h3>Estimating the optimal <span class="math notranslate nohighlight">\(k\)</span>.<a class="headerlink" href="#Estimating-the-optimal-k." title="Link to this heading">¶</a></h3>
+<p>Finally, let’s evaluate how much <span class="math notranslate nohighlight">\(k\)</span>, the number of times to act on <span class="math notranslate nohighlight">\(U_s U_w\)</span>, i.e., how many times to call the oracle. This will determine the computational complexity.</p>
+<p>The closest <span class="math notranslate nohighlight">\((U_s U_w)^k |s\rangle\)</span> comes to <span class="math notranslate nohighlight">\(|\beta\rangle\)</span> is when <span class="math notranslate nohighlight">\(\frac{(2k+1)\theta}{2}\)</span> is close to <span class="math notranslate nohighlight">\(\frac{\pi}{2}\)</span>, that is when <span class="math notranslate nohighlight">\(k\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[R = \text{ClosestInteger}\left( \frac{\pi}{2\theta} -\frac{1}{2} \right)\]</div>
+<p>ここで <span class="math notranslate nohighlight">\(\text{ClosestInteger}(\ldots)\)</span> は <span class="math notranslate nohighlight">\(\ldots\)</span> に最も近い整数を表す。 <span class="math notranslate nohighlight">\(R\)</span>の上限を評価しよう。 <span class="math notranslate nohighlight">\(\theta &gt; 0\)</span> について成り立つ式</p>
+<p>where <span class="math notranslate nohighlight">\(\text{ClosestInteger}(\ldots)\)</span> denotes the integer closest to <span class="math notranslate nohighlight">\(\ldots\)</span>. Let us evaluate the upper bound of <span class="math notranslate nohighlight">\(R\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\frac{\theta}{2} \geq  \sin \frac{\theta}{2} = \sqrt{\frac{M}{N}}\]</div>
+<p>With the above equation that hold for <span class="math notranslate nohighlight">\(\theta &gt; 0\)</span>, we get</p>
+<div class="math notranslate nohighlight">
+\[R \leq \left( \frac{\pi}{2\theta} -\frac{1}{2} \right) + 1 = \frac{\pi}{2\theta} + \frac{1}{2} \leq \frac{\pi}{4}\sqrt{\frac{N}{M}} + \frac{1}{2}\]</div>
+<p>That is, <span class="math notranslate nohighlight">\(R\)</span> is at most <span class="math notranslate nohighlight">\(O(\sqrt{N/M})\)</span> and Grover’s algorithm works with <span class="math notranslate nohighlight">\(O(\sqrt{N})\)</span>.</p>
+</section>
+</section>
+<section id="Example-Implementation">
+<h2>Example Implementation<a class="headerlink" href="#Example-Implementation" title="Link to this heading">¶</a></h2>
+<p>Let us try to implement Grover’s algorithm using Qulacs. (The implementation code is almost the same as in [4].</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Importing libraries</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
+<span class="kn">from</span> <span class="nn">qulacs.state</span> <span class="kn">import</span> <span class="n">inner_product</span>
+<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
+<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">to_matrix_gate</span>
+<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
+<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">Identity</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span> <span class="c1">#Pauli operator</span>
+<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">H</span>
+<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">RX</span><span class="p">,</span><span class="n">RY</span><span class="p">,</span><span class="n">RZ</span> <span class="c1">#Rotation operations on Pauli operators</span>
+
+<span class="c1">## Run only if you are in a Google Colaboratory / (Linux or Mac) jupyter notebook environment.</span>
+<span class="c1">## Qulacs errors will be output normally.</span>
+<span class="o">!</span>pip3<span class="w"> </span>install<span class="w"> </span>wurlitzer
+<span class="o">%</span><span class="k">load_ext</span> wurlitzer
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Function to plot the distribution of absolute values of coefficients</span>
+<span class="k">def</span> <span class="nf">show_distribution</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="n">nqubits</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">nqubits</span><span class="p">))],</span> <span class="nb">abs</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">()))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<section id="Checking-the-operation">
+<h3>Checking the operation<a class="headerlink" href="#Checking-the-operation" title="Link to this heading">¶</a></h3>
+<p>First, let’s implement Grover’s algorithm with 5 qubits and check its operation. The superposition state of all states <span class="math notranslate nohighlight">\(|s\rangle\)</span> can be created by acting on all bits of the state <span class="math notranslate nohighlight">\(|0\cdots0\rangle\)</span> with Hadamard gate.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nqubits</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">make_Hadamard</span><span class="p">(</span><span class="n">nqubits</span><span class="p">):</span>
+    <span class="n">Hadamard</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubits</span><span class="p">):</span>
+        <span class="n">Hadamard</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">H</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">Hadamard</span>
+
+<span class="n">Hadamard</span> <span class="o">=</span> <span class="n">make_Hadamard</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">Hadamard</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+<span class="n">show_distribution</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="n">nqubits</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_8.2_Grovers_algorithm_13_0.png" src="../_images/notebooks_8.2_Grovers_algorithm_13_0.png" />
+</div>
+</div>
+<p>Next, we create the oracle <span class="math notranslate nohighlight">\(U_w\)</span>. Here we set <span class="math notranslate nohighlight">\(|1\ldots1\rangle\)</span> as the solution, and create an operator that adds a phase (-1) to only <span class="math notranslate nohighlight">\(|1\ldots1\rangle\)</span>. Such an operator can be implemented as “an operator that apply the <span class="math notranslate nohighlight">\(Z\)</span> gate on the <code class="docutils literal notranslate"><span class="pre">nqubits</span></code>th qubit when all qubits from the <code class="docutils literal notranslate"><span class="pre">0</span></code>th to the <code class="docutils literal notranslate"><span class="pre">nqubits-1</span></code>th are <code class="docutils literal notranslate"><span class="pre">1</span></code>. The implementation uses Qulacs special gate <code class="docutils literal notranslate"><span class="pre">to_matrix_gate</span></code>. Also, we use <code class="docutils literal notranslate"><span class="pre">control_index</span></code> and <code class="docutils literal notranslate"><span class="pre">control_with_value</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_U_w</span><span class="p">(</span><span class="n">nqubits</span><span class="p">):</span>
+    <span class="n">U_w</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+    <span class="n">CnZ</span> <span class="o">=</span> <span class="n">to_matrix_gate</span><span class="p">(</span><span class="n">Z</span><span class="p">(</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="c1"># apply gate only if i-th qubits are all 1&#39;s</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">control_index</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">control_with_value</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">CnZ</span><span class="o">.</span><span class="n">add_control_qubit</span><span class="p">(</span><span class="n">control_index</span><span class="p">,</span> <span class="n">control_with_value</span><span class="p">)</span>
+    <span class="n">U_w</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">CnZ</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">U_w</span>
+</pre></div>
+</div>
+</div>
+<p>Checking the action of the oracle, we can see that indeed only the last component (<span class="math notranslate nohighlight">\(|1\cdots1\rangle\)</span>) is inverted in phase.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hoge</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">U_w</span> <span class="o">=</span> <span class="n">make_U_w</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">U_w</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">hoge</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">hoge</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[ 0.1767767+0.j  0.1767767+0.j  0.1767767+0.j  0.1767767+0.j
+  0.1767767+0.j  0.1767767+0.j  0.1767767+0.j  0.1767767+0.j
+  0.1767767+0.j  0.1767767+0.j  0.1767767+0.j  0.1767767+0.j
+  0.1767767+0.j  0.1767767+0.j  0.1767767+0.j  0.1767767+0.j
+  0.1767767+0.j  0.1767767+0.j  0.1767767+0.j  0.1767767+0.j
+  0.1767767+0.j  0.1767767+0.j  0.1767767+0.j  0.1767767+0.j
+  0.1767767+0.j  0.1767767+0.j  0.1767767+0.j  0.1767767+0.j
+  0.1767767+0.j  0.1767767+0.j  0.1767767+0.j -0.1767767+0.j]
+</pre></div></div>
+</div>
+<p>Similarly, create an inversion <span class="math notranslate nohighlight">\(U_s\)</span> with <span class="math notranslate nohighlight">\(|s\rangle\)</span> as the symmetry axis. Use the following equation holds.</p>
+<div class="math notranslate nohighlight">
+\[U_s = 2 |s\rangle \langle s| - I = H^{\otimes n} (2 |0\cdots0\rangle \langle0\cdots0| - I) H^{\otimes n}\]</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_U_s</span><span class="p">(</span><span class="n">nqubits</span><span class="p">):</span>
+    <span class="n">U_s</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubits</span><span class="p">):</span>
+        <span class="n">U_s</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">H</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+
+    <span class="c1">## 2|0&gt;&lt;0| - I implementation</span>
+    <span class="c1">## First, phase (-1) is given to all states. The gate matrix is arrary([[-1,0],[0,-1]])</span>
+    <span class="n">U_s</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">to_matrix_gate</span><span class="p">(</span><span class="n">RZ</span><span class="p">(</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)))</span>
+    <span class="n">U_s</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span> <span class="n">X</span><span class="p">(</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
+    <span class="c1">## apply the Z-gate only if all i-th qubits are 0</span>
+    <span class="n">CnZ</span> <span class="o">=</span> <span class="n">to_matrix_gate</span><span class="p">(</span><span class="n">Z</span><span class="p">(</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">control_index</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="n">control_with_value</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">CnZ</span><span class="o">.</span><span class="n">add_control_qubit</span><span class="p">(</span><span class="n">control_index</span><span class="p">,</span> <span class="n">control_with_value</span><span class="p">)</span>
+    <span class="n">U_s</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span> <span class="n">CnZ</span> <span class="p">)</span>
+    <span class="n">U_s</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span> <span class="n">X</span><span class="p">(</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubits</span><span class="p">):</span>
+        <span class="n">U_s</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">H</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">U_s</span>
+</pre></div>
+</div>
+</div>
+<p>Now let’s apply <span class="math notranslate nohighlight">\(U_s U_w\)</span> just once and see how the probability distribution changes. The probability of all 1 states (the rightmost one) gets slightly larger.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Prepare initial state</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+<span class="n">Hadamard</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+<span class="c1">## apply U_s U_w</span>
+<span class="n">U_s</span> <span class="o">=</span> <span class="n">make_U_s</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">U_w</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="n">U_s</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="n">show_distribution</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="n">nqubits</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_8.2_Grovers_algorithm_21_0.png" src="../_images/notebooks_8.2_Grovers_algorithm_21_0.png" />
+</div>
+</div>
+<p>Repeat this a few times and you’ll see.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Create a solution state |1....1&gt; to evaluate the inner product.</span>
+<span class="n">target_state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">target_state</span><span class="o">.</span><span class="n">set_computational_basis</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1">## 2**n_qubits-1 is a binary number 1.... .1</span>
+
+<span class="c1">## Run Grover&#39;s algorithm</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+
+<span class="n">Hadamard</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">U_w</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">U_s</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">show_distribution</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="n">nqubits</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">inner_product</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">target_state</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_8.2_Grovers_algorithm_23_0.png" src="../_images/notebooks_8.2_Grovers_algorithm_23_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.5082329989778305
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_8.2_Grovers_algorithm_23_2.png" src="../_images/notebooks_8.2_Grovers_algorithm_23_2.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.7761601777867947
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_8.2_Grovers_algorithm_23_4.png" src="../_images/notebooks_8.2_Grovers_algorithm_23_4.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.9470673343724091
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_8.2_Grovers_algorithm_23_6.png" src="../_images/notebooks_8.2_Grovers_algorithm_23_6.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0.9995910741614723
+</pre></div></div>
+</div>
+<p>After about <span class="math notranslate nohighlight">\(k=4\)</span> iterations, we got a solution state with probability almost 1. Let <code class="docutils literal notranslate"><span class="pre">nqubits</span></code> be a bit larger and check the behavior of the solution output probability for <span class="math notranslate nohighlight">\(k\)</span>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nqubits</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+
+<span class="c1">## Create a solution state |1....1&gt; to evaluate the inner product.</span>
+<span class="n">target_state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">target_state</span><span class="o">.</span><span class="n">set_computational_basis</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1">## 2**n_qubits-1 is binary number 1...1</span>
+
+<span class="c1">## Run Grover&#39;s algorithm</span>
+<span class="n">Hadamard</span> <span class="o">=</span> <span class="n">make_Hadamard</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">U_w</span><span class="o">=</span> <span class="n">make_U_w</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">U_s</span> <span class="o">=</span> <span class="n">make_U_s</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+<span class="n">Hadamard</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">):</span>
+    <span class="n">U_w</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">U_s</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="c1">#show_distribution(state,nqubits)</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">inner_product</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">target_state</span><span class="p">)))</span>
+
+<span class="n">max_k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span> <span class="sa">f</span><span class="s2">&quot;maximal probability </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="n">max_k</span><span class="p">]</span><span class="si">:</span><span class="s2">5e</span><span class="si">}</span><span class="s2"> is obtained at k = </span><span class="si">{</span><span class="n">max_k</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">30</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">result</span><span class="p">,</span> <span class="s2">&quot;o-&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+maximal probability 9.997306e-01 is obtained at k = 25
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&lt;matplotlib.lines.Line2D at 0x11d3ee990&gt;]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_8.2_Grovers_algorithm_25_2.png" src="../_images/notebooks_8.2_Grovers_algorithm_25_2.png" />
+</div>
+</div>
+<p>The target state is obtained with probability 1 almost <span class="math notranslate nohighlight">\(k=25\)</span> times. Also, the <span class="math notranslate nohighlight">\(k\)</span> dependence of the probability is a sine function, as we saw in the “Geometric Explanation” section.</p>
+<p>Finally, let’s see how the <span class="math notranslate nohighlight">\(k\)</span> needed to find the solution behaves with respect to the number of qubits.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">min_nqubits</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">max_nqubits</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="k">for</span> <span class="n">nqubits</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">min_nqubits</span><span class="p">,</span> <span class="n">max_nqubits</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="c1">## Prepare circuit</span>
+    <span class="n">Hadamard</span> <span class="o">=</span> <span class="n">make_Hadamard</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+    <span class="n">U_w</span><span class="o">=</span> <span class="n">make_U_w</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+    <span class="n">U_s</span> <span class="o">=</span> <span class="n">make_U_s</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+
+    <span class="c1">## Create a solution state |1....1&gt; to evaluate the inner product.</span>
+    <span class="n">target_state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+    <span class="n">target_state</span><span class="o">.</span><span class="n">set_computational_basis</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1">## 2**n_qubits-1 is binary number 1...1</span>
+
+    <span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+    <span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+    <span class="n">Hadamard</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+    <span class="c1">## Multiply U_s U_w until the probability starts to decrease</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">num_iter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">flag</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">num_iter</span> <span class="o">&lt;=</span> <span class="mi">1000</span><span class="p">:</span>
+        <span class="n">num_iter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">U_w</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">U_s</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">suc_prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">inner_product</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">target_state</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">tmp</span> <span class="o">&lt;</span> <span class="n">suc_prob</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">suc_prob</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">[</span><span class="n">nqubits</span><span class="p">,</span> <span class="n">num_iter</span><span class="p">,</span> <span class="n">suc_prob</span><span class="p">]</span> <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;nqubits=</span><span class="si">{</span><span class="n">nqubits</span><span class="si">}</span><span class="s2">, num_iter=</span><span class="si">{</span><span class="n">num_iter</span><span class="si">}</span><span class="s2">, suc_prob=</span><span class="si">{</span><span class="n">suc_prob</span><span class="si">:</span><span class="s2">5e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+nqubits=6, num_iter=7, suc_prob=9.526013e-01
+nqubits=8, num_iter=13, suc_prob=9.930691e-01
+nqubits=10, num_iter=26, suc_prob=9.963280e-01
+nqubits=12, num_iter=51, suc_prob=9.992534e-01
+nqubits=14, num_iter=101, suc_prob=9.998851e-01
+nqubits=16, num_iter=202, suc_prob=9.999368e-01
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">result_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">min_nqubits</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_nqubits</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;n, # of qubits&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;k, # of iteration&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">result_array</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">result_array</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;o-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;experiment&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">result_array</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="mf">0.05</span><span class="o">*</span><span class="mi">2</span><span class="o">**</span><span class="n">result_array</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\propto N=2^n$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">result_array</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="n">result_array</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]),</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;$\propto \sqrt</span><span class="si">{N}</span><span class="s2">=2^{n/2}$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x11a5fd410&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_8.2_Grovers_algorithm_28_1.png" src="../_images/notebooks_8.2_Grovers_algorithm_28_1.png" />
+</div>
+</div>
+<p>The number of iterations = the number of oracle calls <span class="math notranslate nohighlight">\(k\)</span> is proportional to <span class="math notranslate nohighlight">\(O(\sqrt{N})\)</span>, not <span class="math notranslate nohighlight">\(O(N)\)</span>.</p>
+</section>
+</section>
+<section id="Appendix">
+<h2>Appendix<a class="headerlink" href="#Appendix" title="Link to this heading">¶</a></h2>
+<p>Interested readers are encouraged to use Grover’s algorithm to solve the convenience store placement problem <a class="reference external" href="https://github.com/quantum-challenge/2019/blob/master/problems/final/Final.ipynb">IBM Quantum Challenge 2019 contest problem</a>. An <a class="reference external" href="https://github.com/quantum-challenge/2019/blob/master/problems/final/answer_and_comment_by_judges.ipynb">example solution</a> has also been uploaded.</p>
+</section>
+<section id="Reference">
+<h2>Reference<a class="headerlink" href="#Reference" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">[1] M. A. Nielsen and I. L. Chuang, <code class="docutils literal notranslate"><span class="pre">6.1</span> <span class="pre">The</span> <span class="pre">quantum</span> <span class="pre">search</span> <span class="pre">algorithm</span></code> of “Quantum Computation and Quantum Information 10th Anniversary Edition“, University Printing House</div>
+<div class="line">[2] D. Aggarwal, G. Brennen, T. Lee, M. Santha, and M. Tomamichel, “Quantum Attacks on Bitcoin, and How to Protect Against Them“, Ledger, [S.l.], v. 3, oct. 2018, <a class="reference external" href="https://ledgerjournal.org/ojs/index.php/ledger/article/view/127">https://ledgerjournal.org/ojs/index.php/ledger/article/view/127</a></div>
+<div class="line">[3] IBM Quantum Challenge 2019, Week 2 notebook <a class="reference external" href="https://github.com/quantum-challenge/2019/blob/master/problems/week2/week2.ipynb">https://github.com/quantum-challenge/2019/blob/master/problems/week2/week2.ipynb</a></div>
+<div class="line">[4] Keisuke Fujii, “Implement the Grover Search Quantum Algorithm in depth.“, <a class="reference external" href="https://github.com/keisukefujii/QulacsExamples/blob/master/GroverSearch.ipynb">https://github.com/keisukefujii/QulacsExamples/blob/master/GroverSearch.ipynb</a></div>
+</div>
+</section>
+</section>
+
+</article>
+        <aside class="nftt-toc">
+          
+          <div class="mt-3 mb-1 my-lg-0 ps-xl-3 text-muted">
+            <button class="btn btn-link link-dark p-lg-0 mb-2 mb-lg-0 text-decoration-none nftt-toc-toggle d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents"
+            >On this page <i class="ms-2 bi bi-chevron-expand"></i></button>
+            <div class="title d-none d-lg-block">
+              <i class="bi bi-file-earmark-text"></i>&nbsp;&nbsp;<span class="small">On this page</span>
+            </div>
+            <div class="collapse nftt-toc-collapse" id="tocContents">
+              <nav id="TableOfContents">
+                <ul>
+<li><a class="reference internal" href="#">8-2. Grover’s algorithm</a><ul>
+<li><a class="reference internal" href="#Algorithm-Flow">Algorithm Flow</a><ul>
+<li><a class="reference internal" href="#1.-prepare-a-superposition-state-of-all-states-|s\rangle-=-\frac{1}{\sqrt{N}}\sum_x-|x\rangle.">1. prepare a superposition state of all states <span class="math notranslate nohighlight">\(|s\rangle = \frac{1}{\sqrt{N}}\sum_x |x\rangle\)</span>.</a></li>
+<li><a class="reference internal" href="#2.-Apply-the-oracle-U_w-(reversal-operation-on-the-solution)">2. Apply the oracle <span class="math notranslate nohighlight">\(U_w\)</span> (reversal operation on the solution)</a></li>
+<li><a class="reference internal" href="#3.-Applying-the-inversion-operation-U_s-with-|s\rangle-as-the-axis-of-symmetry">3. Applying the inversion operation <span class="math notranslate nohighlight">\(U_s\)</span> with <span class="math notranslate nohighlight">\(|s\rangle\)</span> as the axis of symmetry</a></li>
+<li><a class="reference internal" href="#4.-Repeat-steps-2-and-3-k-times">4. Repeat steps 2 and 3 <span class="math notranslate nohighlight">\(k\)</span> times</a></li>
+<li><a class="reference internal" href="#5.-Take-a-measurement">5. Take a measurement</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Geometric-Explanation">Geometric Explanation</a><ul>
+<li><a class="reference internal" href="#Definition-of-a-two-dimensional-plane">Definition of a two-dimensional plane</a></li>
+<li><a class="reference internal" href="#Two-inversion-operations-U_s-U_w-=-rotation-in-a-two-dimensional-plane">Two inversion operations <span class="math notranslate nohighlight">\(U_s U_w\)</span> = rotation in a two-dimensional plane</a></li>
+<li><a class="reference internal" href="#Estimating-the-optimal-k.">Estimating the optimal <span class="math notranslate nohighlight">\(k\)</span>.</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Example-Implementation">Example Implementation</a><ul>
+<li><a class="reference internal" href="#Checking-the-operation">Checking the operation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Appendix">Appendix</a></li>
+<li><a class="reference internal" href="#Reference">Reference</a></li>
+</ul>
+</li>
+</ul>
+
+              </nav>
+            </div>
+          </div>
+          
+        </aside>
+      </div>
+    </div>
+
+    <footer class="nftt-footer">
+      <nav id="paginator" class="py-4" aria-label="Documentation navigation">
+    <div class="container">
+      <ul class="pagination justify-content-between mb-0"><li class="page-item">
+            <a href="8.1_oracle.html" class="d-flex px-5 align-items-end" rel="prev" aria-label="Previous page: 8-1. Oracles">
+              <span class="prev-page"><i class="bi bi-caret-left"></i></span>
+              <div class="d-flex flex-column">
+                <span class="text-small text-start text-muted">Previous</span>
+                <span class="underline">8-1. Oracles</span>
+              </div>
+            </a>
+          </li>
+        <li class="page-item ms-auto">
+            <a href="9_quantum_error_correction.html" class="d-flex px-5 align-items-end" rel="next" aria-label="Next page: Chapter 9 Quantum Error Correction">
+              <div class="d-flex flex-column">
+                <span class="text-small text-end text-start text-muted">Next</span>
+                <span class="underline">Chapter 9 Quantum Error Correction</span>
+              </div>
+              <span class="next-page"><i class="bi bi-caret-right"></i></span>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </nav>
+
+      <div class="py-5 px-4 px-md-3">
+  <div class="container">
+    
+
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <a class="brand-text d-inline-flex align-items-center mb-2 text-decoration-none" href="/" aria-label="Nefertiti-for-Sphinx">
+          <span class="fs-6 fw-bold">Quantum Native Dojo</span>
+        </a>
+        
+          <ul class="list-unstyled small text-muted">
+            <li>2023, Quantum Native Dojo Contributors</li>
+          </ul>
+        
+        
+        <div class="built-with pt-2">
+          Built with <a href="http://sphinx-doc.org">Sphinx 7.2.6</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.3.0</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+    </footer>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"CommonHTML": {"undefinedFamily": "\"Source Serif Pro\", \"Yakumono\", \"Noto Serif JP\", \"Hiragino Mincho ProN\", \"STIXGeneral\", \"Arial Unicode MS\", serif"}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
+
+    <script type="text/javascript" src="../_static/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinx-nefertiti.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/doc_versions.js"></script>
+  </body>
+</html>

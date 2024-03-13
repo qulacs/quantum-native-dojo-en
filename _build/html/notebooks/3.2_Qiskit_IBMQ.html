@@ -1,0 +1,542 @@
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+      <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="docsearch:name" content="Quantum Native Dojo" />
+    <meta name="docsearch:package_type" content="" />
+    <meta name="docsearch:release" content="" />
+    <meta name="docsearch:version" content="" />
+    
+      <title>3-2. How to use Qiskit and IBM Q Experience &mdash; Quantum Native Dojo  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-icons.css" type="text/css" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+          <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+          <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+        <link rel="index" title="Index" href="../genindex.html" />
+        <link rel="search" title="Search" href="../search.html" />
+        <link rel="top" title="Quantum Native Dojo  documentation" href="#" />
+        <link rel="up" title="Chapter 3: Execution Environment for Quantum Algorithms" href="3_execution_environments_of_quantum_algorithms.html" />
+        <link rel="next" title="Chapter4 Quantum dynamics simulation" href="4_quantum_dynamics_simulation.html" />
+        <link rel="prev" title="3-1. How to use Qulacs, the world’s fastest simulator" href="3.1_Qulacs_tutorial.html" />
+    <style>
+      :root {
+        --nftt-body-font-family: "Nunito", var(--nftt-font-sans-serif) !important;
+        --nftt-font-monospace: "Red Hat Mono", var(--nftt-font-family-monospace) !important;
+        --nftt-project-name-font: var(--nftt-body-font-family);
+        --nftt-documentation-font: var(--nftt-body-font-family);
+        --nftt-doc-headers-font: "Georgia", var(--nftt-documentation-font);}
+      h1 *, h2 *, h3 *, h4 *, h5 *, h6 * { font-size: inherit; }
+    </style>
+  </head>
+  <body>
+    <header class="navbar navbar-expand-xl navbar-dark nftt-navbar flex-column fixed-top">
+      <div class="skip-links container-fluid visually-hidden-focusable overflow-hidden justify-content-start">
+        <div class="border-bottom mb-2 pb-2 w-100">
+          <a class="d-none d-md-inline-flex p-2 m-1" href="#sidebar-filter">Skip to docs navigation</a>
+          <a class="d-inline-flex p-2 m-1" href="#content">Skip to main content</a>
+        </div>
+      </div>
+      <nav class="container-xxl nftt-gutter flex-wrap flex-xl-nowrap" aria-label="Main navigation">
+        <div class="nftt-navbar-toggler">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Toggle documentation navigation">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+          <a href="../index.html"
+              
+              class="navbar-brand p-0 me-0 md-lg-2"
+          ><span class="brand-text">Quantum Native Dojo</span></a>
+        
+        <div class="d-flex d-xl-none">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttSearch" aria-controls="nfttSearch" aria-label="Search">
+            <i class="bi bi-search"></i>
+          </button>
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttNavbar" aria-controls="nfttNavbar" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+        </div>
+        
+<div class="offcanvas-xl offcanvas-end flex-grow-1" tabindex="-1" id="nfttSearch" aria-labelledby="nfttSearchOffcanvasLabel" data-bs-scroll="true">
+  <div class="offcanvas-header px-4 pb-0">
+    <h5 class="offcanvas-title fw-bold" id="nfttSearchOffcanvasLabel">Search the documentation</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttSearch"></button>
+  </div>
+  <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+    <hr class="d-xl-none text-white-50">
+    <ul class="navbar-nav flex-row align-items-center flex-wrap ms-md-auto">
+      <li class="nav-item col-12 col-xl-auto">
+        <form id="nftt-search-form" action="../search.html" method="get">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search docs" aria-label="Search" aria-describedby="button-search">
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+            <button class="btn btn-primary" type="submit" id="button-search" aria-label="Search"><i class="bi bi-search"></i></button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+</div>
+
+        <div class="offcanvas-xl offcanvas-end" tabindex="-1" id="nfttNavbar" aria-labelledby="nfttNavbarOffcanvasLabel" data-bs-scroll="true">
+          <div class="offcanvas-header px-4 pb-0">
+            <div class="offcanvas-title navbar-brand" id="nfttNavbarOffcanvasLabel"><span class="brand-text">Nefertiti for Sphinx</span></div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttNavbar"></button>
+          </div>
+          <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+            <hr class="d-xl-none text-white-50">
+            <ul class="navbar-nav flex-row align-items-center flex-wrap ms-lg-auto">
+              
+              <!-- version_dropdown.html -->
+
+              
+              <!-- colorscheme_dropdown.html -->
+<li class="nav-item dropdown">
+  <a class="nav-link d-flex py-2 px-0 px-xl-2 dropdown-toggle align-items-center" id="snftt-luz" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" aria-label="Toggle light/dark">
+    <i class="bi bi-circle-half" data-snftt-luz-icon-active></i>
+    <span id="snftt-luz-text" class="d-xl-none small ms-2">Toggle light/dark</span>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="snftt-luz-text">
+    <li>
+      <h6 class="dropdown-header">Light/dark</h6>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="light" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-sun" data-snftt-luz-icon="light"></i>
+        </span>
+        <span class="small ms-3">Light</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="dark" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-moon-stars" data-snftt-luz-icon="dark"></i>
+        </span>
+        <span class="small ms-3">Dark</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item current d-flex align-items-center" data-snftt-luz="default" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-circle-half" data-snftt-luz-icon="default"></i>
+        </span>
+        <span class="small ms-3">Default</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+  </ul>
+</li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container-fluid">
+      <div class="nftt-gutter nftt-page">
+        <aside class="nftt-sidebar">
+          <div class="nftt-sidebar-content">
+            <div class="title d-none d-xl-block">
+              <i class="bi bi-book"></i>&nbsp;&nbsp;<span>Index</span>
+            </div>
+            <div id="sidebar" tabindex="-1" class="offcanvas-xl offcanvas-start" aria-labelledby="nfttSidebarOffcanvasLabel">
+                <!-- danirus sidebartemplate: "globaltoc.html" --><div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title fw-bold" id="nfttSidebarOffcanvasLabel">
+    Table of contents
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#sidebar"></button>
+</div>
+
+<div class="offcanvas-body">
+  <nav class="toc" aria-label="Main menu">
+    <div class="mb-3 p-1 pt-3 pb-4 border-bottom">
+      <input id="sidebar-filter" type="text" name="filter" class="form-control form-control-sm" placeholder="filter" aria-label="filter">
+    </div>
+    <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="0_prologue.html">Chapter 0: What is a Quantum Computer ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_quantum_information_foundation.html">Chapter 1: Fundamentals of Quantum Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1.1_qubit_representation.html">1-1. Qubit Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.2_qubit_operations.html">1-2. Qubit Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html">1-3. Multiqubit representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html#Column:-What-is-a-universal-gate-set?">Column: What is a universal gate set?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.4_quantum_circuit_diagram.html">1-4. Quantum Circuit Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2_introduction_to_quantum_algorithms.html">Chapter 2: Introduction to Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2.1_NISQ_and_long_term.html">2-1. NISQ algorithm and long-term algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.2_Hadamard_test.html">2-2. Hadamard test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.3_quantum_Fourier_transform.html">2-3. Quantum Fourier transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.4_phase_estimation_beginner.html">2-4. Phase Estimation Algorithm（Introductory）</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="3_execution_environments_of_quantum_algorithms.html">Chapter 3: Execution Environment for Quantum Algorithms</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="3.1_Qulacs_tutorial.html">3-1. Qulacs_tutorial</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3-2. Qiskit_IBMQ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4_quantum_dynamics_simulation.html">Chapter4 Quantum dynamics simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4.1_quantum_simulation.html">4-1. Quantum Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4.2_trotter_decomposition.html">4-2. Trotter Decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5_VQC_based_algorithms.html">Chapter 5 Algorithms Based on Variational Quantum Circuits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5.1_variational_quantum_eigensolver.html">5-1. Variational Quantum Eigensolver（VQE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.2_Quantum_Circuit_Learning.html">5-2. Quantum Circuit Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.3_quantum_approximate_optimazation_algorithm.html">5-3. Quantum Approximate Optimazation Algorithm (QAOA)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6_quantum_chemistry_calculation.html">Chapter 6 Quantum chemistry calculation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="6.1_openfermion_basics.html">6-1. OpenFermion Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7_quantum_phase_estimation.html">chapter 7 Quantum phase estimation algorithm and its application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7.1_quantum_phase_estimation_detailed.html">7-1. Quantum Phase Estimation (QPE) Algorithm Detailed：Hydrogen Molecule as Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.2_Harrow-Hassidim-Lloyd_algorithm.html">7-2. Harrow-Hassidim-Lloyd (HHL) Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.3_application_of_HHL_algorithm.html">7-3. Portofolio Optimization by HHL Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="8_quantum_search_algorithm.html">Chapter 8: Quantum Search Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="8.1_oracle.html">8-1. oracle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8.2_Grovers_algorithm.html">8-2. Grover’s algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="9_quantum_error_correction.html">Chapter 9 Quantum Error Correction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="9.1_error_correction.html">9-1. classical error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9.2_quantum_error_correction.html">9-2. quantum error</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav>
+  <template data-toggle-item-template>
+    <button class="btn btn-sm btn-link toctree-expand" type="button">
+      <i class="bi bi-caret-right"></i>
+      <span class="visually-hidden">Toggle menu contents</span>
+    </button>
+  </template>
+</div>
+            </div>
+          </div>
+        </aside>
+        <article id="content" class="nftt-content" role="main">
+    <section id="3-2.-How-to-use-Qiskit-and-IBM-Q-Experience">
+<h1>3-2. How to use Qiskit and IBM Q Experience<a class="headerlink" href="#3-2.-How-to-use-Qiskit-and-IBM-Q-Experience" title="Link to this heading">¶</a></h1>
+<p>IBM Q Experience is the world’s first quantum computer released on the cloud by IBM on May 24, 2016 <a class="reference external" href="https://quantumexperience.ng.bluemix.net/qx/experience">[1]</a>. In this section, you will learn how to use IBM Q Experience and IBM’s framework for quantum computation <a class="reference external" href="https://qiskit.org">Qiskit</a>.</p>
+<section id="Prepare-an-execution-environment-for-IBM-Q-Experience">
+<h2>Prepare an execution environment for IBM Q Experience<a class="headerlink" href="#Prepare-an-execution-environment-for-IBM-Q-Experience" title="Link to this heading">¶</a></h2>
+<section id="Account-registration">
+<h3>Account registration<a class="headerlink" href="#Account-registration" title="Link to this heading">¶</a></h3>
+<ol class="arabic simple">
+<li><p>first, create an account by clicking the Sign In button in the upper right corner of the IBM Q Experience web page <a class="reference external" href="https://quantumexperience.ng.bluemix.net/qx/experience">[1]</a>.</p></li>
+<li><p>You will be asked for an e-mail address and password or an account for an external service. Click the Sign Up button under Sign In button.</p></li>
+<li><p>Fill in the required information and click the Sign Up button.</p></li>
+<li><p>An e-mail will be sent to your registered e-mail address. Click the link in the e-mail. Then you will see the registration completion screen in a new window, and you can log in from the next time.</p></li>
+</ol>
+</section>
+<section id="Obtaining-the-API">
+<h3>Obtaining the API<a class="headerlink" href="#Obtaining-the-API" title="Link to this heading">¶</a></h3>
+<p>Now that you have registered for IBM Q Experience, the next step is to learn how to obtain the IBM Q Experience API necessary to access the actual IBM Q Experience device (a real quantum computer).</p>
+<ol class="arabic simple">
+<li><p>after logging in, you will get a pop-up window saying “Welcome to Experience!”. Close the window.</p></li>
+<li><p>click the icon in the upper right corner of the screen → “My Account” to see your registered account information</p></li>
+<li><p>click “Advanced” among “Account,” “Community,” and “Advanced” on the upper right corner of the screen.</p></li>
+<li><p>The “API Token” field is set to “undefined,” click the “Regenerate” button to generate the API. Click the “Copy this token” button next to it to paste the API into the clipboard.</p></li>
+</ol>
+<p>Incidentally, you can also use the GUI on the IBM Q Experience web page <a class="reference external" href="https://quantumexperience.ng.bluemix.net/qx/experience">[1]</a> to generate and run circuits by drag and drop, or the Jupyter Notebook (called Qiskit Notebooks) can also be created and executed on the web page.</p>
+</section>
+</section>
+<section id="Prepare-a-Qiskit-execution-environment">
+<h2>Prepare a Qiskit execution environment<a class="headerlink" href="#Prepare-a-Qiskit-execution-environment" title="Link to this heading">¶</a></h2>
+<p>Qiskit can be installed via pip. If you use the command line in your PC (command prompt on Windows, terminal on Mac), type <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">qiskit</span></code> in the command line to run it. If you are using Google Colaboratory, you can use it by executing <code class="docutils literal notranslate"><span class="pre">!pip</span> <span class="pre">install</span> <span class="pre">qiskit</span></code> in the following cell.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>qiskit
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Using-Qiskit">
+<h2>Using Qiskit<a class="headerlink" href="#Using-Qiskit" title="Link to this heading">¶</a></h2>
+<p>Qiskit is a Python framework, so the syntax is the same as Python. Before that, let’s save the information necessary to use Qiskit in your local environment (you only need to do this step once for each environment).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Put the token obtained above into &quot;MY_API_TOKEN&quot;.</span>
+<span class="kn">from</span> <span class="nn">qiskit</span> <span class="kn">import</span> <span class="n">IBMQ</span>
+<span class="n">IBMQ</span><span class="o">.</span><span class="n">save_account</span><span class="p">(</span><span class="s1">&#39;MY_API_TOKEN&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>In this section, we will learn how to generate a Bell state pair, <span class="math notranslate nohighlight">\(|\Psi^{+}\rangle=\frac{|00\rangle + |11\rangle}{\sqrt{2}}\)</span>, as an example.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">##Import necessary modules</span>
+<span class="kn">from</span> <span class="nn">qiskit</span> <span class="kn">import</span> <span class="n">IBMQ</span><span class="p">,</span> <span class="n">QuantumCircuit</span><span class="p">,</span> <span class="n">ClassicalRegister</span><span class="p">,</span> <span class="n">QuantumRegister</span>
+<span class="kn">from</span> <span class="nn">qiskit</span> <span class="kn">import</span> <span class="n">execute</span><span class="p">,</span> <span class="n">Aer</span>
+<span class="kn">from</span> <span class="nn">qiskit.qasm</span> <span class="kn">import</span> <span class="n">pi</span>
+<span class="kn">from</span> <span class="nn">qiskit.tools.visualization</span> <span class="kn">import</span> <span class="n">plot_histogram</span><span class="p">,</span> <span class="n">circuit_drawer</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load your account information. (You need to run IBMQ.save_account beforehand. If you want to use multiple accounts, do it here)</span>
+<span class="n">provider</span> <span class="o">=</span> <span class="n">IBMQ</span><span class="o">.</span><span class="n">load_account</span><span class="p">()</span>
+
+<span class="c1"># See what backends are available for your account.</span>
+<span class="n">provider</span><span class="o">.</span><span class="n">backends</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&lt;IBMQSimulator(&#39;ibmq_qasm_simulator&#39;) from IBMQ(hub=&#39;ibm-q&#39;, group=&#39;open&#39;, project=&#39;main&#39;)&gt;,
+ &lt;IBMQBackend(&#39;ibmqx2&#39;) from IBMQ(hub=&#39;ibm-q&#39;, group=&#39;open&#39;, project=&#39;main&#39;)&gt;,
+ &lt;IBMQBackend(&#39;ibmq_16_melbourne&#39;) from IBMQ(hub=&#39;ibm-q&#39;, group=&#39;open&#39;, project=&#39;main&#39;)&gt;,
+ &lt;IBMQBackend(&#39;ibmq_vigo&#39;) from IBMQ(hub=&#39;ibm-q&#39;, group=&#39;open&#39;, project=&#39;main&#39;)&gt;,
+ &lt;IBMQBackend(&#39;ibmq_ourense&#39;) from IBMQ(hub=&#39;ibm-q&#39;, group=&#39;open&#39;, project=&#39;main&#39;)&gt;,
+ &lt;IBMQBackend(&#39;ibmq_london&#39;) from IBMQ(hub=&#39;ibm-q&#39;, group=&#39;open&#39;, project=&#39;main&#39;)&gt;,
+ &lt;IBMQBackend(&#39;ibmq_burlington&#39;) from IBMQ(hub=&#39;ibm-q&#39;, group=&#39;open&#39;, project=&#39;main&#39;)&gt;,
+ &lt;IBMQBackend(&#39;ibmq_essex&#39;) from IBMQ(hub=&#39;ibm-q&#39;, group=&#39;open&#39;, project=&#39;main&#39;)&gt;]
+</pre></div></div>
+</div>
+<p>Except for <code class="docutils literal notranslate"><span class="pre">'ibmq_qasm_simulator'</span></code> (32 qubit simulator), available resource is a real 5-qubit and 14-qubit quantum computer (you can find the details on the screen after login to IBM Q Experience). The following command will tell you which one is the most available and easy to throw a job on.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qiskit.providers.ibmq</span> <span class="kn">import</span> <span class="n">least_busy</span>
+<span class="n">backend_lb</span> <span class="o">=</span> <span class="n">least_busy</span><span class="p">(</span><span class="n">provider</span><span class="o">.</span><span class="n">backends</span><span class="p">(</span><span class="n">simulator</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">operational</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Least busy backend: &quot;</span><span class="p">,</span> <span class="n">backend_lb</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Least busy backend:  ibmqx2
+</pre></div></div>
+</div>
+<p>It seems that <code class="docutils literal notranslate"><span class="pre">ibmqx2</span></code> is the least busy one, so let’s use it as the real machine. First, let’s run the quantum circuit on the simulator.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Generate a quantum register q.</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">QuantumRegister</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1">#Generate a quantum register c.</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">ClassicalRegister</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1">#Generate a quantum circuit between quantum register q and classical register c.</span>
+<span class="n">qc</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+<span class="c1">#apply H-gate to the first qubit.</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">h</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1">#Apply CNOT gate to the 1-2th qubit. (The first qubit is the control qubit, the second qubit is the target qubit)</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">cx</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">q</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c1">#pass the measured value of the first qubit to the first classical bit and the measured value of the second qubit to the second classical bit.</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">measure</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">qc</span><span class="o">.</span><span class="n">measure</span><span class="p">(</span><span class="n">q</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c1">#local simulator and least busy backend</span>
+<span class="n">backend_sim</span> <span class="o">=</span> <span class="n">Aer</span><span class="o">.</span><span class="n">get_backend</span><span class="p">(</span><span class="s2">&quot;qasm_simulator&quot;</span><span class="p">)</span>
+
+<span class="c1">#run the quantum circuit qc 4096 times with the specified backend (backend_sim).</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">execute</span><span class="p">(</span><span class="n">qc</span><span class="p">,</span> <span class="n">backend_sim</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">4096</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+
+<span class="c1">#Output the results.</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">get_counts</span><span class="p">(</span><span class="n">qc</span><span class="p">))</span>
+
+<span class="c1">#Draw a histogram of the results.</span>
+<span class="n">plot_histogram</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">get_counts</span><span class="p">(</span><span class="n">qc</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;00&#39;: 2089, &#39;11&#39;: 2007}
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_3.2_Qiskit_IBMQ_12_1.png" src="../_images/notebooks_3.2_Qiskit_IBMQ_12_1.png" />
+</div>
+</div>
+<p>Since the generated state is <span class="math notranslate nohighlight">\(\frac{|00\rangle + |11\rangle}{\sqrt{2}}\)</span>, we can see that the probability of getting <span class="math notranslate nohighlight">\(|00\rangle\)</span> and <span class="math notranslate nohighlight">\(|11\rangle\)</span> are both close to 50% as shown in the formula. Next, let’s look at the results from the actual machine. Note that it takes a very long time to obtain the results of the experiment on the actual machine.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Select the backend that was least busy</span>
+<span class="n">backend_sim</span> <span class="o">=</span> <span class="n">backend_lb</span>
+
+<span class="c1">#Execute quantum circuit qc 4096 times with the specified backend (backend_sim).</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">execute</span><span class="p">(</span><span class="n">qc</span><span class="p">,</span> <span class="n">backend_sim</span><span class="p">,</span> <span class="n">shots</span><span class="o">=</span><span class="mi">4096</span><span class="p">)</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+
+<span class="c1">#Output the results.</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">get_counts</span><span class="p">(</span><span class="n">qc</span><span class="p">))</span>
+
+<span class="c1">#Draw a histogram of the results.</span>
+<span class="n">plot_histogram</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">get_counts</span><span class="p">(</span><span class="n">qc</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;00&#39;: 1844, &#39;11&#39;: 2041, &#39;01&#39;: 107, &#39;10&#39;: 104}
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_3.2_Qiskit_IBMQ_14_1.png" src="../_images/notebooks_3.2_Qiskit_IBMQ_14_1.png" />
+</div>
+</div>
+<p>The results from the actual machine show that <span class="math notranslate nohighlight">\(|01\rangle\)</span> and <span class="math notranslate nohighlight">\(|10\rangle\)</span>, which cannot be obtained theoretically, are obtained. This is due to an error in the calculation process. This result clearly shows that today’s quantum computers are called NISQ devices (medium-scale quantum computers that allow the generation of noise).</p>
+</section>
+<section id="Reference">
+<h2>Reference<a class="headerlink" href="#Reference" title="Link to this heading">¶</a></h2>
+<p>[1] <a class="reference external" href="https://quantumexperience.ng.bluemix.net/qx/experience">https://quantumexperience.ng.bluemix.net/qx/experience</a> [online] ( 2019-02-13)</p>
+</section>
+</section>
+
+</article>
+        <aside class="nftt-toc">
+          
+          <div class="mt-3 mb-1 my-lg-0 ps-xl-3 text-muted">
+            <button class="btn btn-link link-dark p-lg-0 mb-2 mb-lg-0 text-decoration-none nftt-toc-toggle d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents"
+            >On this page <i class="ms-2 bi bi-chevron-expand"></i></button>
+            <div class="title d-none d-lg-block">
+              <i class="bi bi-file-earmark-text"></i>&nbsp;&nbsp;<span class="small">On this page</span>
+            </div>
+            <div class="collapse nftt-toc-collapse" id="tocContents">
+              <nav id="TableOfContents">
+                <ul>
+<li><a class="reference internal" href="#">3-2. How to use Qiskit and IBM Q Experience</a><ul>
+<li><a class="reference internal" href="#Prepare-an-execution-environment-for-IBM-Q-Experience">Prepare an execution environment for IBM Q Experience</a><ul>
+<li><a class="reference internal" href="#Account-registration">Account registration</a></li>
+<li><a class="reference internal" href="#Obtaining-the-API">Obtaining the API</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Prepare-a-Qiskit-execution-environment">Prepare a Qiskit execution environment</a></li>
+<li><a class="reference internal" href="#Using-Qiskit">Using Qiskit</a></li>
+<li><a class="reference internal" href="#Reference">Reference</a></li>
+</ul>
+</li>
+</ul>
+
+              </nav>
+            </div>
+          </div>
+          
+        </aside>
+      </div>
+    </div>
+
+    <footer class="nftt-footer">
+      <nav id="paginator" class="py-4" aria-label="Documentation navigation">
+    <div class="container">
+      <ul class="pagination justify-content-between mb-0"><li class="page-item">
+            <a href="3.1_Qulacs_tutorial.html" class="d-flex px-5 align-items-end" rel="prev" aria-label="Previous page: 3-1. How to use Qulacs, the world’s fastest simulator">
+              <span class="prev-page"><i class="bi bi-caret-left"></i></span>
+              <div class="d-flex flex-column">
+                <span class="text-small text-start text-muted">Previous</span>
+                <span class="underline">3-1. How to use Qulacs, the world’s fastest simulator</span>
+              </div>
+            </a>
+          </li>
+        <li class="page-item ms-auto">
+            <a href="4_quantum_dynamics_simulation.html" class="d-flex px-5 align-items-end" rel="next" aria-label="Next page: Chapter4 Quantum dynamics simulation">
+              <div class="d-flex flex-column">
+                <span class="text-small text-end text-start text-muted">Next</span>
+                <span class="underline">Chapter4 Quantum dynamics simulation</span>
+              </div>
+              <span class="next-page"><i class="bi bi-caret-right"></i></span>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </nav>
+
+      <div class="py-5 px-4 px-md-3">
+  <div class="container">
+    
+
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <a class="brand-text d-inline-flex align-items-center mb-2 text-decoration-none" href="/" aria-label="Nefertiti-for-Sphinx">
+          <span class="fs-6 fw-bold">Quantum Native Dojo</span>
+        </a>
+        
+          <ul class="list-unstyled small text-muted">
+            <li>2023, Quantum Native Dojo Contributors</li>
+          </ul>
+        
+        
+        <div class="built-with pt-2">
+          Built with <a href="http://sphinx-doc.org">Sphinx 7.2.6</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.3.0</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+    </footer>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"CommonHTML": {"undefinedFamily": "\"Source Serif Pro\", \"Yakumono\", \"Noto Serif JP\", \"Hiragino Mincho ProN\", \"STIXGeneral\", \"Arial Unicode MS\", serif"}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
+
+    <script type="text/javascript" src="../_static/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinx-nefertiti.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/doc_versions.js"></script>
+  </body>
+</html>

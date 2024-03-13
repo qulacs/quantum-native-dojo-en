@@ -1,0 +1,623 @@
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+      <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="docsearch:name" content="Quantum Native Dojo" />
+    <meta name="docsearch:package_type" content="" />
+    <meta name="docsearch:release" content="" />
+    <meta name="docsearch:version" content="" />
+    
+      <title>2-3. Quantum Fourier Transform &mdash; Quantum Native Dojo  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-icons.css" type="text/css" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+          <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+          <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+        <link rel="index" title="Index" href="../genindex.html" />
+        <link rel="search" title="Search" href="../search.html" />
+        <link rel="top" title="Quantum Native Dojo  documentation" href="#" />
+        <link rel="up" title="Chapter 2: Introduction to Quantum Algorithms" href="2_introduction_to_quantum_algorithms.html" />
+        <link rel="next" title="2-4. Phase Estimation Algorithm (Introduction)" href="2.4_phase_estimation_beginner.html" />
+        <link rel="prev" title="2-2. Hadamard test" href="2.2_Hadamard_test.html" />
+    <style>
+      :root {
+        --nftt-body-font-family: "Nunito", var(--nftt-font-sans-serif) !important;
+        --nftt-font-monospace: "Red Hat Mono", var(--nftt-font-family-monospace) !important;
+        --nftt-project-name-font: var(--nftt-body-font-family);
+        --nftt-documentation-font: var(--nftt-body-font-family);
+        --nftt-doc-headers-font: "Georgia", var(--nftt-documentation-font);}
+      h1 *, h2 *, h3 *, h4 *, h5 *, h6 * { font-size: inherit; }
+    </style>
+  </head>
+  <body>
+    <header class="navbar navbar-expand-xl navbar-dark nftt-navbar flex-column fixed-top">
+      <div class="skip-links container-fluid visually-hidden-focusable overflow-hidden justify-content-start">
+        <div class="border-bottom mb-2 pb-2 w-100">
+          <a class="d-none d-md-inline-flex p-2 m-1" href="#sidebar-filter">Skip to docs navigation</a>
+          <a class="d-inline-flex p-2 m-1" href="#content">Skip to main content</a>
+        </div>
+      </div>
+      <nav class="container-xxl nftt-gutter flex-wrap flex-xl-nowrap" aria-label="Main navigation">
+        <div class="nftt-navbar-toggler">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Toggle documentation navigation">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+          <a href="../index.html"
+              
+              class="navbar-brand p-0 me-0 md-lg-2"
+          ><span class="brand-text">Quantum Native Dojo</span></a>
+        
+        <div class="d-flex d-xl-none">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttSearch" aria-controls="nfttSearch" aria-label="Search">
+            <i class="bi bi-search"></i>
+          </button>
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttNavbar" aria-controls="nfttNavbar" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+        </div>
+        
+<div class="offcanvas-xl offcanvas-end flex-grow-1" tabindex="-1" id="nfttSearch" aria-labelledby="nfttSearchOffcanvasLabel" data-bs-scroll="true">
+  <div class="offcanvas-header px-4 pb-0">
+    <h5 class="offcanvas-title fw-bold" id="nfttSearchOffcanvasLabel">Search the documentation</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttSearch"></button>
+  </div>
+  <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+    <hr class="d-xl-none text-white-50">
+    <ul class="navbar-nav flex-row align-items-center flex-wrap ms-md-auto">
+      <li class="nav-item col-12 col-xl-auto">
+        <form id="nftt-search-form" action="../search.html" method="get">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search docs" aria-label="Search" aria-describedby="button-search">
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+            <button class="btn btn-primary" type="submit" id="button-search" aria-label="Search"><i class="bi bi-search"></i></button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+</div>
+
+        <div class="offcanvas-xl offcanvas-end" tabindex="-1" id="nfttNavbar" aria-labelledby="nfttNavbarOffcanvasLabel" data-bs-scroll="true">
+          <div class="offcanvas-header px-4 pb-0">
+            <div class="offcanvas-title navbar-brand" id="nfttNavbarOffcanvasLabel"><span class="brand-text">Nefertiti for Sphinx</span></div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttNavbar"></button>
+          </div>
+          <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+            <hr class="d-xl-none text-white-50">
+            <ul class="navbar-nav flex-row align-items-center flex-wrap ms-lg-auto">
+              
+              <!-- version_dropdown.html -->
+
+              
+              <!-- colorscheme_dropdown.html -->
+<li class="nav-item dropdown">
+  <a class="nav-link d-flex py-2 px-0 px-xl-2 dropdown-toggle align-items-center" id="snftt-luz" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" aria-label="Toggle light/dark">
+    <i class="bi bi-circle-half" data-snftt-luz-icon-active></i>
+    <span id="snftt-luz-text" class="d-xl-none small ms-2">Toggle light/dark</span>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="snftt-luz-text">
+    <li>
+      <h6 class="dropdown-header">Light/dark</h6>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="light" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-sun" data-snftt-luz-icon="light"></i>
+        </span>
+        <span class="small ms-3">Light</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="dark" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-moon-stars" data-snftt-luz-icon="dark"></i>
+        </span>
+        <span class="small ms-3">Dark</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item current d-flex align-items-center" data-snftt-luz="default" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-circle-half" data-snftt-luz-icon="default"></i>
+        </span>
+        <span class="small ms-3">Default</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+  </ul>
+</li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container-fluid">
+      <div class="nftt-gutter nftt-page">
+        <aside class="nftt-sidebar">
+          <div class="nftt-sidebar-content">
+            <div class="title d-none d-xl-block">
+              <i class="bi bi-book"></i>&nbsp;&nbsp;<span>Index</span>
+            </div>
+            <div id="sidebar" tabindex="-1" class="offcanvas-xl offcanvas-start" aria-labelledby="nfttSidebarOffcanvasLabel">
+                <!-- danirus sidebartemplate: "globaltoc.html" --><div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title fw-bold" id="nfttSidebarOffcanvasLabel">
+    Table of contents
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#sidebar"></button>
+</div>
+
+<div class="offcanvas-body">
+  <nav class="toc" aria-label="Main menu">
+    <div class="mb-3 p-1 pt-3 pb-4 border-bottom">
+      <input id="sidebar-filter" type="text" name="filter" class="form-control form-control-sm" placeholder="filter" aria-label="filter">
+    </div>
+    <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="0_prologue.html">Chapter 0: What is a Quantum Computer ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_quantum_information_foundation.html">Chapter 1: Fundamentals of Quantum Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1.1_qubit_representation.html">1-1. Qubit Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.2_qubit_operations.html">1-2. Qubit Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html">1-3. Multiqubit representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html#Column:-What-is-a-universal-gate-set?">Column: What is a universal gate set?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.4_quantum_circuit_diagram.html">1-4. Quantum Circuit Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="2_introduction_to_quantum_algorithms.html">Chapter 2: Introduction to Quantum Algorithms</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="2.1_NISQ_and_long_term.html">2-1. NISQ algorithm and long-term algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.2_Hadamard_test.html">2-2. Hadamard test</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">2-3. Quantum Fourier transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.4_phase_estimation_beginner.html">2-4. Phase Estimation Algorithm（Introductory）</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3_execution_environments_of_quantum_algorithms.html">Chapter 3: Execution Environment for Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3.1_Qulacs_tutorial.html">3-1. Qulacs_tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.2_Qiskit_IBMQ.html">3-2. Qiskit_IBMQ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4_quantum_dynamics_simulation.html">Chapter4 Quantum dynamics simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4.1_quantum_simulation.html">4-1. Quantum Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4.2_trotter_decomposition.html">4-2. Trotter Decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5_VQC_based_algorithms.html">Chapter 5 Algorithms Based on Variational Quantum Circuits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5.1_variational_quantum_eigensolver.html">5-1. Variational Quantum Eigensolver（VQE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.2_Quantum_Circuit_Learning.html">5-2. Quantum Circuit Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.3_quantum_approximate_optimazation_algorithm.html">5-3. Quantum Approximate Optimazation Algorithm (QAOA)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6_quantum_chemistry_calculation.html">Chapter 6 Quantum chemistry calculation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="6.1_openfermion_basics.html">6-1. OpenFermion Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7_quantum_phase_estimation.html">chapter 7 Quantum phase estimation algorithm and its application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7.1_quantum_phase_estimation_detailed.html">7-1. Quantum Phase Estimation (QPE) Algorithm Detailed：Hydrogen Molecule as Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.2_Harrow-Hassidim-Lloyd_algorithm.html">7-2. Harrow-Hassidim-Lloyd (HHL) Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.3_application_of_HHL_algorithm.html">7-3. Portofolio Optimization by HHL Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="8_quantum_search_algorithm.html">Chapter 8: Quantum Search Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="8.1_oracle.html">8-1. oracle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8.2_Grovers_algorithm.html">8-2. Grover’s algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="9_quantum_error_correction.html">Chapter 9 Quantum Error Correction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="9.1_error_correction.html">9-1. classical error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9.2_quantum_error_correction.html">9-2. quantum error</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav>
+  <template data-toggle-item-template>
+    <button class="btn btn-sm btn-link toctree-expand" type="button">
+      <i class="bi bi-caret-right"></i>
+      <span class="visually-hidden">Toggle menu contents</span>
+    </button>
+  </template>
+</div>
+            </div>
+          </div>
+        </aside>
+        <article id="content" class="nftt-content" role="main">
+    <section id="2-3.-Quantum-Fourier-Transform">
+<h1>2-3. Quantum Fourier Transform<a class="headerlink" href="#2-3.-Quantum-Fourier-Transform" title="Link to this heading">¶</a></h1>
+<div class="line-block">
+<div class="line">In this section, we will learn about one of the most important quantum algorithms, the quantum Fourier transform.</div>
+<div class="line">As the name suggests, the quantum Fourier transform is a quantum algorithm that performs a Fourier transform and is often used as a subroutine for various quantum algorithms.</div>
+<div class="line">(See: Nielsen-Chuang 5.1 <code class="docutils literal notranslate"><span class="pre">The</span> <span class="pre">quantum</span> <span class="pre">Fourier</span> <span class="pre">transform</span></code>)</div>
+</div>
+<p>*As mentioned somewhat in the last column, it is considered difficult to perform the quantum Fourier transform in so-called NISQ devices because of the circuit complexity and the difficulty of preparing input states.</p>
+<section id="Definition">
+<h2>Definition<a class="headerlink" href="#Definition" title="Link to this heading">¶</a></h2>
+<p>First, for a <span class="math notranslate nohighlight">\(2^n\)</span>-dimension array <span class="math notranslate nohighlight">\(\{x_j\}\)</span> <span class="math notranslate nohighlight">\((j=0,\cdots,2^n-1)\)</span>, its <a class="reference external" href="https://ja.wikipedia.org/wiki/離散フーリエ変換">discrete Fourier transform</a>, the array <span class="math notranslate nohighlight">\(\{y_k \}\)</span> <span class="math notranslate nohighlight">\((k=0, \cdots 2^n-1)\)</span>, is defined as follows</p>
+<div class="math notranslate nohighlight">
+\[y_k = \frac{1}{\sqrt{2^n}} \sum_{j=0}^{2^n-1} x_j e^{i\frac{2\pi kj}{2^n}}   \tag{1}\]</div>
+<p>The array <span class="math notranslate nohighlight">\(\{x_j\}\)</span> is normalized ,and subject to <span class="math notranslate nohighlight">\(\sum_{j=0}^{2^n-1} |x_j|^2 = 1\)</span>.</p>
+<p>The quantum Fourier transform algorithm transforms input quantum state</p>
+<div class="math notranslate nohighlight">
+\[|x\rangle := \sum_{j=0}^{2^n-1} x_j |j\rangle\]</div>
+<p>to the following state.</p>
+<div class="math notranslate nohighlight">
+\[|y \rangle := \sum_{k=0}^{2^n-1} y_k |k\rangle  \tag{2}\]</div>
+<p><span class="math notranslate nohighlight">\(|i \rangle\)</span> is an abbreviation for the quantum state <span class="math notranslate nohighlight">\(|i_1 \cdots i_n \rangle\)</span> corresponding to the binary representation of the integer <span class="math notranslate nohighlight">\(i\)</span> (<span class="math notranslate nohighlight">\(i_m = 0,1\)</span>). (For example, <span class="math notranslate nohighlight">\(|2 \rangle = |0\cdots0 10 \rangle, |7 \rangle = |0\cdots0111 \rangle\)</span>)</p>
+<p>Now, substituting equation (1) into (2), we obtain</p>
+<div class="math notranslate nohighlight">
+\[|y \rangle = \frac{1}{\sqrt{2^n}} \sum_{k=0}^{2^n-1} \sum_{j=0}^{2^n-1} x_j e^{i\frac{2\pi kj}{2^n}} |k\rangle
+            = \sum_{j=0}^{2^n-1} x_j \left( \frac{1}{\sqrt{2^n}} \sum_{k=0}^{2^n-1}  e^{i\frac{2\pi kj}{2^n}} |k\rangle \right)\]</div>
+<p>Therefore, in order to conduct Quantum Fourier Transform, we need to find a quantum circuit(transform) <span class="math notranslate nohighlight">\(U\)</span> which conducts</p>
+<div class="math notranslate nohighlight">
+\[|j\rangle \to \frac{1}{\sqrt{2^n}} \sum_{k=0}^{2^n-1}  e^{i\frac{2\pi kj}{2^n}} |k\rangle\]</div>
+<div class="line-block">
+<div class="line">(Please try verifying that this is a unitary transformation by actually doing the math.)</div>
+<div class="line">This expression can be further transformed (it is rather complicated, so you may only look at the last result)</div>
+</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{eqnarray}
+  \sum_{k=0}^{2^n-1} e^{i\frac{2\pi kj}{2^n}} |k\rangle
+ &amp;=&amp; \sum_{k_1=0}^1 \cdots \sum_{k_n=0}^1  e^{i\frac{2\pi (k_1 2^{n-1} + \cdots k_n 2^0 )\cdot j}{2^n}} |k_1 \cdots k_n\rangle \:\:\:\: \text{(k expressed in binary representation.)} \\
+ &amp;=&amp; \sum_{k_1=0}^1 \cdots \sum_{k_n=0}^1  e^{i 2\pi j (k_1 2^{-1} + \cdots k_n 2^{-n})} |k_1 \cdots k_n\rangle \\
+ &amp;=&amp; \left( \sum_{k_1=0}^1 e^{i 2\pi j k_1 2^{-1}} |k_1 \rangle \right) \otimes \cdots  \otimes \left( \sum_{k_n=0}^1 e^{i 2\pi j k_n 2^{-n}} |k_n \rangle \right) \:\:\:\:\text{( &quot;factorize&quot; and rewrite as a tensor product.)} \\
+ &amp;=&amp; \left( |0\rangle +  e^{i 2\pi 0.j_n} |1 \rangle \right) \otimes \left( |0\rangle +  e^{i 2\pi 0.j_{n-1}j_n} |1 \rangle \right) \otimes \cdots \otimes \left( |0\rangle +  e^{i 2\pi 0.j_1j_2\cdots j_n} |1 \rangle \right) \:\:\:\: \text{(calculate the sum in parentheses.)}
+\end{eqnarray}\end{split}\]</div>
+<p>Here,</p>
+<div class="math notranslate nohighlight">
+\[0.j_l\cdots j_n = \frac{j_l}{2} + \frac{j_{l-1}}{2^2} + \cdots + \frac{j_n}{2^{n-l+1}}\]</div>
+<p>is a binary decimal. <span class="math notranslate nohighlight">\(e^{i 2\pi j/2^{-l} } = e^{i 2\pi j_1 \cdots j_l . j_{l-1}\cdots j_n } = e^{i 2\pi 0. j_{l-1}\cdots j_n }\)</span> is used.（<span class="math notranslate nohighlight">\(e^{i2\pi}=1\)</span>. Therefore, the integer part is irrelevant.）</p>
+<p>In summary, the following transformation must be implemented to conduct the quantum Fourier transform.</p>
+<div class="math notranslate nohighlight">
+\[|j\rangle = |j_1 \cdots j_n \rangle \to \frac{ \left( |0\rangle +  e^{i 2\pi 0.j_n} |1 \rangle \right) \otimes \left( |0\rangle +  e^{i 2\pi 0.j_{n-1}j_n} |1 \rangle \right) \otimes \cdots \otimes \left( |0\rangle +  e^{i 2\pi 0.j_1j_2\cdots j_n} |1 \rangle \right)  }{\sqrt{2^n}}
+\tag{*}\]</div>
+</section>
+<section id="Circuit-Configuration">
+<h2>Circuit Configuration<a class="headerlink" href="#Circuit-Configuration" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">Let us now see how to actually construct the circuit that performs the quantum Fourier transform.</div>
+<div class="line">To do so, we use the following equality for the Hdamard gate <span class="math notranslate nohighlight">\(H\)</span> (which, when substituting 0 and 1, turns out to be correct)</div>
+</div>
+<div class="math notranslate nohighlight">
+\[H |m \rangle = \frac{|0\rangle + e^{i 2\pi 0.m}|1\rangle }{\sqrt{2}}  \:\:\: (m=0,1)\]</div>
+<p>and the general phase gate with angle <span class="math notranslate nohighlight">\(2\pi/2^l\)</span> repeatedly.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}R_l =
+\begin{pmatrix} 1 &amp; 0\\ 0 &amp; e^{i \frac{2\pi}{2^l} } \end{pmatrix}\end{split}\]</div>
+<ol class="arabic">
+<li><p>first, make the part of the state <span class="math notranslate nohighlight">\(\left( |0\rangle + e^{i 2\pi 0.j_1j_2\cdots j_n} |1\rangle \right)\)</span>. Applying an Hadamard gate on the first qubit <span class="math notranslate nohighlight">\(|j_1\rangle\)</span> and</p>
+<div class="math notranslate nohighlight">
+\[|j_1 \cdots j_n \rangle \to \frac{1}{\sqrt{2}} \left( |0\rangle + e^{i2\pi 0.j_1} |1\rangle \right) |j_2 \cdots j_n \rangle\]</div>
+<p>If we apply the general phase gate <span class="math notranslate nohighlight">\(R_2\)</span> with the second bit <span class="math notranslate nohighlight">\(|j_2\rangle\)</span> as the control bit to the first qubit, nothing will be done when <span class="math notranslate nohighlight">\(j_2=0\)</span>, and only when <span class="math notranslate nohighlight">\(j_2=1\)</span> , the phase <span class="math notranslate nohighlight">\(2\pi/2^2 = 0. 01\)</span> (binary fractional) is added to the <span class="math notranslate nohighlight">\(|1\rangle\)</span> portion of the first qubit have , so</p>
+<div class="math notranslate nohighlight">
+\[ \frac{1}{\sqrt{2}} \left( |0\rangle + e^{i2\pi 0.j_1} |1\rangle \right) |j_2 \cdots j_n \rangle
+\to \frac{1}{\sqrt{2}} \left( |0\rangle + e^{i2\pi 0.j_1j_2} |1\rangle \right) |j_2 \cdots j_n \rangle\]</div>
+<p>If we apply the general phase gate <span class="math notranslate nohighlight">\(R_l\)</span> with the <span class="math notranslate nohighlight">\(l\)</span>th qubit <span class="math notranslate nohighlight">\(|j_l\rangle\)</span> as the control bit (<span class="math notranslate nohighlight">\(l=3,\cdots n\)</span>), we end up with</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{\sqrt{2}} \left( |0\rangle + e^{i2\pi 0.j_1\cdots j_n} |1\rangle \right) |j_2 \cdots j_n \rangle\]</div>
+</li>
+<li><p>Next, create the state <span class="math notranslate nohighlight">\(\left( |0\rangle + e^{i2\pi 0.j_2\cdots j_n} |1\rangle\right)\)</span>. As before, if we apply an Hdamard gate to the second bit <span class="math notranslate nohighlight">\(|j_2\rangle\)</span>, we get</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{\sqrt{2}} \left( |0\rangle + e^{i2\pi 0.j_1\cdots j_n}|1\rangle \right) \frac{1}{\sqrt{2}} \left( |0\rangle + e^{i2\pi 0.j_2} |1\rangle \right) |j_3 \cdots j_n \rangle\]</div>
+<p>Again, if we apply a phase gate <span class="math notranslate nohighlight">\(R_2\)</span> with the third qubit as the control bit <span class="math notranslate nohighlight">\(|j_3\rangle\)</span>, we get</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{\sqrt{2}} \left( |0\rangle + e^{i2\pi 0.j_1\cdots j_n}|1\rangle \right) \frac{1}{\sqrt{2}} \left( |0\rangle + e^{i2\pi 0.j_2j_3}|1\rangle \right) |j_3 \cdots j_n \rangle\]</div>
+<p>and by doing this repeadedly, we get</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{\sqrt{2}} \left( |0\rangle + e^{i2\pi 0.j_1\cdots j_n}|1\rangle \right) \frac{1}{\sqrt{2}} \left( |0\rangle + e^{i2\pi 0.j_2\cdots j_n}|1\rangle \right) |j_3 \cdots j_n \rangle\]</div>
+</li>
+<li><p>In the same procedure as in 1 and 2, applying the Hdamard gate/control phase gate <span class="math notranslate nohighlight">\(R_l, R_{l+1},\cdots\)</span> (<span class="math notranslate nohighlight">\(l=3,\cdots,n\)</span>) to the <span class="math notranslate nohighlight">\(l\)</span>th qubit <span class="math notranslate nohighlight">\(|j_l\rangle\)</span> , we get the final result</p>
+<div class="math notranslate nohighlight">
+\[|j_1 \cdots j_n \rangle \to \left( \frac{|0\rangle +  e^{i 2\pi 0.j_1\cdots j_n} |1 \rangle}{\sqrt{2}} \right) \otimes
+\left( \frac{|0\rangle +  e^{i 2\pi 0.j_2\cdots j_n} |1 \rangle}{\sqrt{2}} \right)  \otimes \cdots \otimes
+\left( \frac{|0\rangle +  e^{i 2\pi 0.j_n} |1 \rangle}{\sqrt{2}} \right)\]</div>
+<div class="line-block">
+<div class="line">Finally, by inverting the order of the bits with the SWAP gate, we have constructed a circuit that performs the quantum Fourier transform (note that the order of the bits is reversed from equation (<span class="math notranslate nohighlight">\(*\)</span>)).</div>
+<div class="line">The circuit diagram without the SWAP part is as follows.</div>
+</div>
+<img alt="QFT" src="../_images/QFT.png" />
+</li>
+</ol>
+</section>
+<section id="Implementation-using-SymPy">
+<h2>Implementation using SymPy<a class="headerlink" href="#Implementation-using-SymPy" title="Link to this heading">¶</a></h2>
+<p>To deepen our understanding of the quantum Fourier transform, let’s implement the circuit for <span class="math notranslate nohighlight">\(n=3\)</span> using SymPy.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">sympy.physics.quantum</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">sympy.physics.quantum.qubit</span> <span class="kn">import</span> <span class="n">Qubit</span><span class="p">,</span><span class="n">QubitBra</span>
+<span class="n">init_printing</span><span class="p">()</span> <span class="c1"># to show vectors and matrices nicely</span>
+<span class="kn">from</span> <span class="nn">sympy.physics.quantum.gate</span> <span class="kn">import</span> <span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">H</span><span class="p">,</span><span class="n">S</span><span class="p">,</span><span class="n">T</span><span class="p">,</span><span class="n">CNOT</span><span class="p">,</span><span class="n">SWAP</span><span class="p">,</span><span class="n">CPHASE</span><span class="p">,</span><span class="n">CGateS</span>
+</pre></div>
+</div>
+</div>
+<p>First, the input to Fourier transform, <span class="math notranslate nohighlight">\(|x\rangle\)</span>, is</p>
+<div class="math notranslate nohighlight">
+\[|x\rangle =  \sum_{j=0}^7 \frac{1}{\sqrt{8}} |j\rangle\]</div>
+<p>the superposition state of all states (<span class="math notranslate nohighlight">\(x_0 = \cdots = x_7 = 1/\sqrt{8}\)</span>).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">input</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="o">*</span><span class="p">(</span> <span class="n">Qubit</span><span class="p">(</span><span class="s2">&quot;000&quot;</span><span class="p">)</span><span class="o">+</span><span class="n">Qubit</span><span class="p">(</span><span class="s2">&quot;001&quot;</span><span class="p">)</span><span class="o">+</span><span class="n">Qubit</span><span class="p">(</span><span class="s2">&quot;010&quot;</span><span class="p">)</span><span class="o">+</span><span class="n">Qubit</span><span class="p">(</span><span class="s2">&quot;011&quot;</span><span class="p">)</span><span class="o">+</span><span class="n">Qubit</span><span class="p">(</span><span class="s2">&quot;100&quot;</span><span class="p">)</span><span class="o">+</span><span class="n">Qubit</span><span class="p">(</span><span class="s2">&quot;101&quot;</span><span class="p">)</span><span class="o">+</span><span class="n">Qubit</span><span class="p">(</span><span class="s2">&quot;110&quot;</span><span class="p">)</span><span class="o">+</span><span class="n">Qubit</span><span class="p">(</span><span class="s2">&quot;111&quot;</span><span class="p">))</span>
+<span class="nb">input</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$\displaystyle \frac{\sqrt{2} \left({\left|000\right\rangle } + {\left|001\right\rangle } + {\left|010\right\rangle } + {\left|011\right\rangle } + {\left|100\right\rangle } + {\left|101\right\rangle } + {\left|110\right\rangle } + {\left|111\right\rangle }\right)}{4}$</div></div>
+</div>
+<p>Fourier transform of the array corresponding to this state with numpy yields</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">input_np_array</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span> <span class="n">input_np_array</span> <span class="p">)</span> <span class="c1">## input</span>
+<span class="nb">print</span><span class="p">(</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">input_np_array</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="p">)</span>
+<span class="c1">#To match the definition of Fourier transform with the definition of ifft in numpy, multiply by sqrt(2^3)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[0.35355339 0.35355339 0.35355339 0.35355339 0.35355339 0.35355339
+ 0.35355339 0.35355339]
+[1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j]
+</pre></div></div>
+</div>
+<p>and Fourier transform gives us a simple sequence, <span class="math notranslate nohighlight">\(y_0=1,y_1=\cdots=y_7=0\)</span>. Let us verify this by quantum Fourier transform.</p>
+<p>First, note that <span class="math notranslate nohighlight">\(R_1, R_2, R_3\)</span> gates are equal to <span class="math notranslate nohighlight">\(Z, S, T\)</span> gates, respectively (<span class="math notranslate nohighlight">\(e^{i\pi}=-1, e^{i\pi/2}=i\)</span>).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">represent</span><span class="p">(</span><span class="n">Z</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">nqubits</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">represent</span><span class="p">(</span><span class="n">S</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">nqubits</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">represent</span><span class="p">(</span><span class="n">T</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">nqubits</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$\displaystyle \left( \left[\begin{matrix}1 &amp; 0\\0 &amp; -1\end{matrix}\right], \  \left[\begin{matrix}1 &amp; 0\\0 &amp; i\end{matrix}\right], \  \left[\begin{matrix}1 &amp; 0\\0 &amp; e^{\frac{i \pi}{4}}\end{matrix}\right]\right)$</div></div>
+</div>
+<div class="line-block">
+<div class="line">We will construct a circuit that performs a quantum Fourier transform (we abbreviate Quantum Fourier Transform as QFT).</div>
+<div class="line">First, we apply the Hdamard operator to the first (second in SymPy, since SymPy counts bits 0, 1, 2 from the right) qubit, and then apply <span class="math notranslate nohighlight">\(R_2, R_3\)</span> gates with the second and third bits as control bits.</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">QFT_gate</span> <span class="o">=</span> <span class="n">H</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">QFT_gate</span> <span class="o">=</span> <span class="n">CGateS</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">S</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>  <span class="o">*</span> <span class="n">QFT_gate</span>
+<span class="n">QFT_gate</span> <span class="o">=</span> <span class="n">CGateS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>  <span class="o">*</span> <span class="n">QFT_gate</span>
+</pre></div>
+</div>
+</div>
+<p>The second (first in SymPy) qubit is also subjected to the Hadamard gate and control <span class="math notranslate nohighlight">\(R_2\)</span> operation.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">QFT_gate</span> <span class="o">=</span> <span class="n">H</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="o">*</span> <span class="n">QFT_gate</span>
+<span class="n">QFT_gate</span> <span class="o">=</span> <span class="n">CGateS</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">S</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>  <span class="o">*</span> <span class="n">QFT_gate</span>
+</pre></div>
+</div>
+</div>
+<p>The third (0th in SymPy) qubit should only have an Hadamard gate applied.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">QFT_gate</span> <span class="o">=</span> <span class="n">H</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="o">*</span> <span class="n">QFT_gate</span>
+</pre></div>
+</div>
+</div>
+<p>Finally, a SWAP gate is applied to match the order of the bits.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">QFT_gate</span> <span class="o">=</span> <span class="n">SWAP</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="o">*</span> <span class="n">QFT_gate</span>
+</pre></div>
+</div>
+</div>
+<p>Now we have constructed a circuit for the quantum Fourier transform when <span class="math notranslate nohighlight">\(n=3\)</span>. The circuit itself is somewhat complex.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">QFT_gate</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$\displaystyle SWAP_{0,2} H_{0} C_{0}{\left(S_{1}\right)} H_{1} C_{0}{\left(T_{2}\right)} C_{1}{\left(S_{2}\right)} H_{2}$</div></div>
+</div>
+<p>When this circuit is acted on the input vector <span class="math notranslate nohighlight">\(|x\rangle\)</span>, the following can be seen, showing that the correct Fourier transformed state is output. (<span class="math notranslate nohighlight">\(y_0=1,y_1=\cdots=y_7=0\)</span>)</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simplify</span><span class="p">(</span> <span class="n">qapply</span><span class="p">(</span> <span class="n">QFT_gate</span> <span class="o">*</span> <span class="nb">input</span><span class="p">)</span> <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="math notranslate nohighlight">
+$\displaystyle {\left|000\right\rangle }$</div></div>
+</div>
+<p>You are encouraged to run this circuit with various inputs to verify that the Fourier transform is done correctly.</p>
+</section>
+<hr class="docutils" />
+<section id="Column:-About-Computational-Power">
+<h2>Column: About Computational Power<a class="headerlink" href="#Column:-About-Computational-Power" title="Link to this heading">¶</a></h2>
+<p>What does it mean to say that a quantum computer can perform computations at higher speed? Let us consider the quantum Fourier transform studied in this section as an example.</p>
+<div class="line-block">
+<div class="line">The number of gate operations required to perform the quantum Fourier transform is <span class="math notranslate nohighlight">\(n\)</span> times for the first qubit, <span class="math notranslate nohighlight">\(n-1\)</span> times for the second qubit, … , once for the <span class="math notranslate nohighlight">\(n\)</span>th qubit, and in total , <span class="math notranslate nohighlight">\(n(n-1)/2\)</span> times. In addition, for the last SWAP operation about <span class="math notranslate nohighlight">\(n/2\)</span> times, so <span class="math notranslate nohighlight">\(\mathcal{O}(n^2)\)</span> times in total (see the section below if you want to know more about <span class="math notranslate nohighlight">\(\mathcal{O}\)</span> notation).</div>
+<div class="line">On the other hand, the <a class="reference external" href="https://ja.wikipedia.org/wiki/高速フーリエ変換">fast Fourier transform</a>, which performs the Fourier transform on a classical computer, requires <span class="math notranslate nohighlight">\(\mathcal{O}(n2^n)\)</span> of computation to perform the same calculation. In this sense, the quantum Fourier transform is “faster” than the fast Fourier transform performed by a classical computer.</div>
+<div class="line">This may seem gratifying at first glance, but there is a pitfall. The result of the Fourier transform, <span class="math notranslate nohighlight">\(\{y_k\}\)</span>, is embedded as a probability amplitude of the state <span class="math notranslate nohighlight">\(|y\rangle\)</span> after the quantum Fourier transform, but if we try to read out this amplitude straightforwardly, we end up having to repeat the observation <strong>exponentially many times</strong>. Furthermore, there is no easy way to prepare the input <span class="math notranslate nohighlight">\(|x\rangle\)</span> in the first place (doing it straightforwardly would still take
+an exponential amount of time).</div>
+<div class="line">Thus, it is not easy to make quantum computers and quantum algorithms “practical,” and various innovations and technological developments are still required.</div>
+</div>
+<p>If you want to learn more about what kind of problems quantum computers are considered fast and how they are treated theoretically, please refer to the Qmedia article <a class="reference external" href="https://www.qmedia.jp/computational-complexity-and-quantum-computer/">「What does it mean that “quantum computers are better than classical computers”</a>(Tomoyuki Takezaki).</p>
+<section id="Note-on-the-order-notation-\mathcal{O}.">
+<h3>Note on the order notation <span class="math notranslate nohighlight">\(\mathcal{O}\)</span>.<a class="headerlink" href="#Note-on-the-order-notation-\mathcal{O}." title="Link to this heading">¶</a></h3>
+<p>In the first place, how can the performance of an algorithm be quantitatively evaluated? Here, we consider the resources required to run the algorithm, mainly time, as its criterion. In particular, when the problem size is <span class="math notranslate nohighlight">\(n\)</span>, let’s consider how the required computational resources, such as the number of computation steps (time) and memory consumption, behave as a function of <span class="math notranslate nohighlight">\(n\)</span>. (The size of the problem is, for example, the number of data to be sorted or the number of digits in
+the binary representation of the number of prime factors to be decomposed.)</p>
+<p>For example, suppose that for a problem size <span class="math notranslate nohighlight">\(n\)</span>, the computational resources required by the algorithm are given by <span class="math notranslate nohighlight">\(f(n)\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[f(n) = 2n^2 + 5n + 8\]</div>
+<p>When <span class="math notranslate nohighlight">\(n\)</span> is sufficiently large (e.g., <span class="math notranslate nohighlight">\(n=10^{10}\)</span>), <span class="math notranslate nohighlight">\(5n\)</span> and <span class="math notranslate nohighlight">\(6\)</span> are sufficiently small compared to <span class="math notranslate nohighlight">\(2n^2\)</span>. Therefore, the factor <span class="math notranslate nohighlight">\(5n+8\)</span> is not important in terms of evaluating this algorithm. Also, the information that the factor of <span class="math notranslate nohighlight">\(n^2\)</span> is <span class="math notranslate nohighlight">\(2\)</span> does not affect the behavior when <span class="math notranslate nohighlight">\(n\)</span> is sufficiently large. Thus, the information on the <strong>most “strong “</strong> term of the computation time <span class="math notranslate nohighlight">\(f(n)\)</span> can be considered important. This way of
+thinking is called asymptotic evaluation, and following the order notation of computational quantities, it is expressed by the following equation.</p>
+<div class="math notranslate nohighlight">
+\[f(n) = \mathcal{O}(n^2)\]</div>
+<p>In general, <span class="math notranslate nohighlight">\(f(n) = \mathcal{O}(g(n))\)</span> means that for any <span class="math notranslate nohighlight">\(n &gt; n_0\)</span>, given some positive numbers <span class="math notranslate nohighlight">\(n_0, c\)</span>,</p>
+<div class="math notranslate nohighlight">
+\[|f(n)| \leq c |g(n)|\]</div>
+<p>is valid. In the example above, this definition is true if <span class="math notranslate nohighlight">\(n_0=7, c=3\)</span> (try drawing a graph). As an exercise, consider a pair of <span class="math notranslate nohighlight">\(n_0, c\)</span> that gives the order notation <span class="math notranslate nohighlight">\(f(n) = \mathcal{O}(n^3)\)</span> of <span class="math notranslate nohighlight">\(f(n) = 6n^3 +5n\)</span>.</p>
+<p>In evaluating the performance of an algorithm, the required computational resources are expressed as a function of <span class="math notranslate nohighlight">\(n\)</span> when the size of its input is <span class="math notranslate nohighlight">\(n\)</span>. In particular, asymptotic evaluation using the order notation is useful for understanding the behavior of an algorithm when the size of its inputs increases. Using computational quantity theory based on such asymptotic evaluation, various algorithms have been classified. For details, please refer to the above Qmedia article.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+</article>
+        <aside class="nftt-toc">
+          
+          <div class="mt-3 mb-1 my-lg-0 ps-xl-3 text-muted">
+            <button class="btn btn-link link-dark p-lg-0 mb-2 mb-lg-0 text-decoration-none nftt-toc-toggle d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents"
+            >On this page <i class="ms-2 bi bi-chevron-expand"></i></button>
+            <div class="title d-none d-lg-block">
+              <i class="bi bi-file-earmark-text"></i>&nbsp;&nbsp;<span class="small">On this page</span>
+            </div>
+            <div class="collapse nftt-toc-collapse" id="tocContents">
+              <nav id="TableOfContents">
+                <ul>
+<li><a class="reference internal" href="#">2-3. Quantum Fourier Transform</a><ul>
+<li><a class="reference internal" href="#Definition">Definition</a></li>
+<li><a class="reference internal" href="#Circuit-Configuration">Circuit Configuration</a></li>
+<li><a class="reference internal" href="#Implementation-using-SymPy">Implementation using SymPy</a></li>
+<li><a class="reference internal" href="#Column:-About-Computational-Power">Column: About Computational Power</a><ul>
+<li><a class="reference internal" href="#Note-on-the-order-notation-\mathcal{O}.">Note on the order notation <span class="math notranslate nohighlight">\(\mathcal{O}\)</span>.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </nav>
+            </div>
+          </div>
+          
+        </aside>
+      </div>
+    </div>
+
+    <footer class="nftt-footer">
+      <nav id="paginator" class="py-4" aria-label="Documentation navigation">
+    <div class="container">
+      <ul class="pagination justify-content-between mb-0"><li class="page-item">
+            <a href="2.2_Hadamard_test.html" class="d-flex px-5 align-items-end" rel="prev" aria-label="Previous page: 2-2. Hadamard test">
+              <span class="prev-page"><i class="bi bi-caret-left"></i></span>
+              <div class="d-flex flex-column">
+                <span class="text-small text-start text-muted">Previous</span>
+                <span class="underline">2-2. Hadamard test</span>
+              </div>
+            </a>
+          </li>
+        <li class="page-item ms-auto">
+            <a href="2.4_phase_estimation_beginner.html" class="d-flex px-5 align-items-end" rel="next" aria-label="Next page: 2-4. Phase Estimation Algorithm (Introduction)">
+              <div class="d-flex flex-column">
+                <span class="text-small text-end text-start text-muted">Next</span>
+                <span class="underline">2-4. Phase Estimation Algorithm (Introduction)</span>
+              </div>
+              <span class="next-page"><i class="bi bi-caret-right"></i></span>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </nav>
+
+      <div class="py-5 px-4 px-md-3">
+  <div class="container">
+    
+
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <a class="brand-text d-inline-flex align-items-center mb-2 text-decoration-none" href="/" aria-label="Nefertiti-for-Sphinx">
+          <span class="fs-6 fw-bold">Quantum Native Dojo</span>
+        </a>
+        
+          <ul class="list-unstyled small text-muted">
+            <li>2023, Quantum Native Dojo Contributors</li>
+          </ul>
+        
+        
+        <div class="built-with pt-2">
+          Built with <a href="http://sphinx-doc.org">Sphinx 7.2.6</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.3.0</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+    </footer>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"CommonHTML": {"undefinedFamily": "\"Source Serif Pro\", \"Yakumono\", \"Noto Serif JP\", \"Hiragino Mincho ProN\", \"STIXGeneral\", \"Arial Unicode MS\", serif"}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
+
+    <script type="text/javascript" src="../_static/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinx-nefertiti.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/doc_versions.js"></script>
+  </body>
+</html>

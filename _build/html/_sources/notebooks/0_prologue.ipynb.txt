@@ -1,0 +1,154 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Chapter 0: What is a Quantum Computer ?\n",
+    "\n",
+    "In recent years, we often hear the word \"quantum computer\" in the mass media but are these computers?\n",
+    "This chapter provides an overview of quantum computers.\n",
+    "(Note that in the \"quantum\" computer industry, current computers are called \"classical\" computers, and Quantum Native Dojo follows suit.)\n",
+    "\n",
+    "\n",
+    "## The idea of a Quantum Computer\n",
+    "\n",
+    "The idea of a quantum computer itself is old, dating back to 1982 when theoretical physicist Richard Feynman said \"if you want to make a simulation of nature, you'd better make it quantum mechanical\".[1] Richard Feynamn is famous for his significant contribution to physics including the development of quantum electrodynamics for which he received the Nobel prize. He is also known for his essay \"Surely You're Joking, Mr. Feynman !\".\n",
+    "In 1985, David Elieser Deutsch, a British physicist at the University of Oxford, formulated the concept of a quantum computer.[2]  \n",
+    "\n",
+    "The most important difference between a quantum computer and a conventional classical computer is the way the information is represented. Inside a classical computer, information is represented by \"classical bits\" which can take on one of two states, 0 or 1. In contrast, inside a quantum computer, information is represented by \"qubits\" that can take on both 0 and 1 states **at the same time** (don't worry, you will learn the details in Quantum Native Dojo). This ability to encode information in both 0 and 1 simultaneously allows quantum computers to perform calculations dramatically faster than classical computers **in some cases**.\n",
+    "\n",
+    "\n",
+    "## How useful ?\n",
+    "\n",
+    "I emphasized **sometimes** because not all problems (tasks) in reality can be computed faster by a quantum computer. In fact, there are far more problems for which it is not yet known whether quantum computers are faster than classical computers. Nevertheless, for some problems, quantum computers have been **proven** to be faster than current classical computer algorithms. A good example is prime factorization (Shor's algorithm).  \n",
+    "\n",
+    "Prime factorization can be calculated in your head in simple cases such as $30 = 2\\times 3\\times 5$. However, as the number of integer digits increases, even the fastest supercomputers require time in the order of years or the lifetime of the universe to perform the calculation. The RSA cipher, which is widely used in today's cryptographic communications and information security, takes advantage of this \"time-consuming\" nature of prime factorization. However, in 1995, the American mathematician Peter Shor found a quantum algorithm that performs prime factorization **overwhelmingly faster** than the classical one [3] which brought quantum computers to the attention of the public at once. \n",
+    "\n",
+    "Besides prime factorization, there are several other problems for which quantum computers have been proven to be faster than current classical computers. For example, the search problem of finding the desired data from unorganized data ([8-2. Grover's algorithm](8.2_Grovers_algorithm.ipynb)), the problem of finding solutions to simultaneous linear equations ([7-2. Harrow-Hassidim-Lloyd (HHL) algorithm](7.2_Harrow-Hassidim-Lloyd_algorithm.ipynb)). These problems can be used for various scientific and technological calculations that support modern society, such as fluid analysis, electromagnetic analysis, and machine learning. Furthermore, since everything is based on quantum mechanics, quantum computers have the potential to become the ultimate simulator of natural phenomena for material design and material development, as Feynman and Deutsch thought ([Chapter 6 Quantum Chemistry Calculation](6_quantum_chemistry_ calculation.ipynb)).  \n",
+    "\n",
+    "Thus, although quantum computers will not speed up all calculations in the world, their impact on modern society is immeasurable.\n",
+    "\n",
+    "\n",
+    "## Quantum Error-Correction\n",
+    "\n",
+    "What we have described so far is the theoretical story of quantum computers. Even if it has been theoretically proven that a quantum computer can perform calculations quickly, one needs the necessary hardware that actually performs these calculations. Although research to produce hardware for quantum computers is being conducted widely around the world, there are still many problems to be solved. One of the biggest challenges is noise. Compared to classical bits, qubits are much more sensitive to external noise such as magnetic fields and temperature fluctuations, and the information they hold is quickly lost due to decoherence. As of <span style=\"color: red; \">2022</span>, we are still in the process of exploring ways to increase the number of qubits while also improving the quality of the qubits to reduce noise.  \n",
+    "\n",
+    "Quantum error correction techniques are being studied to overcome such noise problems ([Chapter 9 Quantum Error Correction](9_quantum_error_correction.ipynb)). Quantum error correction is a technique for detecting errors in qubits that occur during computation and correcting them to their original state, and various methods have been proposed. (Thanks to this correction function, we can live without worrying about the sudden loss of data in our classical computers.) However, quantum error correction is far more technically challenging than simply creating and operating a qubit, and it is said that at least another 10 years will be needed before a qubit with error correction capability can be made in an integrated form.\n",
+    "\n",
+    "And since the various applications of quantum computers mentioned in the previous section will require thousands of qubits with error correction functions to be implemented on a practical scale, it is believed that **realistic applications of true quantum computers will be several decades away**.\n",
+    "\n",
+    "\n",
+    "## The Era of  NISQ (Noisy Intermidiate-Scale Quantum) Devices\n",
+    "\n",
+    "Does this mean we have to wait decades more to benefit from quantum computers? We can't just sit on our hands!  Scientists are seeking to demonstrate the usefulness of quantum computers in a variety of ways. The quantum computer that is currently attracting the most attention and being studied around the world is the **Noisy Intermediate-Scale Quantum (NISQ)** device.  \n",
+    "\n",
+    "NISQ devices are defined as \"noisy (no error correction), intermediate-scale (~ several hundred qubits) quantum devices,\" and are expected to be commercially viable within a few years. Although NISQ devices can only run a limited number of quantum algorithms due to the lack of error correction, they are expected to outperform current classical computers in areas such as quantum chemical computation and machine learning ([Chapter 4](4.1_quantum_simulation.ipynb), [Chapter 5](5_VQC_based_algorithms.ipynb)). (See [Chapter 6](6_quantum_chemistry_calculation.ipynb)).  \n",
+    " \n",
+    "If we include NISQ devices, quantum computers will begin to be applied in the not-too-distant future. We hope that through this Quantum Native Dojo, you will acquire the knowledge necessary to get in touch with the cutting edge of quantum computer applications.\n",
+    " \n",
+    " \n",
+    "## Reference\n",
+    " 1. R. P. Feynman, “Simulating physics with computers”, International Journal of Theoretical Physics **21**, 467 [(pdf)](https://people.eecs.berkeley.edu/~christos/classics/Feynman.pdf)\n",
+    " 2. D. Deutsch, “Quantum theory, the Church-Turing principle and the universal quantum computer” Proceedings of the Royal Society of London A **400**, 97 (1985) [(pdf)](https://people.eecs.berkeley.edu/~christos/classics/Deutsch_quantum_theory.pdf)\n",
+    " 3. P. W. Shor, “Polynomial-Time Algorithms for Prime Factorization and Discrete Logarithms on a Quantum Computer”, IAM J.Sci.Statist.Comput. **26** (1997) 1484 [(pdf)](https://arxiv.org/pdf/quant-ph/9508027.pdf)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Slides about quantum computer from basics to application \n",
+    "\n",
+    "Please check the following material for more detailed explanations of the principles of operation of quantum computers, their applications, and government and corporate activities.\n",
+    "[Quantum Summit 2019 lecture summary slides](https://speakerdeck.com/qunasys/quantum-summit-2019)\n",
+    "\n",
+    "[![q-summit-top](figs/0/q-summit.png)](https://speakerdeck.com/qunasys/quantum-summit-2019)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "---\n",
+    "## Column：How are qubits and quantum gate operations physically realized?\n",
+    "\n",
+    "\n",
+    "How are qubits created that make up an actual quantum computer?\n",
+    "How is the quantum gate operation performed?  \n",
+    "\n",
+    "Several promising methods (physical systems) for realizing a qubit have been proposed since around 1995, including the superconducting circuit method, the ion trap method, and the optical method. Each method differs in the number of qubits realized, the lifetime (coherence time) of the qubit, and the error rate, etc., and research is being actively pursued in many countries around the world.    \n",
+    "\n",
+    "Among the many methods for realizing qubits, the most widely known method is the superconducting qubit, which uses a superconducting circuit. This is the world's first quantum bit produced by Yasunobu Nakamura (currently professor at the University of Tokyo) and TSAI JAW SHEN (currently professor at Tokyo University of Science), who were affiliated with NEC at the time, in 1999, and achieves a quantum bit by creating a minute structure called a Josephson junction using superconducting materials. The quantum gate operation is realized by sending pulses of microwaves (a type of electromagnetic wave) to the target qubit. The qubit is measured by attaching a superconducting circuit to the qubit for measurement.  \n",
+    "\n",
+    "The superconducting circuit method is the most promising method of realizing quantum computers as of March 2019, as Google and Rigetti <span style=\"color: red; \">computing</span> have announced the development of devices with tens of qubits.\n",
+    "\n",
+    "For a more in-depth look at how to realize a qubit, please refer to the following material\n",
+    "\n",
+    "\n",
+    "- Qmedia hardware to achieve quantum computer (Japanese only)\n",
+    "    - （first half) https://www.qmedia.jp/making-quantum-hardware-1/\n",
+    "    - （second half) https://www.qmedia.jp/making-quantum-hardware-2/\n",
+    "- Review paper：T. D. Ladd _et al._ , “Quantum Computing”, Nature, **464**, 45 (2010). https://arxiv.org/abs/1009.2267\n",
+    "- [Nielsen-Chuang, '*Quantum Computation and Quantum Information*', chapter 7: 'Quantum computers: physical realization'](https://www.cambridge.org/highereducation/books/quantum-computation-and-quantum-information/01E10196D0A682A6AEFFEA52D53BE9AE#overview)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.3"
+  },
+  "varInspector": {
+   "cols": {
+    "lenName": 16,
+    "lenType": 16,
+    "lenVar": 40
+   },
+   "kernels_config": {
+    "python": {
+     "delete_cmd_postfix": "",
+     "delete_cmd_prefix": "del ",
+     "library": "var_list.py",
+     "varRefreshCmd": "print(var_dic_list())"
+    },
+    "r": {
+     "delete_cmd_postfix": ") ",
+     "delete_cmd_prefix": "rm(",
+     "library": "var_list.r",
+     "varRefreshCmd": "cat(var_dic_list()) "
+    }
+   },
+   "types_to_exclude": [
+    "module",
+    "function",
+    "builtin_function_or_method",
+    "instance",
+    "_Feature"
+   ],
+   "window_display": false
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
