@@ -1,0 +1,175 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 4-1. Quantum simulation\n",
+    "\n",
+    "### What is dynamics simulation?\n",
+    "One of the most important applications of computers, whether classical or quantum, is \"**simulation of the dynamics of physical systems**\". Dynamics simulations focuses on the time evolution of a dynamical system.\n",
+    "\n",
+    "Simulation of physical systems is an indispensable technology that makes life around us possible. For example, computer simulations of physical systems, such as building and aircraft design, weather forecasting, and drug discovery, are frequently used. The goal of simulating a physical system is to know what the system will be like after a certain amount of time, given the **initial state** (initial state) of the system (the object of interest) and the rules of **dynamics = time evolution** of the system (how the system changes over time).\n",
+    "\n",
+    "Consider, for example, a billiard simulation. The initial state is the initial position and velocity of each ball. Since this is a classical dynamical system, the time evolution rules are Newton's equations of motion (differential equations). Given these equations, we can predict where each ball will be at the end of the break shot.\n",
+    "\n",
+    "As in the example above, the rules of time evolution of a system are generally expressed by **differential equations**. Newton's equations of motion for classical dynamical systems, Maxwell's equations for electromagnetic systems, Navier-Stokes equations for hydrodynamic systems, and so on. Therefore, the essence of simulation of physical systems comes down to numerically solving differential equations. And, of course, this is also the case with simulations of quantum systems, i.e., systems obeying quantum mechanics ."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Simulation of quantum systems\n",
+    "\n",
+    "Quantum systems evolve in time according to something called the Schrodinger equation (see below). Therefore, to simulate the dynamics of a quantum system, it is necessary to solve the Schrodinger equation numerically. As in the simulation of other physical systems, it is possible in principle to simulate quantum systems using a classical computer. In fact, by skillful use of various approximations, classical computers have achieved a certain degee of success in simulating quantum systems.\n",
+    "\n",
+    "However, **quantum simulations on a classical computer become very challenging as the computational time needed increases exponentially with system size (number of particles and spins).** For example, to simulate a system with $n$ qubits, approximately $2^n$ equations must be solved (see: Nielsen-Chuang `4.7 Simulation of quantum systems`).\n",
+    "\n",
+    "The idea was then born to **solve the above problem by simulating quantum systems using a quantum computer, which is expected to provide an exponential speedup.** It is truly a \"quantum problem solved by quantum\".\n",
+    "\n",
+    "In this chapter, we will learn about typical methods of simulating the dynamics of quantum systems using quantum computers."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Basic concepts\n",
+    "Here, let's review basic concepts that appear in quantum dynamics simulations."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Schrodinger equation\n",
+    "\n",
+    "The Schrodinger equation is given by:\n",
+    "$$\n",
+    "i\\hbar \\frac{\\partial |\\psi(t)\\rangle}{\\partial t} = H |\\psi(t)\\rangle\n",
+    "$$\n",
+    "\n",
+    "which is a linear differential equation and it is the fundamental equation of quantum mechanics. $|\\psi(t)\\rangle$ is a quantum state, $H$ is an operator called the Hamiltonian, which is explained below, and $\\hbar$ is the reduced Planck's constant (theoretical studies often use so called Planck's unit system with $\\hbar=1$). Microscopic systems evolve in time according to this Schrodinger equation. It is the quantum analog to Newton's equation of motion in classical mechanics.\n",
+    "In particular, when the state is independent of time, the following equation is often called the Schrodinger equation.\n",
+    "\n",
+    "$$\n",
+    "H |\\psi\\rangle = E|\\psi\\rangle  \\:\\:\\: \\text{(When the system is time-independent)}\n",
+    "$$\n",
+    "\n",
+    "where $E$ is the energy of the system."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Hamiltonian\n",
+    "The Hamiltonian is the operator in the Schrodinger equation that governs the time evolution of the system. When you make a simulation by a quantum computer, you can think of it as just a large matrix. The difference from the quantum operations we learned in Chapter 1 is that the Hamiltonian is Hermitian which means that $H=H^\\dagger$. In general, it is not possible to create a state $H|\\psi\\rangle$ with the Hamiltonian acting on it on a quantum computer. (The exception is the Pauli operators $X,Y,Z$, which are unitary and Hermitian.)\n",
+    "\n",
+    "The Hamiltonian is also an **observable corresponding to the energy of the system** (next section). The Hamiltonian contains all of the information about the system, such as the forces between particles and external forces (electric and magnetic fields, etc.). By putting this Hamiltonian into the Schrodinger equation and solving it, we obtain a value for the energy of the system."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Observable (physical quantities)\n",
+    "\n",
+    "In quantum mechanics, physical quantities (energy, magnetization = the magnitude of the magnetic force exhibited by a system, etc.) are described as **Hermitian operators** acting on states. An operator $A$ is Hermitian if it satisfies $A=A^\\dagger$ (Do not confuse this with the unitary operator $UU^\\dagger=I$ for quantum operations, which we studied in Chapter 1). \n",
+    "We denote by $\\{a_i \\}_i$ the eigenvalues and $\\{|a_i\\rangle \\}_i$ the eigenvectors of $A$. We can express the state $|\\psi\\rangle$ in terms of the eigenvectors $\\{|a_i\\rangle \\}_i$:\n",
+    "\n",
+    "$$\n",
+    " |\\psi\\rangle = \\sum_i c_i |a_i\\rangle.\n",
+    "$$\n",
+    "\n",
+    "Using this expression, when the physical quantity $A$ is observed (projective measurement), the observed value $a_i$ is obtained with a probability $|c_i|^2$. In fact, the projective measurement that we learned about in Chapter 1 was the projective measurement with respect to the $z$ observable."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Energy eigenstates (ground and excited states)\n",
+    "\n",
+    "As mentioned above, the Hamiltonian $H$ is an observable that represents the energy of the system. Therefore, knowing its eigenvalue gives us the energy values the system can take (eigenenergies). Why is it important to know the energy levels of the system? The answer is that this allows us to know \"which states are actually likely to be realized\".\n",
+    "\n",
+    "Solving the Schrodinger equation under a given Hamiltonian generally yields multiple solutions (pairs of states and energies). Of these, the state with the lowest energy, i.e., the most stable, is called the \"**ground state**\" and is the easiest to be realized in nature (as the temperature of the system increases, higher energy states are also more likely to appear).\n",
+    "\n",
+    "In the context of materials science and quantum chemistry, it is very important to know the energy of each state because it allows us to consider what crystal structures are stable, what chemical reactions actually occur, and how much energy is necessary for a reaction."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Dynamics (time evolution)\n",
+    "By formally solving the Schrödinger equation when the system is independent of time, we can obtain the time evolution of the state $\\psi$:\n",
+    "\n",
+    "$$\n",
+    "|\\psi(t)\\rangle = e^{-iH/\\hbar t} |\\psi(0)\\rangle\n",
+    "$$\n",
+    "\n",
+    "Simulation of quantum dynamics is, after all, a problem of calculating this $e^{-iH/\\hbar t} |\\psi(0)\\rangle$. (The Hamiltonian $H$ is exponentially large in $2^n$ dimensions with respect to the number of qubits $n$, so it is very hard to compute on a classical computer.)   \n",
+    "A common problem setup is to start from some initial state $|\\psi(0)\\rangle$ and calculate the expected value of some physical quantity $A$ after some time $t$ has passed $A(t) =\\langle\\psi(0)|e^{iH/\\hbar t} A e^{-iH/\\hbar t} |\\psi(0)\\rangle$.\n",
+    "\n",
+    "*Advanced note: Although not covered in this Dojo, the dynamics for states called mixed states are described by an equation called the von-Neumann equation, similar to the Schrodinger equation."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.5"
+  },
+  "varInspector": {
+   "cols": {
+    "lenName": 16,
+    "lenType": 16,
+    "lenVar": 40
+   },
+   "kernels_config": {
+    "python": {
+     "delete_cmd_postfix": "",
+     "delete_cmd_prefix": "del ",
+     "library": "var_list.py",
+     "varRefreshCmd": "print(var_dic_list())"
+    },
+    "r": {
+     "delete_cmd_postfix": ") ",
+     "delete_cmd_prefix": "rm(",
+     "library": "var_list.r",
+     "varRefreshCmd": "cat(var_dic_list()) "
+    }
+   },
+   "types_to_exclude": [
+    "module",
+    "function",
+    "builtin_function_or_method",
+    "instance",
+    "_Feature"
+   ],
+   "window_display": false
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}

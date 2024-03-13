@@ -1,0 +1,618 @@
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+      <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="docsearch:name" content="Quantum Native Dojo" />
+    <meta name="docsearch:package_type" content="" />
+    <meta name="docsearch:release" content="" />
+    <meta name="docsearch:version" content="" />
+    
+      <title>6-2. Implementation of variational quantum eigensolver (VQE) using QURI Parts &mdash; Quantum Native Dojo  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-icons.css" type="text/css" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+          <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+          <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+        <link rel="index" title="Index" href="../genindex.html" />
+        <link rel="search" title="Search" href="../search.html" />
+        <link rel="top" title="Quantum Native Dojo  documentation" href="#" />
+    <style>
+      :root {
+        --nftt-body-font-family: "Nunito", var(--nftt-font-sans-serif) !important;
+        --nftt-font-monospace: "Red Hat Mono", var(--nftt-font-family-monospace) !important;
+        --nftt-project-name-font: var(--nftt-body-font-family);
+        --nftt-documentation-font: var(--nftt-body-font-family);
+        --nftt-doc-headers-font: "Georgia", var(--nftt-documentation-font);}
+      h1 *, h2 *, h3 *, h4 *, h5 *, h6 * { font-size: inherit; }
+    </style>
+  </head>
+  <body>
+    <header class="navbar navbar-expand-xl navbar-dark nftt-navbar flex-column fixed-top">
+      <div class="skip-links container-fluid visually-hidden-focusable overflow-hidden justify-content-start">
+        <div class="border-bottom mb-2 pb-2 w-100">
+          <a class="d-none d-md-inline-flex p-2 m-1" href="#sidebar-filter">Skip to docs navigation</a>
+          <a class="d-inline-flex p-2 m-1" href="#content">Skip to main content</a>
+        </div>
+      </div>
+      <nav class="container-xxl nftt-gutter flex-wrap flex-xl-nowrap" aria-label="Main navigation">
+        <div class="nftt-navbar-toggler">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Toggle documentation navigation">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+          <a href="../index.html"
+              
+              class="navbar-brand p-0 me-0 md-lg-2"
+          ><span class="brand-text">Quantum Native Dojo</span></a>
+        
+        <div class="d-flex d-xl-none">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttSearch" aria-controls="nfttSearch" aria-label="Search">
+            <i class="bi bi-search"></i>
+          </button>
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttNavbar" aria-controls="nfttNavbar" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+        </div>
+        
+<div class="offcanvas-xl offcanvas-end flex-grow-1" tabindex="-1" id="nfttSearch" aria-labelledby="nfttSearchOffcanvasLabel" data-bs-scroll="true">
+  <div class="offcanvas-header px-4 pb-0">
+    <h5 class="offcanvas-title fw-bold" id="nfttSearchOffcanvasLabel">Search the documentation</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttSearch"></button>
+  </div>
+  <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+    <hr class="d-xl-none text-white-50">
+    <ul class="navbar-nav flex-row align-items-center flex-wrap ms-md-auto">
+      <li class="nav-item col-12 col-xl-auto">
+        <form id="nftt-search-form" action="../search.html" method="get">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search docs" aria-label="Search" aria-describedby="button-search">
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+            <button class="btn btn-primary" type="submit" id="button-search" aria-label="Search"><i class="bi bi-search"></i></button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+</div>
+
+        <div class="offcanvas-xl offcanvas-end" tabindex="-1" id="nfttNavbar" aria-labelledby="nfttNavbarOffcanvasLabel" data-bs-scroll="true">
+          <div class="offcanvas-header px-4 pb-0">
+            <div class="offcanvas-title navbar-brand" id="nfttNavbarOffcanvasLabel"><span class="brand-text">Nefertiti for Sphinx</span></div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttNavbar"></button>
+          </div>
+          <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+            <hr class="d-xl-none text-white-50">
+            <ul class="navbar-nav flex-row align-items-center flex-wrap ms-lg-auto">
+              
+              <!-- version_dropdown.html -->
+
+              
+              <!-- colorscheme_dropdown.html -->
+<li class="nav-item dropdown">
+  <a class="nav-link d-flex py-2 px-0 px-xl-2 dropdown-toggle align-items-center" id="snftt-luz" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" aria-label="Toggle light/dark">
+    <i class="bi bi-circle-half" data-snftt-luz-icon-active></i>
+    <span id="snftt-luz-text" class="d-xl-none small ms-2">Toggle light/dark</span>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="snftt-luz-text">
+    <li>
+      <h6 class="dropdown-header">Light/dark</h6>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="light" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-sun" data-snftt-luz-icon="light"></i>
+        </span>
+        <span class="small ms-3">Light</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="dark" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-moon-stars" data-snftt-luz-icon="dark"></i>
+        </span>
+        <span class="small ms-3">Dark</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item current d-flex align-items-center" data-snftt-luz="default" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-circle-half" data-snftt-luz-icon="default"></i>
+        </span>
+        <span class="small ms-3">Default</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+  </ul>
+</li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container-fluid">
+      <div class="nftt-gutter nftt-page">
+        <aside class="nftt-sidebar">
+          <div class="nftt-sidebar-content">
+            <div class="title d-none d-xl-block">
+              <i class="bi bi-book"></i>&nbsp;&nbsp;<span>Index</span>
+            </div>
+            <div id="sidebar" tabindex="-1" class="offcanvas-xl offcanvas-start" aria-labelledby="nfttSidebarOffcanvasLabel">
+                <!-- danirus sidebartemplate: "globaltoc.html" --><div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title fw-bold" id="nfttSidebarOffcanvasLabel">
+    Table of contents
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#sidebar"></button>
+</div>
+
+<div class="offcanvas-body">
+  <nav class="toc" aria-label="Main menu">
+    <div class="mb-3 p-1 pt-3 pb-4 border-bottom">
+      <input id="sidebar-filter" type="text" name="filter" class="form-control form-control-sm" placeholder="filter" aria-label="filter">
+    </div>
+    <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/0_prologue.html">Chapter 0: What is a Quantum Computer ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/1_quantum_information_foundation.html">Chapter 1: Fundamentals of Quantum Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/1.1_qubit_representation.html">1-1. Qubit Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/1.2_qubit_operations.html">1-2. Qubit Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/1.3_multiqubit_representation_and_operations.html">1-3. Multiqubit representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/1.3_multiqubit_representation_and_operations.html#Column:-What-is-a-universal-gate-set?">Column: What is a universal gate set?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/1.4_quantum_circuit_diagram.html">1-4. Quantum Circuit Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/2_introduction_to_quantum_algorithms.html">Chapter 2: Introduction to Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/2.1_NISQ_and_long_term.html">2-1. NISQ algorithm and long-term algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/2.2_Hadamard_test.html">2-2. Hadamard test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/2.3_quantum_Fourier_transform.html">2-3. Quantum Fourier transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/2.4_phase_estimation_beginner.html">2-4. Phase Estimation Algorithm（Introductory）</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/3_execution_environments_of_quantum_algorithms.html">Chapter 3: Execution Environment for Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/3.1_Qulacs_tutorial.html">3-1. Qulacs_tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/3.2_Qiskit_IBMQ.html">3-2. Qiskit_IBMQ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/4_quantum_dynamics_simulation.html">Chapter4 Quantum dynamics simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/4.1_quantum_simulation.html">4-1. Quantum Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/4.2_trotter_decomposition.html">4-2. Trotter Decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/5_VQC_based_algorithms.html">Chapter 5 Algorithms Based on Variational Quantum Circuits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/5.1_variational_quantum_eigensolver.html">5-1. Variational Quantum Eigensolver（VQE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/5.2_Quantum_Circuit_Learning.html">5-2. Quantum Circuit Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/5.3_quantum_approximate_optimazation_algorithm.html">5-3. Quantum Approximate Optimazation Algorithm (QAOA)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/6_quantum_chemistry_calculation.html">Chapter 6 Quantum chemistry calculation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/6.1_openfermion_basics.html">6-1. OpenFermion Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/7_quantum_phase_estimation.html">chapter 7 Quantum phase estimation algorithm and its application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/7.1_quantum_phase_estimation_detailed.html">7-1. Quantum Phase Estimation (QPE) Algorithm Detailed：Hydrogen Molecule as Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/7.2_Harrow-Hassidim-Lloyd_algorithm.html">7-2. Harrow-Hassidim-Lloyd (HHL) Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/7.3_application_of_HHL_algorithm.html">7-3. Portofolio Optimization by HHL Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/8_quantum_search_algorithm.html">Chapter 8: Quantum Search Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/8.1_oracle.html">8-1. oracle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/8.2_Grovers_algorithm.html">8-2. Grover’s algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/9_quantum_error_correction.html">Chapter 9 Quantum Error Correction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/9.1_error_correction.html">9-1. classical error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../notebooks/9.2_quantum_error_correction.html">9-2. quantum error</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav>
+  <template data-toggle-item-template>
+    <button class="btn btn-sm btn-link toctree-expand" type="button">
+      <i class="bi bi-caret-right"></i>
+      <span class="visually-hidden">Toggle menu contents</span>
+    </button>
+  </template>
+</div>
+            </div>
+          </div>
+        </aside>
+        <article id="content" class="nftt-content" role="main">
+    <section id="6-2.-Implementation-of-variational-quantum-eigensolver-(VQE)-using-QURI-Parts">
+<h1>6-2. Implementation of variational quantum eigensolver (VQE) using QURI Parts<a class="headerlink" href="#6-2.-Implementation-of-variational-quantum-eigensolver-(VQE)-using-QURI-Parts" title="Link to this heading">¶</a></h1>
+<p>In this section, we show an example of running the variational quantum eigensolver (VQE) on a simulator using QURI Parts for a quantum chemical Hamiltonian, and searching for the ground state.</p>
+<p>requirements</p>
+<ul class="simple">
+<li><p>quri_parts.chem</p></li>
+<li><p>quri_parts.qulacs</p></li>
+<li><p>quri_parts.openfermion</p></li>
+<li><p>quri_parts.pyscf</p></li>
+<li><p>scipy</p></li>
+<li><p>numpy</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Run if required libraries are not installed</span>
+<span class="c1">## If you run on Google Colaboratory, igore the warning &#39;You must restart the runtime in order to use newly installed versions.&#39;</span>
+<span class="c1">## If you restart runtime, calculation may crash.</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;quri_parts&quot;</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;quri_parts_qulacs&quot;</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;quri_parts_openfermion&quot;</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;quri_parts_pyscf&quot;</span>
+
+<span class="c1">## Run only in Google Colaboratory or (Linux or Mac) jupyter notebook environment</span>
+<span class="c1">## Qulacs errors will be output normally.</span>
+<span class="o">!</span>pip3<span class="w"> </span>install<span class="w"> </span>wurlitzer
+<span class="o">%</span><span class="k">load_ext</span> wurlitzer
+</pre></div>
+</div>
+</div>
+<section id="Creation-of-Hamiltonian">
+<h2>Creation of Hamiltonian<a class="headerlink" href="#Creation-of-Hamiltonian" title="Link to this heading">¶</a></h2>
+<p>Using the same procedure as in the previous section, Hamiltonian is calculated by PySCF .</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyscf</span> <span class="kn">import</span> <span class="n">gto</span><span class="p">,</span> <span class="n">scf</span>
+<span class="kn">from</span> <span class="nn">quri_parts.pyscf.mol</span> <span class="kn">import</span> <span class="n">get_spin_mo_integrals_from_mole</span>
+<span class="kn">from</span> <span class="nn">quri_parts.openfermion.mol</span> <span class="kn">import</span> <span class="n">get_qubit_mapped_hamiltonian</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.operator</span> <span class="kn">import</span> <span class="n">get_sparse_matrix</span>
+<span class="kn">from</span> <span class="nn">scipy.sparse.linalg</span> <span class="kn">import</span> <span class="n">eigsh</span>
+
+<span class="n">distance</span>  <span class="o">=</span> <span class="mf">0.977</span>
+<span class="n">mole</span> <span class="o">=</span> <span class="n">gto</span><span class="o">.</span><span class="n">M</span><span class="p">(</span>
+    <span class="n">atom</span><span class="o">=</span><span class="p">[[</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]],[</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">distance</span><span class="p">]]],</span>
+    <span class="n">spin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">charge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">basis</span><span class="o">=</span><span class="s2">&quot;sto-3g&quot;</span>
+<span class="p">)</span>
+<span class="n">mf</span> <span class="o">=</span> <span class="n">scf</span><span class="o">.</span><span class="n">RHF</span><span class="p">(</span><span class="n">mole</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">full_space</span><span class="p">,</span> <span class="n">mo_eints</span> <span class="o">=</span> <span class="n">get_spin_mo_integrals_from_mole</span><span class="p">(</span><span class="n">mole</span><span class="p">,</span> <span class="n">mf</span><span class="o">.</span><span class="n">mo_coeff</span><span class="p">)</span>
+<span class="n">jw_hamiltonian</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">get_qubit_mapped_hamiltonian</span><span class="p">(</span><span class="n">full_space</span><span class="p">,</span> <span class="n">mo_eints</span><span class="p">)</span>
+
+<span class="c1"># Exact diagolization to find the exact ground state energy.</span>
+<span class="n">hamiltonian_matrix</span> <span class="o">=</span> <span class="n">get_sparse_matrix</span><span class="p">(</span><span class="n">jw_hamiltonian</span><span class="p">)</span>
+<span class="n">eigval</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">eigsh</span><span class="p">(</span><span class="n">hamiltonian_matrix</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;SA&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Compose-ansatz">
+<h2>Compose ansatz<a class="headerlink" href="#Compose-ansatz" title="Link to this heading">¶</a></h2>
+<p>Here we use the Hardware Efficient ansatz that is already built into QURI Parts. The quantum circuits were modeled after those used in experiments with superconducting qubits (A. Kandala <em>et. al.</em> , “Hardware-efficient variational quantum eigensolver for small molecules and quantum magnets“, Nature <strong>549</strong>, 242–246).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.algo.ansatz</span> <span class="kn">import</span> <span class="n">HardwareEfficient</span>
+<span class="kn">from</span> <span class="nn">quri_parts.openfermion.transforms</span> <span class="kn">import</span> <span class="n">jordan_wigner</span>
+
+<span class="n">n_qubit</span> <span class="o">=</span> <span class="n">jordan_wigner</span><span class="o">.</span><span class="n">n_qubits_required</span><span class="p">(</span><span class="n">full_space</span><span class="o">.</span><span class="n">n_active_orb</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">depth</span> <span class="o">=</span> <span class="n">n_qubit</span>
+
+<span class="k">def</span> <span class="nf">he_ansatz_circuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HardwareEfficient</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">HardwareEfficient</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Define-VQE-cost-function">
+<h2>Define VQE cost function<a class="headerlink" href="#Define-VQE-cost-function" title="Link to this heading">¶</a></h2>
+<p>As explained in <a class="reference external" href="5.1_variational_quantum_eigensolver.ipynb">chapter 5-1</a>, VQE obtains an approximate ground state by minimizing the following expectation of Hamiltonian of a state <span class="math notranslate nohighlight">\(|\psi(\theta)\rangle = U(\theta)|0\rangle\)</span> which is output from quantum circuit <span class="math notranslate nohighlight">\(U(\theta)\)</span> with a parameter .</p>
+<div class="math notranslate nohighlight">
+\[\langle H (\theta)\rangle = \langle\psi(\theta)|H|\psi(\theta)\rangle\]</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.state</span> <span class="kn">import</span> <span class="n">quantum_state</span>
+<span class="kn">from</span> <span class="nn">quri_parts.qulacs.estimator</span> <span class="kn">import</span> <span class="n">create_qulacs_vector_estimator</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.utils.recording</span> <span class="kn">import</span> <span class="n">Recorder</span><span class="p">,</span> <span class="n">recordable</span>
+
+<span class="n">estimator</span> <span class="o">=</span> <span class="n">create_qulacs_vector_estimator</span><span class="p">()</span>
+
+<span class="nd">@recordable</span>
+<span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="n">recorder</span><span class="p">:</span> <span class="n">Recorder</span><span class="p">,</span> <span class="n">theta_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The cost function to be optimized.</span>
+
+<span class="sd">    - The recordable decorator and the recorder.info call is not relevant to physics.</span>
+<span class="sd">    It is a convenient feature in QURI Parts that allow users to record intermediate results.</span>
+<span class="sd">    We will use it to record the cost history during VQE.</span>
+
+<span class="sd">    - You do not need to pass in anything to the recorder due to the `recordable` decorator.</span>
+<span class="sd">    You may simply treat it as a function with `theta_list` as its only parameter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ansatz_circuit</span> <span class="o">=</span> <span class="n">he_ansatz_circuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">quantum_state</span><span class="p">(</span>
+        <span class="n">n_qubit</span><span class="p">,</span>
+        <span class="n">circuit</span><span class="o">=</span><span class="n">ansatz_circuit</span><span class="o">.</span><span class="n">bind_parameters</span><span class="p">(</span><span class="n">theta_list</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">est</span> <span class="o">=</span> <span class="n">estimator</span><span class="p">(</span><span class="n">jw_hamiltonian</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">real</span>
+    <span class="n">recorder</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;est&quot;</span><span class="p">,</span> <span class="n">est</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">est</span>
+
+<span class="n">cost</span><span class="p">(</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span>
+        <span class="n">he_ansatz_circuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span><span class="o">.</span><span class="n">parameter_count</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-0.09192014961770327
+</pre></div></div>
+</div>
+<p>Before jumping into the VQE procedure, let’s temporarily digress to an optional step if you wish to use scipy to minimize. This step is customizing our own gradient estimation function. Though this step is optional, it can potentially provide better performance so that the minimization does not take much time. Please check out the QURI Parts tutorial page on <a class="reference external" href="https://quri-parts.qunasys.com/tutorials/variational">Variational Algorithms</a> for details on gradient estimators. Here, we provide an
+example of a customized gradient function with QURI Parts.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">quri_parts.qulacs.estimator</span> <span class="kn">import</span> <span class="n">create_qulacs_vector_concurrent_parametric_estimator</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.estimator.gradient</span> <span class="kn">import</span> <span class="n">create_numerical_gradient_estimator</span>
+
+
+<span class="k">def</span> <span class="nf">grad_func</span><span class="p">(</span><span class="n">theta_list</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of the cost function with respect to the circuit parameters</span>
+<span class="sd">    theta.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">param_estimator</span> <span class="o">=</span> <span class="n">create_qulacs_vector_concurrent_parametric_estimator</span><span class="p">()</span>
+    <span class="n">grad_estimator</span> <span class="o">=</span> <span class="n">create_numerical_gradient_estimator</span><span class="p">(</span><span class="n">param_estimator</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">)</span>
+
+    <span class="n">ansatz_circuit</span> <span class="o">=</span> <span class="n">he_ansatz_circuit</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span>
+    <span class="n">ansatz_state</span> <span class="o">=</span> <span class="n">quantum_state</span><span class="p">(</span><span class="n">n_qubit</span><span class="p">,</span> <span class="n">circuit</span><span class="o">=</span><span class="n">ansatz_circuit</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">grad_estimator</span><span class="p">(</span><span class="n">jw_hamiltonian</span><span class="p">,</span> <span class="n">ansatz_state</span><span class="p">,</span> <span class="n">theta_list</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">real</span>
+<br/></pre></div>
+</div>
+</div>
+</section>
+<section id="Execute-VQE">
+<h2>Execute VQE<a class="headerlink" href="#Execute-VQE" title="Link to this heading">¶</a></h2>
+<p>Now that we’re ready, let’s run VQE. For optimization, the BFGS method implemented in scipy is used, and the initial parameters are randomly selected. It should finish in tens of seconds.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.utils.recording</span> <span class="kn">import</span> <span class="n">RecordSession</span><span class="p">,</span> <span class="n">INFO</span>
+
+<span class="c1"># Optimization parameters</span>
+<span class="n">init_theta_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">n_qubit</span><span class="o">*</span><span class="p">(</span><span class="n">depth</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="mf">1e-1</span>
+<span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;BFGS&quot;</span>
+<span class="n">options</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;disp&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;maxiter&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span> <span class="s2">&quot;gtol&quot;</span><span class="p">:</span> <span class="mf">1e-6</span><span class="p">}</span>
+
+<span class="c1"># Run VQE and record the cost while the optimization loop is executed.</span>
+<span class="n">recording_session</span> <span class="o">=</span> <span class="n">RecordSession</span><span class="p">()</span>
+<span class="n">recording_session</span><span class="o">.</span><span class="n">set_level</span><span class="p">(</span><span class="n">INFO</span><span class="p">,</span> <span class="n">cost</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">recording_session</span><span class="o">.</span><span class="n">start</span><span class="p">():</span>
+    <span class="n">opt</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">cost</span><span class="p">,</span> <span class="n">init_theta_list</span><span class="p">,</span> <span class="n">jac</span><span class="o">=</span><span class="n">grad_func</span><span class="p">,</span>  <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_history</span><span class="p">(</span><span class="n">session</span><span class="p">:</span> <span class="n">RecordSession</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieve hamiltonian expectation value from recording session.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cost_history</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">session</span><span class="o">.</span><span class="n">get_records</span><span class="p">()</span><span class="o">.</span><span class="n">get_history</span><span class="p">(</span><span class="n">cost</span><span class="p">):</span>
+        <span class="n">entries</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">entries</span>
+        <span class="n">cost_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">entries</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">cost_history</span>
+
+<span class="n">cost_history</span> <span class="o">=</span> <span class="n">get_history</span><span class="p">(</span><span class="n">recording_session</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Plotting the execution result, we can see that it has converged to the correct solution.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;font.size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">18</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cost_history</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;VQE&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cost_history</span><span class="p">)),</span> <span class="p">[</span><span class="n">eigval</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">cost_history</span><span class="p">),</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Exact Solution&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Iteration&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Energy expectation value&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/qp_notebooks_6.2_qp_VQE_14_0.png" src="../_images/qp_notebooks_6.2_qp_VQE_14_0.png" />
+</div>
+</div>
+<section id="VQE-using-QURI-Parts">
+<h3>VQE using QURI Parts<a class="headerlink" href="#VQE-using-QURI-Parts" title="Link to this heading">¶</a></h3>
+<p>As explained in the Quantum Circuit Learning chapter, we can use QURI Parts instead of scipy to perform our optimization procedure. Here, we deomonstrate how to do VQE with QURI Parts.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">quri_parts.algo.optimizer</span> <span class="kn">import</span> <span class="n">OptimizerStatus</span><span class="p">,</span> <span class="n">OptimizerState</span><span class="p">,</span> <span class="n">Optimizer</span>
+
+<span class="k">def</span> <span class="nf">vqe</span><span class="p">(</span>
+    <span class="n">init_params</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">cost_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="nb">float</span><span class="p">],</span>
+    <span class="n">grad_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span>
+    <span class="n">optimizer</span><span class="p">:</span> <span class="n">Optimizer</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OptimizerState</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimization loop for performing VQE.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">opt_state</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">get_init_state</span><span class="p">(</span><span class="n">init_params</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">opt_state</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">opt_state</span><span class="p">,</span> <span class="n">cost_fn</span><span class="p">,</span> <span class="n">grad_fn</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">opt_state</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">OptimizerStatus</span><span class="o">.</span><span class="n">FAILED</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Optimizer failed&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="k">if</span> <span class="n">opt_state</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">OptimizerStatus</span><span class="o">.</span><span class="n">CONVERGED</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Optimizer converged&quot;</span><span class="p">)</span>
+            <span class="k">break</span>
+    <span class="k">return</span> <span class="n">opt_state</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">quri_parts.algo.optimizer</span> <span class="kn">import</span> <span class="n">LBFGS</span>
+<span class="kn">from</span> <span class="nn">quri_parts.core.utils.recording</span> <span class="kn">import</span> <span class="n">RecordSession</span><span class="p">,</span> <span class="n">INFO</span>
+
+<span class="n">recording_session</span> <span class="o">=</span> <span class="n">RecordSession</span><span class="p">()</span>
+<span class="n">recording_session</span><span class="o">.</span><span class="n">set_level</span><span class="p">(</span><span class="n">INFO</span><span class="p">,</span> <span class="n">cost</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">recording_session</span><span class="o">.</span><span class="n">start</span><span class="p">():</span>
+    <span class="n">result_qp</span> <span class="o">=</span> <span class="n">vqe</span><span class="p">(</span><span class="n">init_theta_list</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">grad_func</span><span class="p">,</span> <span class="n">LBFGS</span><span class="p">())</span>
+
+<span class="n">qp_cost_history</span> <span class="o">=</span> <span class="n">get_history</span><span class="p">(</span><span class="n">recording_session</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Optimizer converged
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;font.size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">18</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">qp_cost_history</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;VQE&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">qp_cost_history</span><span class="p">)),</span> <span class="p">[</span><span class="n">eigval</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">qp_cost_history</span><span class="p">),</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Exact Solution&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Iteration&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Energy expectation value&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/qp_notebooks_6.2_qp_VQE_18_0.png" src="../_images/qp_notebooks_6.2_qp_VQE_18_0.png" />
+</div>
+</div>
+<p>Encouraged readers should calculate the ground state by changing <code class="docutils literal notranslate"><span class="pre">distance</span></code>, the distance between the hydrogen atoms and find the interatomic distance at which the hydrogen molecule is most stable. (It should be about 0.74 Angstroms, depending on ansatz performance.)</p>
+</section>
+</section>
+</section>
+
+</article>
+        <aside class="nftt-toc">
+          
+          <div class="mt-3 mb-1 my-lg-0 ps-xl-3 text-muted">
+            <button class="btn btn-link link-dark p-lg-0 mb-2 mb-lg-0 text-decoration-none nftt-toc-toggle d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents"
+            >On this page <i class="ms-2 bi bi-chevron-expand"></i></button>
+            <div class="title d-none d-lg-block">
+              <i class="bi bi-file-earmark-text"></i>&nbsp;&nbsp;<span class="small">On this page</span>
+            </div>
+            <div class="collapse nftt-toc-collapse" id="tocContents">
+              <nav id="TableOfContents">
+                <ul>
+<li><a class="reference internal" href="#">6-2. Implementation of variational quantum eigensolver (VQE) using QURI Parts</a><ul>
+<li><a class="reference internal" href="#Creation-of-Hamiltonian">Creation of Hamiltonian</a></li>
+<li><a class="reference internal" href="#Compose-ansatz">Compose ansatz</a></li>
+<li><a class="reference internal" href="#Define-VQE-cost-function">Define VQE cost function</a></li>
+<li><a class="reference internal" href="#Execute-VQE">Execute VQE</a><ul>
+<li><a class="reference internal" href="#VQE-using-QURI-Parts">VQE using QURI Parts</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </nav>
+            </div>
+          </div>
+          
+        </aside>
+      </div>
+    </div>
+
+    <footer class="nftt-footer">
+      
+<nav id="paginator"></nav>
+
+      <div class="py-5 px-4 px-md-3">
+  <div class="container">
+    
+
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <a class="brand-text d-inline-flex align-items-center mb-2 text-decoration-none" href="/" aria-label="Nefertiti-for-Sphinx">
+          <span class="fs-6 fw-bold">Quantum Native Dojo</span>
+        </a>
+        
+          <ul class="list-unstyled small text-muted">
+            <li>2023, Quantum Native Dojo Contributors</li>
+          </ul>
+        
+        
+        <div class="built-with pt-2">
+          Built with <a href="http://sphinx-doc.org">Sphinx 7.2.6</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.3.0</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+    </footer>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"CommonHTML": {"undefinedFamily": "\"Source Serif Pro\", \"Yakumono\", \"Noto Serif JP\", \"Hiragino Mincho ProN\", \"STIXGeneral\", \"Arial Unicode MS\", serif"}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
+
+    <script type="text/javascript" src="../_static/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinx-nefertiti.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/doc_versions.js"></script>
+  </body>
+</html>

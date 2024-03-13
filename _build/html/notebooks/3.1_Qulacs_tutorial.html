@@ -1,0 +1,1328 @@
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+      <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="docsearch:name" content="Quantum Native Dojo" />
+    <meta name="docsearch:package_type" content="" />
+    <meta name="docsearch:release" content="" />
+    <meta name="docsearch:version" content="" />
+    
+      <title>3-1. How to use Qulacs, the world’s fastest simulator &mdash; Quantum Native Dojo  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-icons.css" type="text/css" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+          <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+          <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+        <link rel="index" title="Index" href="../genindex.html" />
+        <link rel="search" title="Search" href="../search.html" />
+        <link rel="top" title="Quantum Native Dojo  documentation" href="#" />
+        <link rel="up" title="Chapter 3: Execution Environment for Quantum Algorithms" href="3_execution_environments_of_quantum_algorithms.html" />
+        <link rel="next" title="3-2. How to use Qiskit and IBM Q Experience" href="3.2_Qiskit_IBMQ.html" />
+        <link rel="prev" title="Chapter 3: Execution Environment for Quantum Algorithms" href="3_execution_environments_of_quantum_algorithms.html" />
+    <style>
+      :root {
+        --nftt-body-font-family: "Nunito", var(--nftt-font-sans-serif) !important;
+        --nftt-font-monospace: "Red Hat Mono", var(--nftt-font-family-monospace) !important;
+        --nftt-project-name-font: var(--nftt-body-font-family);
+        --nftt-documentation-font: var(--nftt-body-font-family);
+        --nftt-doc-headers-font: "Georgia", var(--nftt-documentation-font);}
+      h1 *, h2 *, h3 *, h4 *, h5 *, h6 * { font-size: inherit; }
+    </style>
+  </head>
+  <body>
+    <header class="navbar navbar-expand-xl navbar-dark nftt-navbar flex-column fixed-top">
+      <div class="skip-links container-fluid visually-hidden-focusable overflow-hidden justify-content-start">
+        <div class="border-bottom mb-2 pb-2 w-100">
+          <a class="d-none d-md-inline-flex p-2 m-1" href="#sidebar-filter">Skip to docs navigation</a>
+          <a class="d-inline-flex p-2 m-1" href="#content">Skip to main content</a>
+        </div>
+      </div>
+      <nav class="container-xxl nftt-gutter flex-wrap flex-xl-nowrap" aria-label="Main navigation">
+        <div class="nftt-navbar-toggler">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Toggle documentation navigation">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+          <a href="../index.html"
+              
+              class="navbar-brand p-0 me-0 md-lg-2"
+          ><span class="brand-text">Quantum Native Dojo</span></a>
+        
+        <div class="d-flex d-xl-none">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttSearch" aria-controls="nfttSearch" aria-label="Search">
+            <i class="bi bi-search"></i>
+          </button>
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttNavbar" aria-controls="nfttNavbar" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+        </div>
+        
+<div class="offcanvas-xl offcanvas-end flex-grow-1" tabindex="-1" id="nfttSearch" aria-labelledby="nfttSearchOffcanvasLabel" data-bs-scroll="true">
+  <div class="offcanvas-header px-4 pb-0">
+    <h5 class="offcanvas-title fw-bold" id="nfttSearchOffcanvasLabel">Search the documentation</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttSearch"></button>
+  </div>
+  <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+    <hr class="d-xl-none text-white-50">
+    <ul class="navbar-nav flex-row align-items-center flex-wrap ms-md-auto">
+      <li class="nav-item col-12 col-xl-auto">
+        <form id="nftt-search-form" action="../search.html" method="get">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search docs" aria-label="Search" aria-describedby="button-search">
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+            <button class="btn btn-primary" type="submit" id="button-search" aria-label="Search"><i class="bi bi-search"></i></button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+</div>
+
+        <div class="offcanvas-xl offcanvas-end" tabindex="-1" id="nfttNavbar" aria-labelledby="nfttNavbarOffcanvasLabel" data-bs-scroll="true">
+          <div class="offcanvas-header px-4 pb-0">
+            <div class="offcanvas-title navbar-brand" id="nfttNavbarOffcanvasLabel"><span class="brand-text">Nefertiti for Sphinx</span></div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttNavbar"></button>
+          </div>
+          <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+            <hr class="d-xl-none text-white-50">
+            <ul class="navbar-nav flex-row align-items-center flex-wrap ms-lg-auto">
+              
+              <!-- version_dropdown.html -->
+
+              
+              <!-- colorscheme_dropdown.html -->
+<li class="nav-item dropdown">
+  <a class="nav-link d-flex py-2 px-0 px-xl-2 dropdown-toggle align-items-center" id="snftt-luz" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" aria-label="Toggle light/dark">
+    <i class="bi bi-circle-half" data-snftt-luz-icon-active></i>
+    <span id="snftt-luz-text" class="d-xl-none small ms-2">Toggle light/dark</span>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="snftt-luz-text">
+    <li>
+      <h6 class="dropdown-header">Light/dark</h6>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="light" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-sun" data-snftt-luz-icon="light"></i>
+        </span>
+        <span class="small ms-3">Light</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="dark" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-moon-stars" data-snftt-luz-icon="dark"></i>
+        </span>
+        <span class="small ms-3">Dark</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item current d-flex align-items-center" data-snftt-luz="default" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-circle-half" data-snftt-luz-icon="default"></i>
+        </span>
+        <span class="small ms-3">Default</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+  </ul>
+</li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container-fluid">
+      <div class="nftt-gutter nftt-page">
+        <aside class="nftt-sidebar">
+          <div class="nftt-sidebar-content">
+            <div class="title d-none d-xl-block">
+              <i class="bi bi-book"></i>&nbsp;&nbsp;<span>Index</span>
+            </div>
+            <div id="sidebar" tabindex="-1" class="offcanvas-xl offcanvas-start" aria-labelledby="nfttSidebarOffcanvasLabel">
+                <!-- danirus sidebartemplate: "globaltoc.html" --><div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title fw-bold" id="nfttSidebarOffcanvasLabel">
+    Table of contents
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#sidebar"></button>
+</div>
+
+<div class="offcanvas-body">
+  <nav class="toc" aria-label="Main menu">
+    <div class="mb-3 p-1 pt-3 pb-4 border-bottom">
+      <input id="sidebar-filter" type="text" name="filter" class="form-control form-control-sm" placeholder="filter" aria-label="filter">
+    </div>
+    <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="0_prologue.html">Chapter 0: What is a Quantum Computer ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_quantum_information_foundation.html">Chapter 1: Fundamentals of Quantum Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1.1_qubit_representation.html">1-1. Qubit Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.2_qubit_operations.html">1-2. Qubit Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html">1-3. Multiqubit representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html#Column:-What-is-a-universal-gate-set?">Column: What is a universal gate set?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.4_quantum_circuit_diagram.html">1-4. Quantum Circuit Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2_introduction_to_quantum_algorithms.html">Chapter 2: Introduction to Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2.1_NISQ_and_long_term.html">2-1. NISQ algorithm and long-term algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.2_Hadamard_test.html">2-2. Hadamard test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.3_quantum_Fourier_transform.html">2-3. Quantum Fourier transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.4_phase_estimation_beginner.html">2-4. Phase Estimation Algorithm（Introductory）</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="3_execution_environments_of_quantum_algorithms.html">Chapter 3: Execution Environment for Quantum Algorithms</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3-1. Qulacs_tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.2_Qiskit_IBMQ.html">3-2. Qiskit_IBMQ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4_quantum_dynamics_simulation.html">Chapter4 Quantum dynamics simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4.1_quantum_simulation.html">4-1. Quantum Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4.2_trotter_decomposition.html">4-2. Trotter Decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="5_VQC_based_algorithms.html">Chapter 5 Algorithms Based on Variational Quantum Circuits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="5.1_variational_quantum_eigensolver.html">5-1. Variational Quantum Eigensolver（VQE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.2_Quantum_Circuit_Learning.html">5-2. Quantum Circuit Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.3_quantum_approximate_optimazation_algorithm.html">5-3. Quantum Approximate Optimazation Algorithm (QAOA)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6_quantum_chemistry_calculation.html">Chapter 6 Quantum chemistry calculation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="6.1_openfermion_basics.html">6-1. OpenFermion Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7_quantum_phase_estimation.html">chapter 7 Quantum phase estimation algorithm and its application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7.1_quantum_phase_estimation_detailed.html">7-1. Quantum Phase Estimation (QPE) Algorithm Detailed：Hydrogen Molecule as Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.2_Harrow-Hassidim-Lloyd_algorithm.html">7-2. Harrow-Hassidim-Lloyd (HHL) Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.3_application_of_HHL_algorithm.html">7-3. Portofolio Optimization by HHL Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="8_quantum_search_algorithm.html">Chapter 8: Quantum Search Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="8.1_oracle.html">8-1. oracle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8.2_Grovers_algorithm.html">8-2. Grover’s algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="9_quantum_error_correction.html">Chapter 9 Quantum Error Correction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="9.1_error_correction.html">9-1. classical error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9.2_quantum_error_correction.html">9-2. quantum error</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav>
+  <template data-toggle-item-template>
+    <button class="btn btn-sm btn-link toctree-expand" type="button">
+      <i class="bi bi-caret-right"></i>
+      <span class="visually-hidden">Toggle menu contents</span>
+    </button>
+  </template>
+</div>
+            </div>
+          </div>
+        </aside>
+        <article id="content" class="nftt-content" role="main">
+    <section id="3-1.-How-to-use-Qulacs,-the-world's-fastest-simulator">
+<h1>3-1. How to use Qulacs, the world’s fastest simulator<a class="headerlink" href="#3-1.-How-to-use-Qulacs,-the-world's-fastest-simulator" title="Link to this heading">¶</a></h1>
+<p>In Chapter 2, we used SymPy to actually run quantum algorithms, but SymPy is not good at large-scale and high-speed calculations because it is specialized for algebraic calculations. In this section, we introduce how to use <a class="reference external" href="https://github.com/qulacs/qulacs">Qulacs</a>, a quantum computer simulator with the world’s fastest running speeds. Qulacs is implemented in C++ and runs very fast, but can be easily implemented through the Python interface.</p>
+<p>In addition, there are other quantum computer simulators such as IBM’s <a class="reference external" href="https://qiskit.org">Qiskit</a>, Rigetti Conmputing’s <a class="reference external" href="https://github.com/rigetti/pyquil">PyQuil</a> (<a class="reference external" href="https://www.rigetti.com">Cloud Quantum Computer</a>), Google’s <a class="reference external" href="https://github.com/quantumlib/Cirq">Cirq</a>, and Microsoft’s <a class="reference external" href="https://www.microsoft.com/en-us/quantum/development-kit">Q#</a>.See also <a class="reference external" href="https://qiita.com/TenninYan/items/82d6e9f94321de0bb4c0">this article</a> for more information on PyQuil.</p>
+<section id="installing-Qulacs">
+<h2>installing Qulacs<a class="headerlink" href="#installing-Qulacs" title="Link to this heading">¶</a></h2>
+<p>You can easily install Qulacs uning pip. For more detail, please check Qulacs document.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">## Please run only on Google colaboratory and local environment without Qulacs</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>qulacs
+
+<span class="c1">## Run only if you are in a Google Colaboratory / (Linux or Mac) jupyter notebook environment.</span>
+<span class="c1">## Qulacs errors will be output normally.</span>
+<span class="o">!</span>pip3<span class="w"> </span>install<span class="w"> </span>wurlitzer
+<span class="o">%</span><span class="k">load_ext</span> wurlitzer
+</pre></div>
+</div>
+</div>
+</section>
+<section id="How-to-use-Qulacs-(1):-Quantum-states">
+<h2>How to use Qulacs (1): Quantum states<a class="headerlink" href="#How-to-use-Qulacs-(1):-Quantum-states" title="Link to this heading">¶</a></h2>
+<section id="Creating-a-quantum-state">
+<h3>Creating a quantum state<a class="headerlink" href="#Creating-a-quantum-state" title="Link to this heading">¶</a></h3>
+<p>Qulacs can generate a quantum state (<code class="docutils literal notranslate"><span class="pre">QuantumState</span></code> class) of <span class="math notranslate nohighlight">\(n\)</span> qubits with the following code. The generated quantum state is initialized to <span class="math notranslate nohighlight">\(|0\rangle^{\otimes n}\)</span>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
+
+<span class="c1"># generate a 5-qubit state</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+<span class="c1">## The initial state is |000000&gt;</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>If <span class="math notranslate nohighlight">\(n\)</span> is very large, or if there is insufficient memory, the quantum state cannot be generated.</p>
+</section>
+<section id="Getting-Quantum-State-Data">
+<h3>Getting Quantum State Data<a class="headerlink" href="#Getting-Quantum-State-Data" title="Link to this heading">¶</a></h3>
+<p>Using <code class="docutils literal notranslate"><span class="pre">QuantumState.get_vector()</span></code>, you can get a <span class="math notranslate nohighlight">\(2^n\)</span> long array representing a quantum state. Note that this is a very heavy operation, especially if you create quantum states on a GPU or with large <span class="math notranslate nohighlight">\(n\)</span>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+
+<span class="c1"># Get state vector as a numpy array</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j
+ 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j
+ 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j
+ 0.+0.j 0.+0.j]
+</pre></div></div>
+</div>
+</section>
+<section id="Initializing-the-quantum-state">
+<h3>Initializing the quantum state<a class="headerlink" href="#Initializing-the-quantum-state" title="Link to this heading">¶</a></h3>
+<p>The generated quantum state can be initialized using binary numbers (<code class="docutils literal notranslate"><span class="pre">set_computational_basis</span></code>) or to a random state (<code class="docutils literal notranslate"><span class="pre">set_Haar_random_state</span></code>).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+
+<span class="c1"># initialize to |00101&gt;</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_computational_basis</span><span class="p">(</span><span class="mb">0b00101</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
+
+<span class="c1"># Generate random initial state</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_Haar_random_state</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
+
+<span class="c1"># Generate a random initial state by specifying a seed</span>
+<span class="n">seed</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_Haar_random_state</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j
+ 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j
+ 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j
+ 0.+0.j 0.+0.j]
+[-0.02437065-0.24658958j -0.01613144+0.13503688j -0.18994795-0.12319831j
+  0.06504845+0.16830255j -0.21598901+0.18730307j -0.16812459-0.02947785j
+ -0.19220647-0.09961786j  0.10572396+0.00775966j -0.0680691 -0.02781797j
+ -0.13307298+0.16938736j  0.03958908+0.10715579j  0.01297565-0.13433703j
+ -0.06164082-0.07189014j -0.07461534+0.18664457j  0.12610337-0.12079184j
+  0.04721677+0.05207131j -0.01081212+0.24851703j  0.02671697-0.00200128j
+ -0.03405007-0.3028626j   0.04368712-0.047096j    0.27087639+0.20331916j
+ -0.11928844+0.02439986j  0.09817583+0.22850291j -0.08822065-0.01851942j
+ -0.08319959+0.12819258j  0.00568074-0.02627961j  0.08279638-0.10588521j
+  0.04417022-0.01161947j -0.05749897-0.22828609j -0.00629634+0.04739956j
+ -0.09164645-0.10147242j  0.13382742+0.04209609j]
+[ 0.09232558+0.06460115j  0.14544754-0.10413526j  0.11300793-0.02455806j
+  0.00811251+0.2426378j  -0.01116588+0.23770313j -0.10691448+0.0487731j
+ -0.01654446+0.17073103j  0.22250403+0.01934699j  0.04728154+0.22585226j
+  0.04475383+0.20375993j -0.10592159+0.10428549j -0.10175932-0.04016904j
+  0.04241271+0.08723859j  0.18205362+0.06190871j  0.14103367-0.12925877j
+ -0.08269267+0.08879486j -0.14479848-0.0183179j  -0.32601567+0.06762062j
+  0.03482754+0.04464901j  0.09181499+0.05497985j  0.06870746+0.12628442j
+ -0.00624006-0.21793139j -0.11181371+0.2659879j  -0.04589826+0.00891387j
+ -0.04058365+0.30265587j -0.13894575-0.04392724j -0.03499327+0.0184768j
+  0.05033425-0.07376874j  0.07124237+0.15451312j  0.09319498+0.08341551j
+ -0.03002195-0.14677347j -0.05309219+0.10184815j]
+</pre></div></div>
+</div>
+</section>
+<section id="Copy-and-load-quantum-state-data">
+<h3>Copy and load quantum state data<a class="headerlink" href="#Copy-and-load-quantum-state-data" title="Link to this heading">¶</a></h3>
+<p>You can copy (<code class="docutils literal notranslate"><span class="pre">copy</span></code>) a quantum state and load (<code class="docutils literal notranslate"><span class="pre">load</span></code>) data from another quantum state.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_computational_basis</span><span class="p">(</span><span class="mb">0b00101</span><span class="p">)</span>
+
+<span class="c1"># Copy and create a new quantum state</span>
+<span class="n">second_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">second_state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
+
+<span class="c1"># Create a new quantum state and copy the vector of existing states</span>
+<span class="n">third_state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">third_state</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">third_state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j
+ 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j
+ 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j
+ 0.+0.j 0.+0.j]
+[0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j
+ 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j
+ 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j
+ 0.+0.j 0.+0.j]
+</pre></div></div>
+</div>
+</section>
+<section id="Calculations-on-quantum-states">
+<h3>Calculations on quantum states<a class="headerlink" href="#Calculations-on-quantum-states" title="Link to this heading">¶</a></h3>
+<p>In addition to the above, various other operations are possible on quantum states (<code class="docutils literal notranslate"><span class="pre">QuantumState</span></code>).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_Haar_random_state</span><span class="p">()</span>
+
+<span class="c1"># Calculation of norm (renamed from get_norm to get_squared_norm in qulacs v0.1.8)</span>
+<span class="n">norm</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_squared_norm</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;squared_norm : &quot;</span><span class="p">,</span> <span class="n">norm</span><span class="p">)</span>
+
+<span class="c1"># compute entropy when measured in Z basis</span>
+<span class="n">entropy</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_entropy</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;entropy : &quot;</span><span class="p">,</span><span class="n">entropy</span><span class="p">)</span>
+
+<span class="c1"># Calculate the probability of getting 0 when measuring index-th qubit in Z basis</span>
+<span class="n">index</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">zero_probability</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_zero_probability</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;prob_meas_3rd : &quot;</span><span class="p">,</span><span class="n">zero_probability</span><span class="p">)</span>
+
+<span class="c1"># Calculation of the marginal probability (below is an example of the probability that 0,3-th qubit is measured as 0 and 1,2-th qubit is measured as 1)</span>
+<span class="n">value_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">marginal_probability</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">get_marginal_probability</span><span class="p">(</span><span class="n">value_list</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;marginal_prob : &quot;</span><span class="p">,</span><span class="n">marginal_probability</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+squared_norm :  1.0
+entropy :  3.0719687986623603
+prob_meas_3rd :  0.5740657157322318
+marginal_prob :  0.04265173032311748
+</pre></div></div>
+</div>
+</section>
+<section id="inner-product-of-quantum-states">
+<h3>inner product of quantum states<a class="headerlink" href="#inner-product-of-quantum-states" title="Link to this heading">¶</a></h3>
+<p>The inner product can be calculated with the <code class="docutils literal notranslate"><span class="pre">inner_product</span></code> function.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
+<span class="kn">from</span> <span class="nn">qulacs.state</span> <span class="kn">import</span> <span class="n">inner_product</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">state_bra</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">state_ket</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">state_bra</span><span class="o">.</span><span class="n">set_Haar_random_state</span><span class="p">()</span>
+<span class="n">state_ket</span><span class="o">.</span><span class="n">set_computational_basis</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Calculate the inner product value</span>
+<span class="n">value</span> <span class="o">=</span> <span class="n">inner_product</span><span class="p">(</span><span class="n">state_bra</span><span class="p">,</span> <span class="n">state_ket</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(0.07448994812927281-0.1223698589819414j)
+</pre></div></div>
+</div>
+</section>
+<section id="Releasing-a-quantum-state">
+<h3>Releasing a quantum state<a class="headerlink" href="#Releasing-a-quantum-state" title="Link to this heading">¶</a></h3>
+<p>Quantum states can be forcibly released from memory using <code class="docutils literal notranslate"><span class="pre">del</span></code>. It is useful when memory is tight. Also, quantum states will be released when it is no longer used without <code class="docutils literal notranslate"><span class="pre">del</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+<span class="c1"># Release a quantum state</span>
+<span class="k">del</span> <span class="n">state</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Getting-detailed-information-about-a-quantum-state">
+<h3>Getting detailed information about a quantum state<a class="headerlink" href="#Getting-detailed-information-about-a-quantum-state" title="Link to this heading">¶</a></h3>
+<p>If you <code class="docutils literal notranslate"><span class="pre">print</span></code> an object of <code class="docutils literal notranslate"><span class="pre">QuantumState</span></code> class directly, you can get the information of the quantum state.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ *** Quantum State ***
+ * Qubit Count : 5
+ * Dimension   : 32
+ * State vector :
+(1,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+(0,0)
+
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="How-to-use-Qulacs-(2):-Quantum-gate">
+<h2>How to use Qulacs (2): Quantum gate<a class="headerlink" href="#How-to-use-Qulacs-(2):-Quantum-gate" title="Link to this heading">¶</a></h2>
+<section id="Creation-and-action-of-quantum-gates">
+<h3>Creation and action of quantum gates<a class="headerlink" href="#Creation-and-action-of-quantum-gates" title="Link to this heading">¶</a></h3>
+<p>The quantum gates implemented by default are defined in the <code class="docutils literal notranslate"><span class="pre">qulacs.gate</span></code> module.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
+<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">X</span><span class="p">,</span> <span class="n">RY</span><span class="p">,</span> <span class="n">DenseMatrix</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
+
+<span class="c1"># X operation on 1st-qubit (|000&gt; -&gt; |010&gt;)</span>
+<span class="n">index</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">x_gate</span> <span class="o">=</span> <span class="n">X</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+<span class="n">x_gate</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
+
+<span class="c1"># pi/4.0 rotation on 1st-qubit with Y-pauli</span>
+<span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">4.0</span>
+<span class="n">ry_gate</span> <span class="o">=</span> <span class="n">RY</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">angle</span><span class="p">)</span>
+<span class="n">ry_gate</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
+
+<span class="c1"># Apply gate created by gate matrix to 2nd-qubit</span>
+<span class="n">dense_gate</span> <span class="o">=</span> <span class="n">DenseMatrix</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="n">dense_gate</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
+
+<span class="c1"># Release gates</span>
+<span class="k">del</span> <span class="n">x_gate</span>
+<span class="k">del</span> <span class="n">ry_gate</span>
+<span class="k">del</span> <span class="n">dense_gate</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j]
+[0.+0.j 0.+0.j 1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j]
+[0.38268343+0.j 0.        +0.j 0.92387953+0.j 0.        +0.j
+ 0.        +0.j 0.        +0.j 0.        +0.j 0.        +0.j]
+[0.        +0.j 0.        +0.j 0.        +0.j 0.        +0.j
+ 0.38268343+0.j 0.        +0.j 0.92387953+0.j 0.        +0.j]
+</pre></div></div>
+</div>
+<p>The predefined gates are as follows.</p>
+<ul class="simple">
+<li><p>single-qubit Pauli operation: Identity, X, Y, Z</p></li>
+<li><p>single-qubit Clifford operation : H, S, Sdag, T, Tdag, sqrtX, sqrtXdag, sqrtY, sqrtYdag</p></li>
+<li><p>two-qubit Clifford operation : CNOT, CZ, SWAP</p></li>
+<li><p>single-qubit Pauli rotation : RX, RY, RZ</p></li>
+<li><p>General Pauli operation : Pauli, PauliRotation</p></li>
+<li><p>IBMQ basis-gate : U1, U2, U3</p></li>
+<li><p>General gate : DenseMatrix</p></li>
+<li><p>Measurement : Measurement</p></li>
+<li><p>Noise : BitFlipNoise, DephasingNoise, IndepenedentXZNoise, DepolarizingNoise</p></li>
+</ul>
+<p>The rotation gates, <code class="docutils literal notranslate"><span class="pre">RX</span></code>, <code class="docutils literal notranslate"><span class="pre">RY</span></code>, <code class="docutils literal notranslate"><span class="pre">RZ</span></code>, and <code class="docutils literal notranslate"><span class="pre">PauliRotation</span></code>, operate on a given Pauli operator <span class="math notranslate nohighlight">\(P\)</span> with <span class="math notranslate nohighlight">\(\exp(i\frac{\theta}{2}P)\)</span> for the argument <span class="math notranslate nohighlight">\(\theta\)</span>. See <a class="reference external" href="http://qulacs.org/namespacegate.html">API documentation</a> for details on each gate.</p>
+</section>
+<section id="Quantum-gate-synthesis">
+<h3>Quantum gate synthesis<a class="headerlink" href="#Quantum-gate-synthesis" title="Link to this heading">¶</a></h3>
+<p>A new single quantum gate can be generated by synthesizing quantum gates that act in succession.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
+<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">X</span><span class="p">,</span> <span class="n">RY</span><span class="p">,</span> <span class="n">merge</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+
+<span class="n">index</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">x_gate</span> <span class="o">=</span> <span class="n">X</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+<span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">4.0</span>
+<span class="n">ry_gate</span> <span class="o">=</span> <span class="n">RY</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">angle</span><span class="p">)</span>
+
+<span class="c1"># Synthesize gates to create a new gate</span>
+<span class="c1"># First argument acts first</span>
+<span class="n">x_and_ry_gate</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">x_gate</span><span class="p">,</span> <span class="n">ry_gate</span><span class="p">)</span>
+<span class="n">x_and_ry_gate</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[0.38268343+0.j 0.        +0.j 0.92387953+0.j 0.        +0.j
+ 0.        +0.j 0.        +0.j 0.        +0.j 0.        +0.j]
+</pre></div></div>
+</div>
+</section>
+<section id="Sum-of-quantum-gate-matrices">
+<h3>Sum of quantum gate matrices<a class="headerlink" href="#Sum-of-quantum-gate-matrices" title="Link to this heading">¶</a></h3>
+<p>It is generally difficult to perform this operation on a real quantum computer, but it is possible to sum the gate elements of quantum gates. (Currently, it is recommended not to use the sum in the case where there is a control-qubit since the operation is undefined.)</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
+<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">P0</span><span class="p">,</span><span class="n">P1</span><span class="p">,</span><span class="n">add</span><span class="p">,</span> <span class="n">merge</span><span class="p">,</span> <span class="n">Identity</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Z</span>
+
+<span class="n">gate00</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">P0</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">P0</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">gate11</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">P1</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">P1</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="c1"># |00&gt;&lt;00| + |11&gt;&lt;11|</span>
+<span class="n">proj_00_or_11</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="n">gate00</span><span class="p">,</span> <span class="n">gate11</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">proj_00_or_11</span><span class="p">)</span>
+
+<span class="n">gate_ii_zz</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="n">Identity</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">merge</span><span class="p">(</span><span class="n">Z</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">Z</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
+<span class="n">gate_ii_xx</span> <span class="o">=</span> <span class="n">add</span><span class="p">(</span><span class="n">Identity</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">merge</span><span class="p">(</span><span class="n">X</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">X</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
+<span class="n">proj_00_plus_11</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">gate_ii_zz</span><span class="p">,</span> <span class="n">gate_ii_xx</span><span class="p">)</span>
+<span class="c1"># ((|00&gt;+|11&gt;)(&lt;00|+&lt;11|))/2 = (II + ZZ)(II + XX)/4</span>
+<span class="n">proj_00_plus_11</span><span class="o">.</span><span class="n">multiply_scalar</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">proj_00_plus_11</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ *** gate info ***
+ * gate name : DenseMatrix
+ * target    :
+ 0 : commute
+ 1 : commute
+ * control   :
+ * Pauli     : no
+ * Clifford  : no
+ * Gaussian  : no
+ * Parametric: no
+ * Diagonal  : no
+ * Matrix
+(1,0) (0,0) (0,0) (0,0)
+(0,0) (0,0) (0,0) (0,0)
+(0,0) (0,0) (0,0) (0,0)
+(0,0) (0,0) (0,0) (1,0)
+
+ *** gate info ***
+ * gate name : DenseMatrix
+ * target    :
+ 0 : commute
+ 1 : commute
+ * control   :
+ * Pauli     : no
+ * Clifford  : no
+ * Gaussian  : no
+ * Parametric: no
+ * Diagonal  : no
+ * Matrix
+(0.5,0)   (0,0)   (0,0) (0.5,0)
+  (0,0)   (0,0)   (0,0)   (0,0)
+  (0,0)   (0,0)   (0,0)   (0,0)
+(0.5,0)   (0,0)   (0,0) (0.5,0)
+
+</pre></div></div>
+</div>
+</section>
+<section id="Special-and-general-quantum-gates">
+<h3>Special and general quantum gates<a class="headerlink" href="#Special-and-general-quantum-gates" title="Link to this heading">¶</a></h3>
+<p>Basic quantum gates in Qulacs can be divided into the following two categories</p>
+<ul class="simple">
+<li><p>Special gates: those that have a dedicated accelerated function for the gate’s action.</p></li>
+<li><p>General gates: gates that maintain a gate matrix and act by multiplying the matrix.</p></li>
+</ul>
+<p>The former is faster than the latter because a dedicated function has been created for the former. However, it is not possible to change the action of the quantum gate later, such as increasing the number of control qubits. If you want to make such changes, you need to convert the special gate to a general gate, which can be achieved with <code class="docutils literal notranslate"><span class="pre">gate.to_matrix_gate</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
+<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">to_matrix_gate</span><span class="p">,</span> <span class="n">X</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+
+<span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">x_gate</span> <span class="o">=</span> <span class="n">X</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+<span class="n">x_mat_gate</span> <span class="o">=</span> <span class="n">to_matrix_gate</span><span class="p">(</span><span class="n">x_gate</span><span class="p">)</span>
+
+<span class="c1"># Apply gates only if 1st-qubit is 0</span>
+<span class="n">control_index</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">control_with_value</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">x_mat_gate</span><span class="o">.</span><span class="n">add_control_qubit</span><span class="p">(</span><span class="n">control_index</span><span class="p">,</span> <span class="n">control_with_value</span><span class="p">)</span>
+
+<span class="n">x_mat_gate</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[0.+0.j 1.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j 0.+0.j]
+</pre></div></div>
+</div>
+</section>
+<section id="Getting-the-gate-matrix-of-a-quantum-gate">
+<h3>Getting the gate matrix of a quantum gate<a class="headerlink" href="#Getting-the-gate-matrix-of-a-quantum-gate" title="Link to this heading">¶</a></h3>
+<p>You can get the gate matrix of the generated quantum gate. (control qubits, etc. are not included in the gate matrix.) Be especially careful with gates that do not have a gate matrix (e.g. Pauli rotation gates with <span class="math notranslate nohighlight">\(n\)</span> qubits), as they require a lot of memory and time.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">X</span><span class="p">,</span> <span class="n">to_matrix_gate</span>
+<span class="n">gate</span> <span class="o">=</span> <span class="n">X</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">to_matrix_gate</span><span class="p">(</span><span class="n">gate</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ *** gate info ***
+ * gate name : X
+ * target    :
+ 0 : commute X
+ * control   :
+ * Pauli     : yes
+ * Clifford  : yes
+ * Gaussian  : no
+ * Parametric: no
+ * Diagonal  : no
+
+ *** gate info ***
+ * gate name : DenseMatrix
+ * target    :
+ 0 : commute X
+ * control   :
+ * Pauli     : no
+ * Clifford  : no
+ * Gaussian  : no
+ * Parametric: no
+ * Diagonal  : no
+ * Matrix
+(0,0) (1,0)
+(1,0) (0,0)
+
+</pre></div></div>
+</div>
+</section>
+<section id="General-Quantum-Gate-Realization">
+<h3>General Quantum Gate Realization<a class="headerlink" href="#General-Quantum-Gate-Realization" title="Link to this heading">¶</a></h3>
+<p>Using <code class="docutils literal notranslate"><span class="pre">qulacs.gate.DenseMatrix</span></code>, you can generate a gate from a general matrix.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">DenseMatrix</span>
+
+<span class="c1"># For 1-qubit gate.</span>
+<span class="n">gate</span> <span class="o">=</span> <span class="n">DenseMatrix</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+
+<span class="c1"># For 2-qubit gate.</span>
+<span class="n">gate</span> <span class="o">=</span> <span class="n">DenseMatrix</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gate</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ *** gate info ***
+ * gate name : DenseMatrix
+ * target    :
+ 0 : commute
+ * control   :
+ * Pauli     : no
+ * Clifford  : no
+ * Gaussian  : no
+ * Parametric: no
+ * Diagonal  : no
+ * Matrix
+(0,0) (1,0)
+(1,0) (0,0)
+
+ *** gate info ***
+ * gate name : DenseMatrix
+ * target    :
+ 0 : commute
+ 1 : commute
+ * control   :
+ * Pauli     : no
+ * Clifford  : no
+ * Gaussian  : no
+ * Parametric: no
+ * Diagonal  : no
+ * Matrix
+(1,0) (0,0) (0,0) (0,0)
+(0,0) (1,0) (0,0) (0,0)
+(0,0) (0,0) (0,0) (1,0)
+(0,0) (0,0) (1,0) (0,0)
+
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="How-to-use-Qulacs-(3):-Quantum-circuits">
+<h2>How to use Qulacs (3): Quantum circuits<a class="headerlink" href="#How-to-use-Qulacs-(3):-Quantum-circuits" title="Link to this heading">¶</a></h2>
+<section id="Composition-of-quantum-circuits">
+<h3>Composition of quantum circuits<a class="headerlink" href="#Composition-of-quantum-circuits" title="Link to this heading">¶</a></h3>
+<p>A quantum circuit (<code class="docutils literal notranslate"><span class="pre">QuantumCircuit</span></code> class) is represented as a set of quantum gates and can be composed in the following way.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span><span class="p">,</span> <span class="n">QuantumCircuit</span>
+<span class="kn">from</span> <span class="nn">qulacs.gate</span> <span class="kn">import</span> <span class="n">Z</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_zero_state</span><span class="p">()</span>
+
+<span class="c1"># define a quantum circuit</span>
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+<span class="c1"># add hadamard gate to a quantum circuit</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+<span class="c1"># you can create a gate and add it</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">add_gate</span><span class="p">(</span><span class="n">Z</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+
+<span class="c1"># apply a quantum cirtuit to a quantum state</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">get_vector</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[ 0.1767767+0.j -0.1767767-0.j -0.1767767-0.j  0.1767767+0.j
+ -0.1767767-0.j  0.1767767+0.j  0.1767767+0.j -0.1767767-0.j
+ -0.1767767-0.j  0.1767767+0.j  0.1767767+0.j -0.1767767-0.j
+  0.1767767+0.j -0.1767767-0.j -0.1767767-0.j  0.1767767+0.j
+ -0.1767767-0.j  0.1767767+0.j  0.1767767+0.j -0.1767767-0.j
+  0.1767767+0.j -0.1767767-0.j -0.1767767-0.j  0.1767767+0.j
+  0.1767767+0.j -0.1767767-0.j -0.1767767-0.j  0.1767767+0.j
+ -0.1767767-0.j  0.1767767+0.j  0.1767767+0.j -0.1767767-0.j]
+</pre></div></div>
+</div>
+<p>Note that the quantum circuit added by <code class="docutils literal notranslate"><span class="pre">add_gate</span></code> is released together with the quantum circuit when it is released. Therefore, the assigned gate cannot be reused. If you want to reuse a gate given as an argument, you need to make a copy of it using <code class="docutils literal notranslate"><span class="pre">gate.copy</span></code> or use the <code class="docutils literal notranslate"><span class="pre">add_gate_copy</span></code> function.</p>
+</section>
+<section id="Calculating-and-Optimizing-Depth-of-a-Quantum-Circuit">
+<h3>Calculating and Optimizing Depth of a Quantum Circuit<a class="headerlink" href="#Calculating-and-Optimizing-Depth-of-a-Quantum-Circuit" title="Link to this heading">¶</a></h3>
+<p>Sometimes it is possible to reduce the number of quantum gates by grouping them together into a single quantum gate, thereby reducing the numerical computation time. (Of course, if the number of target qubits increases, or if the qubits with dedicated functions are combined into a quantum gate with no dedicated function, the total reduction in computation time depends on the situation.)</p>
+<p>The code below uses the <code class="docutils literal notranslate"><span class="pre">optimize</span></code> function to repeatedly synthesize the quantum gates of a quantum circuit using the greedy method until there are three target qubits.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
+<span class="kn">from</span> <span class="nn">qulacs.circuit</span> <span class="kn">import</span> <span class="n">QuantumCircuitOptimizer</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">depth</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">depth</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+<span class="c1"># calculate depth (depth =10)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">calculate_depth</span><span class="p">())</span>
+
+<span class="c1"># optimization</span>
+<span class="n">opt</span> <span class="o">=</span> <span class="n">QuantumCircuitOptimizer</span><span class="p">()</span>
+
+<span class="c1"># the maximum size of quantum gate</span>
+<span class="n">max_block_size</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">opt</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span><span class="n">circuit</span><span class="p">,</span> <span class="n">max_block_size</span><span class="p">)</span>
+
+<span class="c1"># calculate depth(depth=1)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">calculate_depth</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+10
+1
+</pre></div></div>
+</div>
+</section>
+<section id="Debugging-Quantum-Circuit-Information">
+<h3>Debugging Quantum Circuit Information<a class="headerlink" href="#Debugging-Quantum-Circuit-Information" title="Link to this heading">¶</a></h3>
+<p>When you <code class="docutils literal notranslate"><span class="pre">print</span></code> a quantum circuit, you can see the statistical information of the gates in the quantum circuit, etc.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumCircuit</span>
+<span class="kn">from</span> <span class="nn">qulacs.circuit</span> <span class="kn">import</span> <span class="n">QuantumCircuitOptimizer</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">depth</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">depth</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">circuit</span><span class="o">.</span><span class="n">add_H_gate</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+*** Quantum Circuit Info ***
+# of qubit: 5
+# of step : 10
+# of gate : 50
+# of 1 qubit gate: 50
+Clifford  : yes
+Gaussian  : no
+
+
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="How-to-use-Qulacs-(4):-Observables">
+<h2>How to use Qulacs (4): Observables<a class="headerlink" href="#How-to-use-Qulacs-(4):-Observables" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">(Readers who are not familiar with quantum mechanical observables can read this section later.)</div>
+<div class="line">As you will learn the details in the next chapter, Chapter 4, in quantum mechanics, <strong>physical quantities are represented by Hermitian operators</strong><span class="math notranslate nohighlight">\(A\)</span><strong>, also called observable</strong> (Hermitian operators satisfy <span class="math notranslate nohighlight">\(A^\dagger=A\)</span>). If we perform what is called a “projective measurement” of <span class="math notranslate nohighlight">\(A\)</span> for the state <span class="math notranslate nohighlight">\(|\psi\rangle\)</span>,</div>
+</div>
+<div class="math notranslate nohighlight">
+\[|\psi\rangle = \sum_i c_i |a_i\rangle\]</div>
+<p>the value <span class="math notranslate nohighlight">\(a_i\)</span> is obtained with probability <span class="math notranslate nohighlight">\(|c_i|^2\)</span> depending on the coefficients of <span class="math notranslate nohighlight">\(|\psi\rangle\)</span> expanded in the eigenstate <span class="math notranslate nohighlight">\(\{|a_i\rangle\}_i\)</span> of A (eigenvalue <span class="math notranslate nohighlight">\(a_i\)</span>).</p>
+<p>Its expected value is <span class="math notranslate nohighlight">\(\langle\psi|A|\psi\rangle\)</span>.</p>
+<section id="Generating-Observables">
+<h3>Generating Observables<a class="headerlink" href="#Generating-Observables" title="Link to this heading">¶</a></h3>
+<p>In Qulacs, an observable is represented as a set of (direct product of) Pauli operators <span class="math notranslate nohighlight">\(X,Y,Z\)</span>. (Since Hermitian operators are always represented by a sum of direct products of Pauli operators.) The Pauli operator can be defined as follows.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">Observable</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">coef</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="c1"># define Pauli operators 2.0 X_0 X_1 Y_2 Z_4</span>
+<span class="n">Pauli_string</span> <span class="o">=</span> <span class="s2">&quot;X 0 X 1 Y 2 Z 4&quot;</span>
+<span class="n">observable</span> <span class="o">=</span> <span class="n">Observable</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">observable</span><span class="o">.</span><span class="n">add_operator</span><span class="p">(</span><span class="n">coef</span><span class="p">,</span><span class="n">Pauli_string</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Evaluating-Observables">
+<h3>Evaluating Observables<a class="headerlink" href="#Evaluating-Observables" title="Link to this heading">¶</a></h3>
+<p>The expected value of an observable can be evaluated for a state.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">Observable</span><span class="p">,</span> <span class="n">QuantumState</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">coef</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="n">Pauli_string</span> <span class="o">=</span> <span class="s2">&quot;X 0 X 1 Y 2 Z 4&quot;</span>
+<span class="n">observable</span> <span class="o">=</span> <span class="n">Observable</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">observable</span><span class="o">.</span><span class="n">add_operator</span><span class="p">(</span><span class="n">coef</span><span class="p">,</span><span class="n">Pauli_string</span><span class="p">)</span>
+
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">state</span><span class="o">.</span><span class="n">set_Haar_random_state</span><span class="p">()</span>
+
+<span class="c1"># calculating expected value</span>
+<span class="n">value</span> <span class="o">=</span> <span class="n">observable</span><span class="o">.</span><span class="n">get_expectation_value</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-0.027383733754500428
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="How-to-use-Qulacs-(5):-Variational-quantum-circuits">
+<h2>How to use Qulacs (5): Variational quantum circuits<a class="headerlink" href="#How-to-use-Qulacs-(5):-Variational-quantum-circuits" title="Link to this heading">¶</a></h2>
+<p>If you define a quantum circuit as a <code class="docutils literal notranslate"><span class="pre">ParametricQuantumCircuit</span></code> class, in addition to the usual <code class="docutils literal notranslate"><span class="pre">QuantumCircuit</span></code> class functions, you can use some functions that are useful for optimizing a quantum circuit using variational methods. This is very useful when implementing variational quantum circuits, which you will learn in Chapter 5.</p>
+<section id="Examples-of-Variational-Quantum-Circuit-Applications">
+<h3>Examples of Variational Quantum Circuit Applications<a class="headerlink" href="#Examples-of-Variational-Quantum-Circuit-Applications" title="Link to this heading">¶</a></h3>
+<p>Quantum gates with a single rotation angle (X-rot, Y-rot, Z-rot, multi_qubit_pauli_rotation) can be added to a quantum circuit as parametric quantum gates. For quantum gates added as parametric gates, the number of parametric gates can be taken out after the quantum circuit is configured, or the rotation angle can be changed later.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">ParametricQuantumCircuit</span>
+<span class="kn">from</span> <span class="nn">qulacs</span> <span class="kn">import</span> <span class="n">QuantumState</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">depth</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="c1"># construct parametric quantum circuit with random rotation</span>
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">ParametricQuantumCircuit</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">depth</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">add_parametric_RX_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">angle</span><span class="p">)</span>
+            <span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">add_parametric_RY_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">angle</span><span class="p">)</span>
+            <span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
+            <span class="n">circuit</span><span class="o">.</span><span class="n">add_parametric_RZ_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">angle</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">d</span><span class="o">%</span><span class="k">2</span>, n-1, 2):
+            <span class="n">circuit</span><span class="o">.</span><span class="n">add_CNOT_gate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># add multi-qubit Pauli rotation gate as parametric gate (X_0 Y_3 Y_1 X_4)</span>
+<span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span>
+<span class="n">pauli_ids</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">add_parametric_multi_Pauli_rotation_gate</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">pauli_ids</span><span class="p">,</span> <span class="n">angle</span><span class="p">)</span>
+
+<span class="c1"># get variable parameter count, and get current parameter</span>
+<span class="n">parameter_count</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">get_parameter_count</span><span class="p">()</span>
+<span class="n">param</span> <span class="o">=</span> <span class="p">[</span><span class="n">circuit</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span> <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">parameter_count</span><span class="p">)]</span>
+
+<span class="c1"># set 3rd parameter to 0</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">set_parameter</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)</span>
+
+<span class="c1"># update quantum state</span>
+<span class="n">state</span> <span class="o">=</span> <span class="n">QuantumState</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">update_quantum_state</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+<span class="c1"># output state and circuit info</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">circuit</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ *** Quantum State ***
+ * Qubit Count : 5
+ * Dimension   : 32
+ * State vector :
+  (-0.0673932,0.0932352)
+   (0.0793816,0.0803179)
+ (-0.0240998,-0.0720735)
+    (0.0267232,0.103591)
+  (-0.089328,-0.0454438)
+  (-0.0273612,-0.172908)
+   (0.0753719,-0.185454)
+    (0.120598,0.0489211)
+(-0.0433311,-0.00542669)
+   (0.407492,-0.0683546)
+    (0.0712898,0.029486)
+   (-0.0374001,0.100097)
+    (0.0395997,0.166802)
+    (0.113313,0.0278069)
+  (0.00456149,0.0702255)
+    (-0.121551,0.306851)
+  (-0.0113109,0.0106071)
+    (0.158906,0.0897413)
+   (0.276642,0.00709558)
+   (-0.163862,0.0615158)
+  (-0.0507503,0.0898438)
+    (0.221342,0.0332379)
+   (-0.125741,-0.130305)
+    (0.0463867,0.225922)
+   (0.0493533,-0.127222)
+   (-0.235716,0.0564754)
+   (0.0206978,-0.129814)
+     (0.108871,0.107555)
+  (0.0917828,-0.0557612)
+     (0.180461,0.121747)
+   (0.0456678,0.0580318)
+    (0.0311144,0.203219)
+
+*** Quantum Circuit Info ***
+# of qubit: 5
+# of step : 41
+# of gate : 171
+# of 1 qubit gate: 150
+# of 2 qubit gate: 20
+# of 3 qubit gate: 0
+# of 4 qubit gate: 1
+Clifford  : no
+Gaussian  : no
+
+*** Parameter Info ***
+# of parameter: 151
+
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="Conclusion">
+<h2>Conclusion<a class="headerlink" href="#Conclusion" title="Link to this heading">¶</a></h2>
+<p>The above run-through has shown how to use Qulacs, which is a very fast and easy-to-use library once you get used to it. For more details on the various functions, please refer to the official <a class="reference external" href="http://qulacs.org">API Documentation</a> and <a class="reference external" href="http://qulacs.org/md_3__tutorial_python.html">Tutorial</a>.</p>
+</section>
+</section>
+
+</article>
+        <aside class="nftt-toc">
+          
+          <div class="mt-3 mb-1 my-lg-0 ps-xl-3 text-muted">
+            <button class="btn btn-link link-dark p-lg-0 mb-2 mb-lg-0 text-decoration-none nftt-toc-toggle d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents"
+            >On this page <i class="ms-2 bi bi-chevron-expand"></i></button>
+            <div class="title d-none d-lg-block">
+              <i class="bi bi-file-earmark-text"></i>&nbsp;&nbsp;<span class="small">On this page</span>
+            </div>
+            <div class="collapse nftt-toc-collapse" id="tocContents">
+              <nav id="TableOfContents">
+                <ul>
+<li><a class="reference internal" href="#">3-1. How to use Qulacs, the world’s fastest simulator</a><ul>
+<li><a class="reference internal" href="#installing-Qulacs">installing Qulacs</a></li>
+<li><a class="reference internal" href="#How-to-use-Qulacs-(1):-Quantum-states">How to use Qulacs (1): Quantum states</a><ul>
+<li><a class="reference internal" href="#Creating-a-quantum-state">Creating a quantum state</a></li>
+<li><a class="reference internal" href="#Getting-Quantum-State-Data">Getting Quantum State Data</a></li>
+<li><a class="reference internal" href="#Initializing-the-quantum-state">Initializing the quantum state</a></li>
+<li><a class="reference internal" href="#Copy-and-load-quantum-state-data">Copy and load quantum state data</a></li>
+<li><a class="reference internal" href="#Calculations-on-quantum-states">Calculations on quantum states</a></li>
+<li><a class="reference internal" href="#inner-product-of-quantum-states">inner product of quantum states</a></li>
+<li><a class="reference internal" href="#Releasing-a-quantum-state">Releasing a quantum state</a></li>
+<li><a class="reference internal" href="#Getting-detailed-information-about-a-quantum-state">Getting detailed information about a quantum state</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#How-to-use-Qulacs-(2):-Quantum-gate">How to use Qulacs (2): Quantum gate</a><ul>
+<li><a class="reference internal" href="#Creation-and-action-of-quantum-gates">Creation and action of quantum gates</a></li>
+<li><a class="reference internal" href="#Quantum-gate-synthesis">Quantum gate synthesis</a></li>
+<li><a class="reference internal" href="#Sum-of-quantum-gate-matrices">Sum of quantum gate matrices</a></li>
+<li><a class="reference internal" href="#Special-and-general-quantum-gates">Special and general quantum gates</a></li>
+<li><a class="reference internal" href="#Getting-the-gate-matrix-of-a-quantum-gate">Getting the gate matrix of a quantum gate</a></li>
+<li><a class="reference internal" href="#General-Quantum-Gate-Realization">General Quantum Gate Realization</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#How-to-use-Qulacs-(3):-Quantum-circuits">How to use Qulacs (3): Quantum circuits</a><ul>
+<li><a class="reference internal" href="#Composition-of-quantum-circuits">Composition of quantum circuits</a></li>
+<li><a class="reference internal" href="#Calculating-and-Optimizing-Depth-of-a-Quantum-Circuit">Calculating and Optimizing Depth of a Quantum Circuit</a></li>
+<li><a class="reference internal" href="#Debugging-Quantum-Circuit-Information">Debugging Quantum Circuit Information</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#How-to-use-Qulacs-(4):-Observables">How to use Qulacs (4): Observables</a><ul>
+<li><a class="reference internal" href="#Generating-Observables">Generating Observables</a></li>
+<li><a class="reference internal" href="#Evaluating-Observables">Evaluating Observables</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#How-to-use-Qulacs-(5):-Variational-quantum-circuits">How to use Qulacs (5): Variational quantum circuits</a><ul>
+<li><a class="reference internal" href="#Examples-of-Variational-Quantum-Circuit-Applications">Examples of Variational Quantum Circuit Applications</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#Conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+
+              </nav>
+            </div>
+          </div>
+          
+        </aside>
+      </div>
+    </div>
+
+    <footer class="nftt-footer">
+      <nav id="paginator" class="py-4" aria-label="Documentation navigation">
+    <div class="container">
+      <ul class="pagination justify-content-between mb-0"><li class="page-item">
+            <a href="3_execution_environments_of_quantum_algorithms.html" class="d-flex px-5 align-items-end" rel="prev" aria-label="Previous page: Chapter 3: Execution Environment for Quantum Algorithms">
+              <span class="prev-page"><i class="bi bi-caret-left"></i></span>
+              <div class="d-flex flex-column">
+                <span class="text-small text-start text-muted">Previous</span>
+                <span class="underline">Chapter 3: Execution Environment for Quantum Algorithms</span>
+              </div>
+            </a>
+          </li>
+        <li class="page-item ms-auto">
+            <a href="3.2_Qiskit_IBMQ.html" class="d-flex px-5 align-items-end" rel="next" aria-label="Next page: 3-2. How to use Qiskit and IBM Q Experience">
+              <div class="d-flex flex-column">
+                <span class="text-small text-end text-start text-muted">Next</span>
+                <span class="underline">3-2. How to use Qiskit and IBM Q Experience</span>
+              </div>
+              <span class="next-page"><i class="bi bi-caret-right"></i></span>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </nav>
+
+      <div class="py-5 px-4 px-md-3">
+  <div class="container">
+    
+
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <a class="brand-text d-inline-flex align-items-center mb-2 text-decoration-none" href="/" aria-label="Nefertiti-for-Sphinx">
+          <span class="fs-6 fw-bold">Quantum Native Dojo</span>
+        </a>
+        
+          <ul class="list-unstyled small text-muted">
+            <li>2023, Quantum Native Dojo Contributors</li>
+          </ul>
+        
+        
+        <div class="built-with pt-2">
+          Built with <a href="http://sphinx-doc.org">Sphinx 7.2.6</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.3.0</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+    </footer>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"CommonHTML": {"undefinedFamily": "\"Source Serif Pro\", \"Yakumono\", \"Noto Serif JP\", \"Hiragino Mincho ProN\", \"STIXGeneral\", \"Arial Unicode MS\", serif"}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
+
+    <script type="text/javascript" src="../_static/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinx-nefertiti.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/doc_versions.js"></script>
+  </body>
+</html>
