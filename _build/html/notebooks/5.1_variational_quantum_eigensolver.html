@@ -1,0 +1,651 @@
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+      <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="docsearch:name" content="Quantum Native Dojo" />
+    <meta name="docsearch:package_type" content="" />
+    <meta name="docsearch:release" content="" />
+    <meta name="docsearch:version" content="" />
+    
+      <title>5-1. Variational Quantum Eigensolver (VQE) Algorithm &mdash; Quantum Native Dojo  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/bootstrap-icons.css" type="text/css" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=e7352e39" />
+          <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+          <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+          <link rel="stylesheet" type="text/css" href="../_static/colorsets/sphinx-nefertiti-blue.min.css" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/nunito/stylesheet.css?v=0ed606bc" />
+          <link rel="stylesheet" type="text/css" href="../_static/fonts/red-hat-mono/stylesheet.css?v=4eee5046" />
+          <link rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=e15ddae3" />
+        <link rel="index" title="Index" href="../genindex.html" />
+        <link rel="search" title="Search" href="../search.html" />
+        <link rel="top" title="Quantum Native Dojo  documentation" href="#" />
+        <link rel="up" title="Chapter 5 Algorithms Based on Variational Quantum Circuits" href="5_VQC_based_algorithms.html" />
+        <link rel="next" title="5-2. Quantum Circuit learning" href="5.2_Quantum_Circuit_Learning.html" />
+        <link rel="prev" title="Chapter 5 Algorithms Based on Variational Quantum Circuits" href="5_VQC_based_algorithms.html" />
+    <style>
+      :root {
+        --nftt-body-font-family: "Nunito", var(--nftt-font-sans-serif) !important;
+        --nftt-font-monospace: "Red Hat Mono", var(--nftt-font-family-monospace) !important;
+        --nftt-project-name-font: var(--nftt-body-font-family);
+        --nftt-documentation-font: var(--nftt-body-font-family);
+        --nftt-doc-headers-font: "Georgia", var(--nftt-documentation-font);}
+      h1 *, h2 *, h3 *, h4 *, h5 *, h6 * { font-size: inherit; }
+    </style>
+  </head>
+  <body>
+    <header class="navbar navbar-expand-xl navbar-dark nftt-navbar flex-column fixed-top">
+      <div class="skip-links container-fluid visually-hidden-focusable overflow-hidden justify-content-start">
+        <div class="border-bottom mb-2 pb-2 w-100">
+          <a class="d-none d-md-inline-flex p-2 m-1" href="#sidebar-filter">Skip to docs navigation</a>
+          <a class="d-inline-flex p-2 m-1" href="#content">Skip to main content</a>
+        </div>
+      </div>
+      <nav class="container-xxl nftt-gutter flex-wrap flex-xl-nowrap" aria-label="Main navigation">
+        <div class="nftt-navbar-toggler">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Toggle documentation navigation">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+          <a href="../index.html"
+              
+              class="navbar-brand p-0 me-0 md-lg-2"
+          ><span class="brand-text">Quantum Native Dojo</span></a>
+        
+        <div class="d-flex d-xl-none">
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttSearch" aria-controls="nfttSearch" aria-label="Search">
+            <i class="bi bi-search"></i>
+          </button>
+          <button class="navbar-toggler p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#nfttNavbar" aria-controls="nfttNavbar" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+        </div>
+        
+<div class="offcanvas-xl offcanvas-end flex-grow-1" tabindex="-1" id="nfttSearch" aria-labelledby="nfttSearchOffcanvasLabel" data-bs-scroll="true">
+  <div class="offcanvas-header px-4 pb-0">
+    <h5 class="offcanvas-title fw-bold" id="nfttSearchOffcanvasLabel">Search the documentation</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttSearch"></button>
+  </div>
+  <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+    <hr class="d-xl-none text-white-50">
+    <ul class="navbar-nav flex-row align-items-center flex-wrap ms-md-auto">
+      <li class="nav-item col-12 col-xl-auto">
+        <form id="nftt-search-form" action="../search.html" method="get">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search docs" aria-label="Search" aria-describedby="button-search">
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+            <button class="btn btn-primary" type="submit" id="button-search" aria-label="Search"><i class="bi bi-search"></i></button>
+          </div>
+        </form>
+      </li>
+    </ul>
+  </div>
+</div>
+
+        <div class="offcanvas-xl offcanvas-end" tabindex="-1" id="nfttNavbar" aria-labelledby="nfttNavbarOffcanvasLabel" data-bs-scroll="true">
+          <div class="offcanvas-header px-4 pb-0">
+            <div class="offcanvas-title navbar-brand" id="nfttNavbarOffcanvasLabel"><span class="brand-text">Nefertiti for Sphinx</span></div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#nfttNavbar"></button>
+          </div>
+          <div class="offcanvas-body p-4 pt-0 p-xl-0 px-xl-3">
+            <hr class="d-xl-none text-white-50">
+            <ul class="navbar-nav flex-row align-items-center flex-wrap ms-lg-auto">
+              
+              <!-- version_dropdown.html -->
+
+              
+              <!-- colorscheme_dropdown.html -->
+<li class="nav-item dropdown">
+  <a class="nav-link d-flex py-2 px-0 px-xl-2 dropdown-toggle align-items-center" id="snftt-luz" href="#" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" aria-label="Toggle light/dark">
+    <i class="bi bi-circle-half" data-snftt-luz-icon-active></i>
+    <span id="snftt-luz-text" class="d-xl-none small ms-2">Toggle light/dark</span>
+  </a>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="snftt-luz-text">
+    <li>
+      <h6 class="dropdown-header">Light/dark</h6>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="light" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-sun" data-snftt-luz-icon="light"></i>
+        </span>
+        <span class="small ms-3">Light</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item d-flex align-items-center" data-snftt-luz="dark" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-moon-stars" data-snftt-luz-icon="dark"></i>
+        </span>
+        <span class="small ms-3">Dark</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item current d-flex align-items-center" data-snftt-luz="default" href="#" aria-pressed="false">
+        <span class="small">
+          <i class="bi bi-circle-half" data-snftt-luz-icon="default"></i>
+        </span>
+        <span class="small ms-3">Default</span>
+        <i class="bi bi-check ms-auto"></i>
+      </a>
+    </li>
+  </ul>
+</li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container-fluid">
+      <div class="nftt-gutter nftt-page">
+        <aside class="nftt-sidebar">
+          <div class="nftt-sidebar-content">
+            <div class="title d-none d-xl-block">
+              <i class="bi bi-book"></i>&nbsp;&nbsp;<span>Index</span>
+            </div>
+            <div id="sidebar" tabindex="-1" class="offcanvas-xl offcanvas-start" aria-labelledby="nfttSidebarOffcanvasLabel">
+                <!-- danirus sidebartemplate: "globaltoc.html" --><div class="offcanvas-header border-bottom">
+  <h5 class="offcanvas-title fw-bold" id="nfttSidebarOffcanvasLabel">
+    Table of contents
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" data-bs-target="#sidebar"></button>
+</div>
+
+<div class="offcanvas-body">
+  <nav class="toc" aria-label="Main menu">
+    <div class="mb-3 p-1 pt-3 pb-4 border-bottom">
+      <input id="sidebar-filter" type="text" name="filter" class="form-control form-control-sm" placeholder="filter" aria-label="filter">
+    </div>
+    <p class="caption" role="heading"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="0_prologue.html">Chapter 0: What is a Quantum Computer ?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1_quantum_information_foundation.html">Chapter 1: Fundamentals of Quantum Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="1.1_qubit_representation.html">1-1. Qubit Representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.2_qubit_operations.html">1-2. Qubit Operations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html">1-3. Multiqubit representation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.3_multiqubit_representation_and_operations.html#Column:-What-is-a-universal-gate-set?">Column: What is a universal gate set?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="1.4_quantum_circuit_diagram.html">1-4. Quantum Circuit Diagram</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="2_introduction_to_quantum_algorithms.html">Chapter 2: Introduction to Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="2.1_NISQ_and_long_term.html">2-1. NISQ algorithm and long-term algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.2_Hadamard_test.html">2-2. Hadamard test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.3_quantum_Fourier_transform.html">2-3. Quantum Fourier transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="2.4_phase_estimation_beginner.html">2-4. Phase Estimation Algorithm（Introductory）</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="3_execution_environments_of_quantum_algorithms.html">Chapter 3: Execution Environment for Quantum Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="3.1_Qulacs_tutorial.html">3-1. Qulacs_tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="3.2_Qiskit_IBMQ.html">3-2. Qiskit_IBMQ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="4_quantum_dynamics_simulation.html">Chapter4 Quantum dynamics simulation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="4.1_quantum_simulation.html">4-1. Quantum Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="4.2_trotter_decomposition.html">4-2. Trotter Decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="5_VQC_based_algorithms.html">Chapter 5 Algorithms Based on Variational Quantum Circuits</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">5-1. Variational Quantum Eigensolver（VQE)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.2_Quantum_Circuit_Learning.html">5-2. Quantum Circuit Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="5.3_quantum_approximate_optimazation_algorithm.html">5-3. Quantum Approximate Optimazation Algorithm (QAOA)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="6_quantum_chemistry_calculation.html">Chapter 6 Quantum chemistry calculation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="6.1_openfermion_basics.html">6-1. OpenFermion Basics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.2_qulacs_VQE.html">6-2. Variational Quantum Eigensolver (VQE) Implementation using Qulacs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="6.3_subspace_search_VQE.html">6-3. Calculation of Excited States using Subspace-Search Variational Quantum Eigensolver</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="7_quantum_phase_estimation.html">chapter 7 Quantum phase estimation algorithm and its application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="7.1_quantum_phase_estimation_detailed.html">7-1. Quantum Phase Estimation (QPE) Algorithm Detailed：Hydrogen Molecule as Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.2_Harrow-Hassidim-Lloyd_algorithm.html">7-2. Harrow-Hassidim-Lloyd (HHL) Algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="7.3_application_of_HHL_algorithm.html">7-3. Portofolio Optimization by HHL Algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="8_quantum_search_algorithm.html">Chapter 8: Quantum Search Algorithms</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="8.1_oracle.html">8-1. oracle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="8.2_Grovers_algorithm.html">8-2. Grover’s algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="9_quantum_error_correction.html">Chapter 9 Quantum Error Correction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="9.1_error_correction.html">9-1. classical error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="9.2_quantum_error_correction.html">9-2. quantum error</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav>
+  <template data-toggle-item-template>
+    <button class="btn btn-sm btn-link toctree-expand" type="button">
+      <i class="bi bi-caret-right"></i>
+      <span class="visually-hidden">Toggle menu contents</span>
+    </button>
+  </template>
+</div>
+            </div>
+          </div>
+        </aside>
+        <article id="content" class="nftt-content" role="main">
+    <section id="5-1.-Variational-Quantum-Eigensolver-(VQE)-Algorithm">
+<h1>5-1. Variational Quantum Eigensolver (VQE) Algorithm<a class="headerlink" href="#5-1.-Variational-Quantum-Eigensolver-(VQE)-Algorithm" title="Link to this heading">¶</a></h1>
+<p>First, we introduce the VQE (Variational Quantum Eigensolver) algorithm, which is expected to be applied to material science and quantum chemistry. This algorithm is used to find the value of the ground energy of matter.</p>
+<section id="Background">
+<h2>Background<a class="headerlink" href="#Background" title="Link to this heading">¶</a></h2>
+<p>It is believed that the properties of molecules and matter are mostly determined by the motion of electrons in them. Therefore, by solving the Schrodinger equation, which is the equation governing electrons, (see <a class="reference internal" href="4.1_quantum_simulation.html"><span class="doc">4-1</span></a>)</p>
+<div class="math notranslate nohighlight">
+\[H|\psi\rangle = E|\psi\rangle\]</div>
+<p>the properties of molecules and matter can be revealed by calculation. Here <span class="math notranslate nohighlight">\(H\)</span> is an operator (matrix) called the Hamiltonian, which is determined by the details of the system, such as the shape of the molecules. As can be seen from the form <span class="math notranslate nohighlight">\(H|\psi\rangle = E|\psi\rangle\)</span>, solving the Schrodinger equation is equivalent to solving the eigenvalue problem for the Hamiltonian <span class="math notranslate nohighlight">\(H\)</span> and finding the eigenvalues <span class="math notranslate nohighlight">\(E_i\)</span> and the corresponding eigenvectors (also called eigenstates)
+<span class="math notranslate nohighlight">\(|\phi_i\rangle\)</span>. The eigenvalue <span class="math notranslate nohighlight">\(E_i\)</span> is the energy of the eigenstate <span class="math notranslate nohighlight">\(|\phi_i\rangle\)</span>.</p>
+<p>In chemistry, solving this problem is called <strong>quantum chemical calculation</strong>, and there is still active research on how to solve this problem. The problem becomes exponentially more difficult as the number of electrons increase, so that it is practically impossible to solve it exactly when the size of the molecule or the unit lattice of the crystal becomes large. Therefore, various approximate solutions are being studied. The difficulty of this problem is caused by the fact that <span class="math notranslate nohighlight">\(H\)</span> is a
+matrix acting on the quantum state, and its dimension grows exponentially as the number of particles increases.</p>
+</section>
+<section id="Variational-Methods">
+<h2>Variational Methods<a class="headerlink" href="#Variational-Methods" title="Link to this heading">¶</a></h2>
+<p>Unless we consider extreme environments, electrons are usually in the lowest energy state, i.e., the ground state. Therefore, among the eigenstates, the ground state is of particular interest.</p>
+<p>The <strong>variational method</strong> is a powerful method for finding the ground state of a Hamiltonian of very large dimension. The variational method uses the fact that for any given state <span class="math notranslate nohighlight">\(|\psi\rangle\)</span>, its energy expectation value will always be higher than the ground energy <span class="math notranslate nohighlight">\(E_0\)</span>, i.e.,</p>
+<div class="math notranslate nohighlight">
+\[\langle \psi|H|\psi\rangle \geq E_0\]</div>
+<p>(This is also called the variational principle.) From this, if we bring many states <span class="math notranslate nohighlight">\(\{|\psi_i\rangle\}\)</span> at random and find the state with the lowest energy among them, we would expect it to be the state closest to the ground state in <span class="math notranslate nohighlight">\(\{|\psi_i\rangle\}\)</span>.</p>
+<p>In fact, if we were to bring states at random, the probability of finding a state close to the ground state would be exponentially small in relation to the size of the system. Therefore, the usual approach is to construct a parameterized quantum state <span class="math notranslate nohighlight">\(|\psi(\theta)\rangle\)</span> (where <span class="math notranslate nohighlight">\(\theta\)</span> is a parameter) based on physical and chemical intuition and experience, and find the <span class="math notranslate nohighlight">\(\theta\)</span> that minimizes</p>
+<div class="math notranslate nohighlight">
+\[\langle \psi(\theta)|H|\psi(\theta)\rangle\]</div>
+<p>For the convenience of performing calculations on a classical computer, it has been necessary to select a quantum state <span class="math notranslate nohighlight">\(|\psi(\theta)\rangle\)</span> that can be efficiently described by a classical computer.</p>
+</section>
+<section id="What-is-VQE?">
+<h2>What is VQE?<a class="headerlink" href="#What-is-VQE?" title="Link to this heading">¶</a></h2>
+<p>VQE is <strong>an algorithm that searches for ground states using quantum states that can be efficiently described by a quantum computer.</strong></p>
+</section>
+<section id="id1">
+<h2>Variational Methods<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<p>The algorithm is as follows:</p>
+<ol class="arabic simple">
+<li><p>generate a quantum state <span class="math notranslate nohighlight">\(|\psi(\theta)\rangle\)</span> on a quantum computer.</p></li>
+<li><p>measure <span class="math notranslate nohighlight">\(\langle H(\theta)\rangle = \langle \psi(\theta)|H|\psi(\theta)\rangle\)</span></p></li>
+<li><p>Based on the measurement results, determine the <span class="math notranslate nohighlight">\(\theta\)</span> such that <span class="math notranslate nohighlight">\(\langle \psi(\theta)|H|\psi(\theta)\rangle\)</span> becomes smaller using a classical computer.</p></li>
+</ol>
+<p>This is repeated until <span class="math notranslate nohighlight">\(\langle\psi(\theta)|H|\psi(\theta)\rangle\)</span> converges to obtain an approximate ground state.</p>
+<p>! <a class="reference external" href="figs/5/VQE_concept.png">VQE-concept</a></p>
+<p>(Figure cited from reference [1])</p>
+</section>
+<section id="Example-Implementation">
+<h2>Example Implementation<a class="headerlink" href="#Example-Implementation" title="Link to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line">Below is an example implementation of VQE using numpy. (Of course, it can be easily implemented in Qulacs as well, so readers who can afford to do so are encouraged to try.)</div>
+<div class="line">Here we find the ground energy of H-He<span class="math notranslate nohighlight">\(^+\)</span> (helium hydride ion). We will use two qubits and implement them according to reference [1].</div>
+</div>
+</section>
+<section id="Preparation-of-quantum-gates">
+<h2>Preparation of quantum gates<a class="headerlink" href="#Preparation-of-quantum-gates" title="Link to this heading">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">nqubits</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="c1">### Prepare the Pauli operator.</span>
+<span class="n">pI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="o">+</span><span class="mf">0.0</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="o">+</span><span class="mf">0.0</span><span class="n">j</span><span class="p">],[</span><span class="mi">0</span><span class="o">+</span><span class="mf">0.0</span><span class="n">j</span><span class="p">,</span><span class="mi">1</span><span class="o">+</span><span class="mf">0.0</span><span class="n">j</span><span class="p">]])</span>
+<span class="n">pX</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="o">+</span><span class="mf">0.0</span><span class="n">j</span><span class="p">,</span><span class="mi">1</span><span class="o">+</span><span class="mf">0.0</span><span class="n">j</span><span class="p">],[</span><span class="mi">1</span><span class="o">+</span><span class="mf">0.0</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="o">+</span><span class="mf">0.0</span><span class="n">j</span><span class="p">]])</span>
+<span class="n">pZ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="o">+</span><span class="mf">0.0</span><span class="n">j</span><span class="p">,</span><span class="mi">0</span><span class="o">+</span><span class="mf">0.0</span><span class="n">j</span><span class="p">],[</span><span class="mi">0</span><span class="o">+</span><span class="mf">0.0</span><span class="n">j</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="o">+</span><span class="mf">0.0</span><span class="n">j</span><span class="p">]])</span>
+<span class="n">pY</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="o">+</span><span class="mf">0.0</span><span class="n">j</span><span class="p">,</span><span class="o">-</span><span class="mf">1.0</span><span class="n">j</span><span class="p">],[</span><span class="mf">0.0</span><span class="o">+</span><span class="mf">1.0</span><span class="n">j</span><span class="p">,</span><span class="mf">0.0</span><span class="o">+</span><span class="mf">0.0</span><span class="n">j</span><span class="p">]])</span>
+<span class="n">pHad</span> <span class="o">=</span> <span class="p">(</span><span class="n">pX</span><span class="o">+</span><span class="n">pZ</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pP0</span> <span class="o">=</span> <span class="p">(</span><span class="n">pI</span><span class="o">+</span><span class="n">pZ</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+<span class="n">pP1</span> <span class="o">=</span> <span class="p">(</span><span class="n">pI</span><span class="o">-</span><span class="n">pZ</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Convert the Pauli operator into a single quantum gate.</span>
+<span class="n">X</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">Y</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">Z</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">H</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">P0</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+<span class="n">P1</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubits</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubits</span><span class="p">):</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">i</span> <span class="o">!=</span> <span class="n">j</span><span class="p">):</span>
+            <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">pI</span><span class="p">,</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">Y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">pI</span><span class="p">,</span><span class="n">Y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">Z</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">pI</span><span class="p">,</span><span class="n">Z</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">H</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">pI</span><span class="p">,</span><span class="n">H</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">P0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">pI</span><span class="p">,</span><span class="n">P0</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">P1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">pI</span><span class="p">,</span><span class="n">P1</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">pX</span><span class="p">,</span><span class="n">X</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">Y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">pY</span><span class="p">,</span><span class="n">Y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">Z</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">pZ</span><span class="p">,</span><span class="n">Z</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">H</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">pHad</span><span class="p">,</span><span class="n">H</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">P0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">pP0</span><span class="p">,</span><span class="n">P0</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">P1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">kron</span><span class="p">(</span><span class="n">pP1</span><span class="p">,</span><span class="n">P1</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="n">Ide</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">nqubits</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#2 prepare quantum gate</span>
+<span class="n">CZ</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)]</span>
+<span class="n">CX</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubits</span><span class="p">)]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubits</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nqubits</span><span class="p">):</span>
+        <span class="n">CZ</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">=</span> <span class="p">(</span><span class="n">P0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">P1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">Z</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+        <span class="n">CX</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">=</span> <span class="p">(</span><span class="n">P0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">P1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">X</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Prepare variational quantum gates (gates that allow specifying the angle of rotation with respect to X,Y,Z).</span>
+
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">expm</span>
+<span class="k">def</span> <span class="nf">RX</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="n">angle</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">expm</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">angle</span><span class="o">*</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">X</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">RY</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="n">angle</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">expm</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">angle</span><span class="o">*</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">Y</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">RZ</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="n">angle</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">expm</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">angle</span><span class="o">*</span><span class="mf">1.</span><span class="n">j</span><span class="o">*</span><span class="n">Z</span><span class="p">[</span><span class="n">target</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Prepare initial state|0000...0&gt;.</span>
+<span class="k">def</span> <span class="nf">StateZeros</span><span class="p">(</span><span class="n">nqubits</span><span class="p">):</span>
+    <span class="n">State</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="o">**</span><span class="n">nqubits</span><span class="p">)</span>
+    <span class="n">State</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+    <span class="k">return</span> <span class="n">State</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Prepare-the-Hamiltonian.">
+<h2>Prepare the Hamiltonian.<a class="headerlink" href="#Prepare-the-Hamiltonian." title="Link to this heading">¶</a></h2>
+<p>Based on reference [1] <a class="reference external" href="https://static-content.springer.com/esm/art%3A10.1038%2Fncomms5213/MediaObjects/41467_2014_BFncomms5213_MOESM1050_ESM.pdf">Supplementary Information</a>, define the coefficients of the Hamiltonian when the distance between H and He is <span class="math notranslate nohighlight">\(0.9\)</span> angstroms. By finding the minimum energy eigenstates of this Hamiltonian, we can determine the properties of various H-He<span class="math notranslate nohighlight">\(^+\)</span> molecules.</p>
+<p>※ This Hamiltonian is derived from the magnitude of the electron-nucleus Coulomb interaction and the Coulomb interaction between electrons. The details will be studied in the section on quantum chemical calculations in Chapter 6.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">M</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">3.8505</span> <span class="o">*</span> <span class="n">Ide</span>  <span class="o">-</span> <span class="mf">0.2288</span> <span class="o">*</span> <span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.0466</span> <span class="o">*</span> <span class="n">Z</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.2288</span> <span class="o">*</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span>  <span class="mf">0.2613</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> \
+     <span class="mf">0.2288</span> <span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">Z</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mf">1.0466</span><span class="o">*</span><span class="n">Z</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.2288</span><span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Z</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span>  <span class="mf">0.2356</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Z</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">Z</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="p">)</span><span class="o">/</span><span class="mi">2</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Preparing-a-quantum-circuit">
+<h2>Preparing a quantum circuit<a class="headerlink" href="#Preparing-a-quantum-circuit" title="Link to this heading">¶</a></h2>
+<p>Implement a variational quantum circuit in exactly the same form as in the paper as follows.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_param</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="k">def</span> <span class="nf">TwoQubitPQC</span><span class="p">(</span><span class="n">phi</span><span class="p">):</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">StateZeros</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">RX</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">phi</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">RZ</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">phi</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">RX</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">phi</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">RZ</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">phi</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">CX</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">RZ</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">phi</span><span class="p">[</span><span class="mi">4</span><span class="p">]),</span><span class="n">state</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">RX</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">phi</span><span class="p">[</span><span class="mi">5</span><span class="p">]),</span><span class="n">state</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">state</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Measuring-the-expected-energy-of-a-quantum-state">
+<h2>Measuring the expected energy of a quantum state<a class="headerlink" href="#Measuring-the-expected-energy-of-a-quantum-state" title="Link to this heading">¶</a></h2>
+<p>Define a function to calculate the energy expectation value of the output by the variational quantum circuit as follows.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Convert a column vector to a row vector</span>
+<span class="k">def</span> <span class="nf">ExpectVal</span><span class="p">(</span><span class="n">Operator</span><span class="p">,</span><span class="n">State</span><span class="p">):</span>
+    <span class="n">BraState</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">State</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="c1">#Cross a matrix with a column vector and a row vector</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">BraState</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">Operator</span><span class="p">,</span><span class="n">State</span><span class="p">))</span>
+<span class="c1">#the real part of an element</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Minimizing-the-energy-expectation-value">
+<h2>Minimizing the energy expectation value<a class="headerlink" href="#Minimizing-the-energy-expectation-value" title="Link to this heading">¶</a></h2>
+<p>The Powell method implemented in <code class="docutils literal notranslate"><span class="pre">scipy.optimize.minimize</span></code> is one of the optimization methods that do not use gradient information. The initial values of the parameters are specified randomly.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scipy.optimize</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="n">phi</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ExpectVal</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">TwoQubitPQC</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span>
+
+<span class="n">cost_val</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c1">#function to preserve changes in the cost function</span>
+
+<span class="c1">#This function is called for each iteration.</span>
+<span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">phi</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">cost_val</span>
+    <span class="n">cost_val</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cost</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span>
+
+<span class="n">init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">n_param</span><span class="p">)</span>
+<span class="n">callback</span><span class="p">(</span><span class="n">init</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">cost</span><span class="p">,</span> <span class="n">init</span><span class="p">,</span>
+                              <span class="n">method</span><span class="o">=</span><span class="s1">&#39;Powell&#39;</span><span class="p">,</span>
+                              <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cost_val</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;iteration&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;energy expectation value&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_5.1_variational_quantum_eigensolver_15_0.png" src="../_images/notebooks_5.1_variational_quantum_eigensolver_15_0.png" />
+</div>
+</div>
+<p>Let`s verify if the values calculated by VQE are correct by comparing them with the exact energy obtained by diagonalizing the Hamiltonian.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scipy.linalg</span>
+<span class="n">l</span><span class="p">,</span> <span class="n">P</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">M</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1">#minimum eigenvalue</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cost</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">))</span> <span class="c1">#VQE result</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-2.8626207640766816
+-2.8623984117519257
+</pre></div></div>
+</div>
+<p>Although not identical to the eigenvalues calculated by the Powell method, they are the same to three decimal places, so we can say that we have an almost correct value.</p>
+<p>Next, let us examine the case where noise exists at the output of the circuit. NISQ cannot avoid errors (noise) in the output, so it is very important to verify whether the algorithm works even with noise and how much noise it can withstand.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">cost</span><span class="p">(</span><span class="n">phi</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">ExpectVal</span><span class="p">(</span><span class="n">M</span><span class="p">,</span><span class="n">TwoQubitPQC</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.01</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">phi</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">cost_val</span>
+    <span class="n">cost_val</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cost</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cost_val</span><span class="o">=</span><span class="p">[]</span>
+<span class="c1">#history of cost function</span>
+<span class="n">init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+<span class="n">callback</span><span class="p">(</span><span class="n">init</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">cost</span><span class="p">,</span> <span class="n">init</span><span class="p">,</span>
+                              <span class="n">method</span><span class="o">=</span><span class="s1">&#39;Powell&#39;</span><span class="p">,</span>
+                              <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cost_val</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;iteration&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;energy expectation value&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cost</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">x</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_5.1_variational_quantum_eigensolver_20_0.png" src="../_images/notebooks_5.1_variational_quantum_eigensolver_20_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-2.862398401331204
+</pre></div></div>
+</div>
+<p>If the noise is small, it is clear that the optimization can be performed in almost the same way. (Interested readers are encouraged to experiment with higher noise levels.)</p>
+</section>
+<section id="Reference">
+<h2>Reference<a class="headerlink" href="#Reference" title="Link to this heading">¶</a></h2>
+<p>[1] A. Peruzzo <em>et al</em>. , “A variational eigenvalue solver on a photonic quantum processor“ <a class="reference external" href="https://www.nature.com/articles/ncomms5213">Nat. Commun. 5:4213 doi: 10.1038/ncomms5213 (2014)</a></p>
+</section>
+</section>
+
+</article>
+        <aside class="nftt-toc">
+          
+          <div class="mt-3 mb-1 my-lg-0 ps-xl-3 text-muted">
+            <button class="btn btn-link link-dark p-lg-0 mb-2 mb-lg-0 text-decoration-none nftt-toc-toggle d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#tocContents" aria-expanded="false" aria-controls="tocContents"
+            >On this page <i class="ms-2 bi bi-chevron-expand"></i></button>
+            <div class="title d-none d-lg-block">
+              <i class="bi bi-file-earmark-text"></i>&nbsp;&nbsp;<span class="small">On this page</span>
+            </div>
+            <div class="collapse nftt-toc-collapse" id="tocContents">
+              <nav id="TableOfContents">
+                <ul>
+<li><a class="reference internal" href="#">5-1. Variational Quantum Eigensolver (VQE) Algorithm</a><ul>
+<li><a class="reference internal" href="#Background">Background</a></li>
+<li><a class="reference internal" href="#Variational-Methods">Variational Methods</a></li>
+<li><a class="reference internal" href="#What-is-VQE?">What is VQE?</a></li>
+<li><a class="reference internal" href="#id1">Variational Methods</a></li>
+<li><a class="reference internal" href="#Example-Implementation">Example Implementation</a></li>
+<li><a class="reference internal" href="#Preparation-of-quantum-gates">Preparation of quantum gates</a></li>
+<li><a class="reference internal" href="#Prepare-the-Hamiltonian.">Prepare the Hamiltonian.</a></li>
+<li><a class="reference internal" href="#Preparing-a-quantum-circuit">Preparing a quantum circuit</a></li>
+<li><a class="reference internal" href="#Measuring-the-expected-energy-of-a-quantum-state">Measuring the expected energy of a quantum state</a></li>
+<li><a class="reference internal" href="#Minimizing-the-energy-expectation-value">Minimizing the energy expectation value</a></li>
+<li><a class="reference internal" href="#Reference">Reference</a></li>
+</ul>
+</li>
+</ul>
+
+              </nav>
+            </div>
+          </div>
+          
+        </aside>
+      </div>
+    </div>
+
+    <footer class="nftt-footer">
+      <nav id="paginator" class="py-4" aria-label="Documentation navigation">
+    <div class="container">
+      <ul class="pagination justify-content-between mb-0"><li class="page-item">
+            <a href="5_VQC_based_algorithms.html" class="d-flex px-5 align-items-end" rel="prev" aria-label="Previous page: Chapter 5 Algorithms Based on Variational Quantum Circuits">
+              <span class="prev-page"><i class="bi bi-caret-left"></i></span>
+              <div class="d-flex flex-column">
+                <span class="text-small text-start text-muted">Previous</span>
+                <span class="underline">Chapter 5 Algorithms Based on Variational Quantum Circuits</span>
+              </div>
+            </a>
+          </li>
+        <li class="page-item ms-auto">
+            <a href="5.2_Quantum_Circuit_Learning.html" class="d-flex px-5 align-items-end" rel="next" aria-label="Next page: 5-2. Quantum Circuit learning">
+              <div class="d-flex flex-column">
+                <span class="text-small text-end text-start text-muted">Next</span>
+                <span class="underline">5-2. Quantum Circuit learning</span>
+              </div>
+              <span class="next-page"><i class="bi bi-caret-right"></i></span>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </nav>
+
+      <div class="py-5 px-4 px-md-3">
+  <div class="container">
+    
+
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <a class="brand-text d-inline-flex align-items-center mb-2 text-decoration-none" href="/" aria-label="Nefertiti-for-Sphinx">
+          <span class="fs-6 fw-bold">Quantum Native Dojo</span>
+        </a>
+        
+          <ul class="list-unstyled small text-muted">
+            <li>2023, Quantum Native Dojo Contributors</li>
+          </ul>
+        
+        
+        <div class="built-with pt-2">
+          Built with <a href="http://sphinx-doc.org">Sphinx 7.2.6</a> and <a href="https://github.com/danirus/sphinx-nefertiti">Nefertiti 0.3.0</a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+    </footer>
+    <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"CommonHTML": {"undefinedFamily": "\"Source Serif Pro\", \"Yakumono\", \"Noto Serif JP\", \"Hiragino Mincho ProN\", \"STIXGeneral\", \"Arial Unicode MS\", serif"}, "tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
+
+    <script type="text/javascript" src="../_static/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="../_static/sphinx-nefertiti.min.js"></script>
+    
+    <script type="text/javascript" src="../_static/doc_versions.js"></script>
+  </body>
+</html>

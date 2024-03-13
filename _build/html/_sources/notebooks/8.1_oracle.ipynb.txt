@@ -1,0 +1,91 @@
+{
+ "cells": [
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 8-1. Oracles\n",
+    "In this section, we treat the search problem in general and introduce oracles, a concept necessary to consider its computational complexity [1]."
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### What is an oracle?\n",
+    "A search problem is generally a problem of finding $M$ solutions from $N$ elements. For example, you have a database of names of people, and you want to find only Sato-san from the database.\n",
+    "Assuming that $N$ elements are labeled with $n$-digit bit strings $x=x_1\\ldots x_n$, we define the \"classical oracle\" for this search problem as follows.\n",
+    "\n",
+    "$$\n",
+    "f(x) =\n",
+    "\\begin{cases}\n",
+    "1 \\:\\:\\text{(x is a solution)} \\\\ \n",
+    "0 \\:\\: \\text{(x is not a solution)}\n",
+    "\\end{cases}\n",
+    "$$\n",
+    "\n",
+    "In other words, $f$ is a function that, given the label $x$ of an element, tells us in two choices whether that element is a solution.\n",
+    "For example, if $Name_0$=Takahashi and $Name_1$=Sato, then $f(0)=0, f(1)=1$.\n",
+    "Oracle means an abstract entity that is a black box inside but tells us the answer anyway, not caring how it is implemented (nor does the implementation actually need to exist).\n",
+    "The computational complexity of a classical algorithm for solving a search problem is evaluated by the number of times it asks the classical oracle if $x$ is a solution. In this way, a uniform evaluation independent of the detail of the problem is possible.\n",
+    "\n",
+    "On the other hand, the computational complexity of the quantum algorithm for solving the search problem is evaluated by the number of calls to the following (quantum) oracle $\\mathcal{O}_f$.\n",
+    "\n",
+    "$$\n",
+    "|x \\rangle |q \\rangle \\xrightarrow{\\mathcal{O}_f} |x \\rangle |q \\oplus f(x) \\rangle.\n",
+    "$$\n",
+    "\n",
+    "where the input state $|x \\rangle$ is the state of the input bit sequence $x$ in the computational basis, $|q \\rangle$ is the auxiliary bit, and $\\oplus$ is the modulo-2 addition (XOR operation).\n",
+    "We can tell if $x$ is a solution to the search problem by checking if the auxiliary bit $q$ is inverted：$|x \\rangle |0 \\rangle \\xrightarrow{\\mathcal{O}_f} |x \\rangle | f(x) \\rangle$. In addition, if the auxiliary bit is $|- \\rangle = (|0 \\rangle - |1 \\rangle)/\\sqrt{2}$ ,\n",
+    "\n",
+    "$$\n",
+    "|x \\rangle |- \\rangle \\xrightarrow{\\mathcal{O}_f} (-)^{f(x)}|x \\rangle |- \\rangle \n",
+    "$$\n",
+    "\n",
+    "The phase of the state is reversed only when $x$ is a solution to the search problem.\n",
+    "\n",
+    "One of the most significant features of the oracle $\\mathcal{O}_f$ is that it works as is even if the input states are superposed.\n",
+    "\n",
+    "For example, if we take the superposition of all states $N^{-1/2} \\sum_x |x\\rangle$ as input state and set the auxiliary bit to $|-\\rangle$, then\n",
+    "\n",
+    "$$\n",
+    "\\frac{1}{\\sqrt{N}} \\sum_x |x \\rangle |- \\rangle \\xrightarrow{\\mathcal{O}} \\frac{1}{\\sqrt{N}} \\sum_x (-)^{f(x)}|x \\rangle |- \\rangle \n",
+    "$$\n",
+    "\n",
+    "The Grover's algorithm, which will be introduced in the next section, makes good use of this property of phase reversal only when $x$ is a solution to find a solution."
+   ]
+  },
+  {
+   "attachments": {},
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Reference\n",
+    "[1] M. A. Nielsen and I. L. Chuang, “Quantum Computation and Quantum Information 10th Anniversary Edition“, University Printing House の `6.1 The quantum search algorithm` "
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
