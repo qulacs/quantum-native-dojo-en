@@ -60,7 +60,7 @@ html_theme_options = {
     "style": "blue",
     "versions": [
         ("Qulacs", "https://dojo.qulacs.org/en/qulacs_main/"),
-        ("QURI Parts", "https://dojo.qulacs.org/en/qp_main/"),
+        ("QURI-Parts", "https://dojo.qulacs.org/en/qp_main/"),
     ]
 }
 
