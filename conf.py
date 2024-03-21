@@ -58,6 +58,7 @@ html_theme_path = ['.']
 html_theme_options = {
     'display_version': True,
     "style": "blue",
+    "current_version": "latest",
     "versions": [
         ("Qulacs", "https://dojo.qulacs.org/en/qulacs_main/"),
         ("QURI-Parts", "https://dojo.qulacs.org/en/qp_main/"),
