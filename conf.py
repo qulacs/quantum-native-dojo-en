@@ -56,7 +56,7 @@ exclude_patterns = ['_build', '**.ipynb_checkpoints', 'Thumbs.db', '.DS_Store']
 html_theme = "sphinx_nefertiti"
 html_theme_path = ['.']
 html_theme_options = {
-    'display_version': False,
+    'display_version': True,
     "style": "blue",
     "versions": [
         ("Qulacs", "https://dojo.qulacs.org/en/qulacs_main/"),
