@@ -30,7 +30,7 @@ If you are not comfortable with this prerequisite knowledge and with Python and 
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents
 
    notebooks/0_prologue
