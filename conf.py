@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Quantum Native Dojo'
-copyright = '2019, Quantum Native Dojo Contributors'
+copyright = '2023, Quantum Native Dojo Contributors'
 author = 'Quantum Native Dojo Contributors'
 
 
@@ -40,7 +40,7 @@ templates_path = ['_templates']
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = 'ja'
+language = 'en'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -53,11 +53,18 @@ exclude_patterns = ['_build', '**.ipynb_checkpoints', 'Thumbs.db', '.DS_Store']
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_qndojo_theme'
+html_theme = "sphinx_nefertiti"
 html_theme_path = ['.']
 html_theme_options = {
-    'display_version': False
+    'display_version': True,
+    "style": "blue",
+    "current_version": "latest",
+    "versions": [
+        ("Qulacs", "https://dojo.qulacs.org/en/qulacs_main/"),
+        ("QURI-Parts", "https://dojo.qulacs.org/en/qp_main/"),
+    ]
 }
+
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
