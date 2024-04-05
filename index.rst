@@ -44,7 +44,6 @@ If you are not comfortable with this prerequisite knowledge and with Python and 
    notebooks/8_quantum_search_algorithm
    notebooks/9_quantum_error_correction
 
-
 Operation・Support
 --------------
 
