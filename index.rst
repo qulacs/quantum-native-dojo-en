@@ -3,7 +3,7 @@ Welcome to Quantum Native Dojo!
 
 Quantum Native Dojo is a self-study material designed for those who want to learn about quantum computers.
 
-You can learn the basic principles of quantum computers, basic algorithms, and how to apply them to chemical and financial calculations. The material covers algorithms for quantum computers with error correction, as well as algorithms for NISQ (Noisy Intermidiate-Scale Quantum) devices, which will be in practical use within a few years.
+You can learn the basic principles of quantum computers, basic algorithms, and how to apply them to chemical and financial calculations. The material covers algorithms for quantum computers with error correction, as well as algorithms for NISQ (Noisy Intermediate-Scale Quantum) devices, which will be in practical use within a few years.
 
 All the materials are built on Jupyter notebooks and can be run directly on Google Colaboratory, so you can start learning without any complicated setup.
 
