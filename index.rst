@@ -1,9 +1,9 @@
 Welcome to Quantum Native Dojo!
 ===============================
 
-Quantum Native Dojo is a self-study material designed for those who want to learn about quantum computers.
+Our Quantum Native Dojo offers a training ground for you to sharpen your skills, and give you the tools to become a “Quantum Native”. This self-study material is designed for those eager to dive into the world of quantum computers and quantum application development! 
 
-You can learn the basic principles of quantum computers, basic algorithms, and how to apply them to chemical and financial calculations. The material covers algorithms for quantum computers with error correction, as well as algorithms for NISQ (Noisy Intermidiate-Scale Quantum) devices, which will be in practical use within a few years.
+In the Dojo you can learn about the basic principles of quantum computers, basic algorithms, how to apply them to chemical, financial calculations, and more. The material covers algorithms for quantum computers with error correction, as well as algorithms for NISQ (Noisy Intermediate-Scale Quantum) devices, which will be in practical use within a few years.
 
 All the materials are built on Jupyter notebooks and can be run directly on Google Colaboratory, so you can start learning without any complicated setup.
 
@@ -11,11 +11,11 @@ All the materials are built on Jupyter notebooks and can be run directly on Goog
 Objective of this material：Becoming Quantum Native
 ------------------------------------------------------
 
-Quantum computers perform calculations based on the principles of quantum mechanics. On the other hand, the physical phenomena we see in everyday life are mainly governed by classical mechanics. This is one of the reasons why people think that quantum computers are difficult.
+Quantum computers perform calculations based on the principles of quantum mechanics. On the other hand, the physical phenomena we see in everyday life are mainly governed by classical mechanics. This is one of the reasons why people think that quantum computers are tricky to work with.
 
-The goal of Quantum Native Dojo is to help you become a **Quantum Native** who understands the operation of quantum computer and can use it sensibly. The road to becoming a Quantum Native is not an easy one, but learning the principles and applications of quantum mechanics and quantum computing from the basics through this Dojo will be a steady step forward.
+The goal of Quantum Native Dojo is to help you become a **Quantum Native** who understands the operation of quantum computers and can use the technology accordingly. The road to becoming a Quantum Native is not an easy one, but learning the principles and applications of quantum mechanics and quantum computing from the basics through this guide will bring you a step closer.
 
-We hope that you will leave this Dojo and become Quantum Natives and become engineers who create various quantum algorithms/applications!
+We hope that you will leave the Dojo as a Quantum Natives and go on to create your own quantum applications!
 
 Prerequisite Knowledge
 -----------------------
